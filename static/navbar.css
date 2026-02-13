@@ -1,0 +1,200 @@
+@import url("cart.css");
+
+body{
+    margin: 0rem;
+    padding: 0rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.section-0{
+
+    height: 10rem;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0rem 0.1rem 0.5rem rgba(0, 0, 0, 0.3);
+    text-align: center;
+
+}
+.section-0 .navbar .nav-logo {
+    height: 9rem;
+    width: auto;
+    margin-left: 2rem;
+    margin-top: 0rem;
+    float: left;
+}
+
+.section-0 .navbar .nav-link{
+
+    display: inline-block;
+    margin-top: 4rem;
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-right: 3rem;
+    color: #000000;
+    text-decoration:none;
+    letter-spacing: 0.2rem;
+    background-color: transparent;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition-property: color, background-color, padding, border-radius, transform;
+    transform: scale(1);
+
+}
+.section-0 .navbar .nav-link:hover{
+    background-color: #f5f0f0;
+    transform: scale(1.1);
+
+}
+
+.section-0 .navbar .nav-link--home:hover{
+    color: #ff5733;
+}
+
+.section-0 .navbar .nav-link--vehicles:hover{
+    color: #ff5733;
+}
+
+.section-0 .navbar .nav-link--reviews:hover{
+    color: #ff5733;
+}
+
+.section-0 .navbar .nav-link--contact:hover{
+    color: #ff5733;
+}
+
+.section-0 .navbar .nav-link--about:hover{
+    color: #ff5733;
+}
+
+.section-0 .navbar .nav-link--home{
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+}
+
+.section-0 .navbar .nav-link--vehicles{
+    transition-duration: 0.35s;
+    transition-timing-function: ease;
+}
+
+.section-0 .navbar .nav-link--reviews{
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
+}
+
+.section-0 .navbar .nav-link--contact{
+    transition-duration: 0.4s;
+    transition-timing-function: ease;
+}
+
+.section-0 .navbar .nav-link--about{
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+}
+
+
+.section-0 .navbar .nav-link.active{
+    color: #ff5733;
+    font-weight: 600;
+
+}
+
+.section-0 .navbar .nav-link--login:hover{
+    color: #ff5733;
+}
+
+.section-0 .navbar .nav-link--login{
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
+}
+
+.section-0 .login-btn{
+    position:relative;
+    right: -5rem;
+    top: 0rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+
+
+
+
+
+.section-0 .logout-btn{
+    position:relative;
+    right: -5rem;
+    top: 0rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.section-0 .user-profile-btn{
+    position:relative;
+    right: -4rem;
+    top: 0rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.section-0 .navbar .nav-link--logout:hover{
+    color: #ef4444;
+}
+
+.section-0 .navbar .nav-link--logout{
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
+}
+
+.section-0 .user-profile-btn .nav-link i {
+    font-size: 1.3rem;
+    vertical-align: middle;
+}
+
+
+
+.section-0 button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+
+@media only screen and (max-width: 768px) {
+    .section-0 .navbar .nav-link {
+        display: block;
+        margin: 1rem 0;
+        font-size: 1rem;
+    }
+
+    .section-0 .navbar .nav-links {
+        float: none;
+        text-align: center;
+        margin: 0;
+    }
+}
+@media only screen and (max-width: 480px) {
+    .section-0 .navbar .nav-logo {
+        height: 7rem;
+        margin-left: 1rem;
+    }
+
+    .section-0 .navbar .nav-link {
+        font-size: 0.9rem;
+        margin-right: 1rem;
+    }
+}
+
+
