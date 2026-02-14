@@ -4,13 +4,13 @@
 <section class="section-0">
     <nav class="navbar">
         <div>
-            <a href="/G11/Html/index.php"><img src="{%static 'bird_2.jpg'%}" alt="logo" class="nav-logo"></a>
-            <button><a href="/G11/Html/index.php" class="nav-link nav-link--home">Home</a></button>
-            <button><a href="/G11/Html/pages/buy.php" class="nav-link nav-link--vehicles">BUY</a></button>
-            <button><a href="/G11/Html/pages/reviews.php" class="nav-link nav-link--reviews">Reviews</a></button>
-            <button><a href="/G11/Html/pages/contact.php" class="nav-link nav-link--contact">Contact</a></button>
-            <button><a href="{% static 'about.html' %}" class="nav-link nav-link--about">About</a></button>
-            <button class="login-btn"><a href="/G11/Html/pages/login.php" class="nav-link nav-link--login">Login</a></button>
+            <a href="{% url 'index' %}"><img src="{%static 'bird_2.jpg'%}" alt="logo" class="nav-logo"></a>
+            <button><a href="{% url 'index' %}" class="nav-link nav-link--home">Home</a></button>
+            <button><a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">BUY</a></button>
+            <button><a href="{% url 'reviews' %}" class="nav-link nav-link--reviews">Reviews</a></button>
+            <button><a href="{% url 'contact' %}" class="nav-link nav-link--contact">Contact</a></button>
+            <button><a href="{% url 'about' %}" class="nav-link nav-link--about">About</a></button>
+            <button class="login-btn"><a href="" class="nav-link nav-link--login">Login</a></button>
 
         </div>
     </nav>

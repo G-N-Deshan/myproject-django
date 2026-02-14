@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,11 +9,11 @@
     <link rel="stylesheet" href="{%static 'footer.css'%}">
 </head>
 <body>
-    
+    {%include 'navbar.html'%}
 
     <h1>Contact Us</h1>
 
     
-
+{%include 'footer.html'%}
 </body>
 </html>
