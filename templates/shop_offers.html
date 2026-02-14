@@ -54,7 +54,7 @@
         <div class="offers-list">
 
 
-            {%for offers in offer%}
+            {%for offers in kids_offers%}
             <article class="offer-card">
                 <span class="offer-badge">{{offers.offers_badge}}</span>
                 <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}">
@@ -324,7 +324,37 @@
        </div>
 
         <div class="offers-list">
+
+              {%for offers in men_offers%}
             <article class="offer-card">
+                <span class="offer-badge">{{offers.offers_badge}}</span>
+                <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}">
+                <h3>{{offers.title}}</h3>
+                <p>{{offers.description}}</p>
+                <div class="offer-meta">
+                    {% if offers.price1 %}
+                    <span class="price">{{offers.price1}}</span>
+                    {% endif %}
+                    {% if offers.price2 %}
+                    <span class="price-old">{{offers.price2}}</span>
+                    {% endif %}
+                    {% if offers.stock_text %}
+                    <span class="stock">{{offers.stock_text}}</span>
+                    {% endif %} 
+                </div>
+                <a href="" class="offer-btn">{{offers.button_text}}</a>
+            </article>
+
+            {% endfor %}
+
+
+
+
+
+
+
+
+            <!-- <article class="offer-card">
                 <span class="offer-badge">- 30%</span>
                 <img src="../../assets/images/protective-clothing.png" alt="Mens wear offer">
                 <h3>Smart Casual Essentials</h3>
@@ -419,7 +449,7 @@
                     <span class="price-old">Rs. 2200</span>
                 </div>
                 <a href="/G11/Html/pages/add-to-cart.php?product_id=22" class="offer-btn">Grab Deal</a>
-            </article>
+            </article> -->
     </div>
     </section>
 
@@ -446,7 +476,51 @@
 
 
         <div class="offers-list">
+
+
+
+
+             {%for offers in women_offers%}
             <article class="offer-card">
+                <span class="offer-badge">{{offers.offers_badge}}</span>
+                <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}">
+                <h3>{{offers.title}}</h3>
+                <p>{{offers.description}}</p>
+                <div class="offer-meta">
+                    {% if offers.price1 %}
+                    <span class="price">{{offers.price1}}</span>
+                    {% endif %}
+                    {% if offers.price2 %}
+                    <span class="price-old">{{offers.price2}}</span>
+                    {% endif %}
+                    {% if offers.stock_text %}
+                    <span class="stock">{{offers.stock_text}}</span>
+                    {% endif %} 
+                </div>
+                <a href="" class="offer-btn">{{offers.button_text}}</a>
+            </article>
+
+            {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- <article class="offer-card">
                 <span class="offer-badge">- 30%</span>
                 <img src="../../assets/images/protective-clothing.png" alt="Women wear offer">
                 <h3>Everyday Fashion Deals</h3>
@@ -542,7 +616,7 @@
                 </div>
                 <a href="/G11/Html/pages/add-to-cart.php?product_id=29" class="offer-btn">Grab Deal</a>
             </article>
-
+ -->
 
 
 

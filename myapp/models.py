@@ -11,6 +11,13 @@ class Card(models.Model):
     
 
 class Offers(models.Model):
+    
+    CATEGORY_CHOICES = [
+        ('kids', 'Kids'),
+        ('men', 'Men'),
+        ('women', 'Women'),
+    ]
+    
     imageUrl = models.ImageField(upload_to='offers/')
     offers_badge = models.CharField(max_length=50)
     title = models.CharField(max_length=150)
@@ -20,7 +27,7 @@ class Offers(models.Model):
     stock_text = models.CharField(max_length=50, blank=True)
 
     button_text = models.CharField(max_length=50)
-    
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='kids' )
     def __str__(self):
         return self.title
     

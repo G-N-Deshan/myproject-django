@@ -24,4 +24,8 @@ def buy(request):
 
 def shop_offers(request):
     offer = Offers.objects.all()
-    return render(request, 'shop_offers.html', {'offer' : offer})
+    return render(request, 'shop_offers.html', {
+        'kids_offers' : offer.filter(category='kids'),
+        'men_offers' : offer.filter(category='men'),
+        'women_offers' : offer.filter(category='women'),
+        })
