@@ -1,0 +1,333 @@
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-x: hidden;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    margin: 0rem;
+    padding: 0rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+.grid-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding:2rem 25rem;
+    background-color: #f1eded;
+    min-height: 20vh;
+    align-items: center;
+    justify-items: center;
+
+
+}
+.grid-section a {
+    text-decoration: none;
+    color: inherit;
+}
+.grid-section img {
+    width: 20%;
+    height:40%;
+    border-radius: 0.5rem;
+    justify-content: center;
+    display: block;
+    margin: 0 auto;
+
+}
+.grid-section .grid-item-1{
+    background-color: #ffffff;
+    padding: 1rem;
+    justify-content: center;
+    text-align: center;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease; 
+    border-radius: 2.5rem;     
+     padding-bottom: 1.5rem;
+    padding-top: 1.5rem;     
+}
+.grid-section .grid-item-2 {
+    background-color: #ffffff;
+    
+    justify-content: center;
+    text-align: center;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;   
+    border-radius: 2.5rem;  
+    padding-bottom: 1.5rem;
+    padding-top: 1.5rem;    
+   
+}
+
+.grid-section .grid-item-1 h2{
+    text-align: center;
+    margin-top: 1rem;
+    font-family: "Poppins", sans-serif;
+    color: #333;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 0;
+
+
+}
+.grid-section .grid-item-1:hover{
+    transform: translateY(-0.5rem);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+}
+.grid-section .grid-item-2 h2{
+    text-align: center;
+    margin-top: 1rem;
+    font-family: "Poppins", sans-serif;
+    color: #333;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 0;
+
+}
+.grid-section .grid-item-2:hover{
+    transform: translateY(-0.5rem);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+}
+
+
+
+.offers,
+.arrivals {
+    padding: 3rem 6vw;
+    background-color: #f7f7f8;
+}
+
+.arrivals {
+    background-color: #ffffff;
+}
+
+.section-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.section-small {
+    color: #2563eb;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    margin: 0 0 0.4rem 0;
+}
+
+.section-top h2 {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    margin: 0;
+    color: #0f172a;
+}
+
+.section-sub {
+    margin: 0.4rem 0 0;
+    color: #475569;
+    font-size: 1rem;
+}
+
+.section-btn {
+    text-decoration: none;
+    background-color: #0f172a;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+}
+
+
+.offers-list,
+.arrivals-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.offer-card,
+.arrival-card {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.offer-card:hover,
+.arrival-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.15);
+}
+
+.offer-card img,
+.arrival-card img {
+    width: 100%;
+    max-height: 180px;
+    object-fit: contain;
+}
+
+.offer-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: #ef4444;
+    color: #ffffff;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    animation: pulse 2s infinite;
+}
+
+.offer-meta,
+.arrival-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.offer-card a,
+.arrival-card a {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+.price {
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.price-old {
+    text-decoration: line-through;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.stock {
+    color: #f97316;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.offer-card a,
+.arrival-card a {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+.offer-card a.offer-btn,
+.arrival-card a.arrival-btn {
+    background-color: #2563eb;
+    color: #ffffff;
+    padding: 0.7rem 0.2rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    border: none;
+    display: block;
+    width: 100%;
+    pointer-events: auto !important;
+    z-index: 10;
+}
+
+.offer-card a.offer-btn:hover,
+.arrival-card a.arrival-btn:hover {
+    background-color: #1e40af;
+    transform: translateY(-1px);
+}
+
+.offer-card a button,
+.arrival-card a button {
+    display: block;
+    width: 100%;
+}
+
+.offer-btn,
+.arrival-btn {
+    border: none;
+    background-color: #2563eb;
+    color: #ffffff;
+    padding: 0.7rem 0.2rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.offer-btn:hover,
+.arrival-btn:hover {
+    background-color: #1e40af;
+    transform: translateY(-1px);
+}
+
+.arrival-media {
+    position: relative;
+    background: #f8fafc;
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.arrival-badge {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    background-color: #22c55e;
+    color: #ffffff;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.9;
+    }
+}

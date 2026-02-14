@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Card 
+from .models import Card, Offers
 
 # Create your views here.
 
@@ -19,4 +19,9 @@ def reviews(request):
     return render(request, 'reviews.html')
 
 def buy(request):
-    return render(request, 'buy.html')
+    offers = Offers.objects.all()
+    return render(request, 'buy.html', {'offers' : offers})
+
+def shop_offers(request):
+    offer = Offers.objects.all()
+    return render(request, 'shop_offers.html', {'offer' : offer})
