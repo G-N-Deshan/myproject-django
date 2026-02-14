@@ -27,8 +27,29 @@ class Offers(models.Model):
     stock_text = models.CharField(max_length=50, blank=True)
 
     button_text = models.CharField(max_length=50)
-    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='kids' )
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='kids')
+    
     def __str__(self):
         return self.title
     
+    
+    
+
+class NewArrivals(models.Model):
+    
+    CATEGORY_CHOICES = [
+        ('kids', 'Kids'),
+        ('men', 'Men'),
+        ('women','Women'),
+    ]
+    
+    imageUrl = models.ImageField(upload_to='new_arrivals/')
+    offers_badge = models.CharField(max_length=50)
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+    price = models.CharField(max_length=50, blank=True)
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='kids')
+    
+    def __str__(self):
+        return self.title
 # Create your models here.

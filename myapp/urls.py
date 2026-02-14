@@ -10,7 +10,7 @@ urlpatterns = [
     path('reviews/', views.reviews, name= 'reviews'),
     path('buy/', views.buy, name= 'buy'),
     path('shop-offers/', views.shop_offers, name= 'shop_offers'),
-   # path('counter', views.counter, name = 'counter' )
+    path('new_arrivals/', views.new_arrivals, name= 'new_arrivals')
 ]
 
 if settings.DEBUG:

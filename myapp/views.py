@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Card, Offers
+from .models import Card, Offers, NewArrivals
 
 # Create your views here.
 
@@ -29,3 +29,11 @@ def shop_offers(request):
         'men_offers' : offer.filter(category='men'),
         'women_offers' : offer.filter(category='women'),
         })
+    
+def new_arrivals(request):
+    new_arrivals = NewArrivals.objects.all()
+    return render(request, 'new_arrivals.html', {
+        'kids_arrivals' : new_arrivals.filter(category='kids'),
+        'men_arrivals' : new_arrivals.filter(category='men'),
+        'women_arrivals' : new_arrivals.filter(category='women'),
+    })

@@ -116,11 +116,37 @@
                 <h2>New Arrivals</h2>
                 <p class="section-sub">Fresh styles and playful toys your kids will love.</p>
             </div>
-            <a class="section-btn" href="new-arrivals.php">View All</a>
+            <a class="section-btn" href="{%url 'new_arrivals'%}">View All</a>
         </div>
 
         <div class="arrivals-list">
+
+
+
+
+            
+            {%for item in kids_arrivals%}
+
             <article class="arrival-card">
+                <div class="arrival-media">
+                    <img src="{{ item.imageUrl.url }}" alt="{{item.title}}">
+                    <span class="arrival-badge">{{item.offers_badge}}</span>
+                </div>
+                <h3>{{item.title}}</h3>
+                <p>{{item.description}}</p>
+                <div class="arrival-meta">
+                    <span class="price">{{item.price}}</span>
+                    <a href="" class="arrival-btn">Add to cart</a>
+                </div>
+            </article>
+
+            {% endfor %}
+
+
+
+
+
+            <!-- <article class="arrival-card">
                 <div class="arrival-media">
                     <img src="../../assets/images/10.jpeg" alt="New arrival outfit">
                     <span class="arrival-badge">New</span>
@@ -157,7 +183,7 @@
                     <span class="price">Rs. 2,900</span>
                     <a href="/G11/Html/pages/add-to-cart.php?product_id=32" class="arrival-btn">Add to cart</a>
                 </div>
-            </article>
+            </article> -->
         </div>
 
     </section>
