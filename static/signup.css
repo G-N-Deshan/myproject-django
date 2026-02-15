@@ -1,0 +1,119 @@
+
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-x: hidden;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    margin: 0rem;
+    padding: 0rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-top: 8rem;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    min-height: 100vh;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.signup-section{
+    width: 30%;
+    min-height: 60vh;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 2rem;
+    padding-bottom: 1rem;
+    box-shadow: 0 8px 32px 0 rgba(245, 87, 108, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.signup-section .signup-header img{
+    width: 8%;
+    height:8%;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+    padding: 0.2rem;
+}
+
+.signup-section .signup-header{
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    padding-top: 2rem;
+    margin-bottom: -1.54rem;
+    display: flex;  
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-section p{
+    margin-bottom: 3rem;
+}
+
+.signup-section label{
+    display: block;
+    text-align: left;
+    width: 60%;
+    margin: 1rem auto 0.5rem;
+    font-weight: 600;
+    color: #0f172a;
+    font-size: 0.95rem;
+}
+
+.signup-section input{
+    width: 60%;
+    padding: 1rem;
+    margin: 0rem 0rem 1rem 0rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.signup-section input:focus{
+    outline: none;
+    border-color: #f5576c;
+    box-shadow: 0 0 8px rgba(245, 87, 108, 0.3);
+}
+
+.signup-section input::placeholder{
+    color: #9ca3af;
+}
+
+.signup-section button{
+    width: 30%;
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background-color: #f5576c;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.signup-section button:hover{
+    background-color: #e63251;
+}

@@ -10,7 +10,9 @@ urlpatterns = [
     path('reviews/', views.reviews, name= 'reviews'),
     path('buy/', views.buy, name= 'buy'),
     path('shop-offers/', views.shop_offers, name= 'shop_offers'),
-    path('new_arrivals/', views.new_arrivals, name= 'new_arrivals')
+    path('new_arrivals/', views.new_arrivals, name= 'new_arrivals'),
+    path('login/', views.login, name = 'login'),
+    path('signup/', views.signup, name = 'signup'),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,45 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+    <title>Login</title>
+</head>
+<body>
+    
+    
+    <div class="login-section">
+        <form action="" method="POST">
+            <div>
+                    <div class="login-header">
+                        <img src="/static/key.png" alt="logo" class="login-logo">
+                    <h2>G11 Cloths & Toys</h2>
+                    </div>
+                    <p>Welcome back! Please login to your account</p>
+                    
+                </div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required placeholder="Enter your username">
+            <br><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required placeholder="Enter your password">
+            <br><br>
+
+            <button type="submit" name="login">Login</button>
+            <br>
+
+            <strong>or</strong>
+            <br><br>
+            Don't have an account? <a href="{%url 'signup'%}" style="text-decoration: none;">Sign Up</a>
+            <br><br>
+            <a href="{%url 'index'%}" style="text-decoration: none;">Back to Home</a>
+
+         </form>
+    </div>
+
+</body>
+</html>

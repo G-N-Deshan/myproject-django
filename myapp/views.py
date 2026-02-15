@@ -37,3 +37,10 @@ def new_arrivals(request):
         'men_arrivals' : new_arrivals.filter(category='men'),
         'women_arrivals' : new_arrivals.filter(category='women'),
     })
+    
+    
+def login(request):
+    return render(request , 'login.html')
+
+def signup(request):
+    return render(request, 'signup.html')
