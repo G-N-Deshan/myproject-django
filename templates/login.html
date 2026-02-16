@@ -12,7 +12,11 @@
     
     
     <div class="login-section">
-        <form action="" method="POST">
+        <form action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            {%if form.errors%}
+                <p>{{ form.errors }}</p>
+            {% endif %}
             <div>
                     <div class="login-header">
                         <img src="/static/key.png" alt="logo" class="login-logo">
