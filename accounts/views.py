@@ -9,6 +9,7 @@ def signup_view(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
+            user.username = form.cleaned_data["full_name"]
             user.set_password(form.cleaned_data["password"])
             user.save()
             
@@ -23,20 +24,20 @@ def signup_view(request):
             messages.success(request, "Account created successfully!")
             return redirect('buy')
     else:
-            form = SignupForm()
+        form = SignupForm()
     return render(request, 'signup.html', {'form': form})
             
 def login_view(request):
-        if request.method == 'POST':
-            form = LoginForm(request, data = request.POST)
-            if form.is_valid():
-                login(request, form.get_user())
-                messages.success(request, "Logged in successfully!")
-                return redirect('buy')
-        else:
-            form = LoginForm()
-        return render(request, 'login.html', {'form': form})
+    if request.method == 'POST':
+        form = LoginForm(request.POST)  # Changed this line
+        if form.is_valid():
+            login(request, form.get_user())
+            messages.success(request, "Logged in successfully!")
+            return redirect('buy')
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
     
 def logout_view(request):
     logout(request)
-    return redirect('index')
+    messages.info(request, "Logged out successfully!")
