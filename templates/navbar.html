@@ -10,8 +10,16 @@
             <button><a href="{% url 'reviews' %}" class="nav-link nav-link--reviews">Reviews</a></button>
             <button><a href="{% url 'contact' %}" class="nav-link nav-link--contact">Contact</a></button>
             <button><a href="{% url 'about' %}" class="nav-link nav-link--about">About</a></button>
+            {% if user.is_authenticated %}
+            <button class="login-btn"><a href="{%url 'logout'%}" class="nav-link nav-link--logout">Logout</a></button>
+         <button class="user-profile-btn" title="{{ user.username }}">
+            <a href="{% url 'profile' %}" class="nav-link">
+            <li class="bi bi-person-circle" style="list-style-type: none;"></li> {{ user.username }}
+             </a>
+        </button>
+            {% else %}
             <button class="login-btn"><a href="{%url 'login'%}" class="nav-link nav-link--login">Login</a></button>
-
+            {% endif %}
         </div>
     </nav>
 </section>

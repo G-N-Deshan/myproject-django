@@ -90,6 +90,8 @@ body::-webkit-scrollbar {
     flex-direction: column;
     justify-content: center;
 }
+
+
 .section-2 p{
     font-size: clamp(1.3rem, 3vw, 1.8rem);
     color: #f1f5f9;

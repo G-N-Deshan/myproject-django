@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required 
 from .forms import SignupForm, LoginForm
 from .models import Profile
 from django.contrib import messages
@@ -41,3 +42,18 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
+    return redirect('index')
+
+
+@login_required(login_url='login')
+def profile_view(request):
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(
+            user=request.user,
+            full_name=request.user.username,
+            address="",
+            phone=""
+        )
+    return render(request, 'profile.html', {'profile': profile})

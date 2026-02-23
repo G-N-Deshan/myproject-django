@@ -1,0 +1,22 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--     <link rel="stylesheet" href="{% static 'profile.css' %}">
+ -->     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>profile</title>
+</head>
+<body>
+    <h1>Profile Page</h1>
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}!</p>
+        <p>Email: {{ user.email }}</p>
+        <p>First Name: {{ user.first_name }}</p>
+        <p>Last Name: {{ user.last_name }}</p>
+        
+       
+     {% endif %}
+</body>
+</html>
