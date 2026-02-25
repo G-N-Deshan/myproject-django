@@ -14,6 +14,11 @@ urlpatterns = [
     path('login/', views.login, name = 'login'),
     path('signup/', views.signup, name = 'signup'), 
     path('product/<str:product_type>/<int:product_id>/', views.product_detail, name='product_detail'), 
+    path('cloths/', views.cloths, name='cloths'),
+    path('toys/', views.toys, name='toys'),
+    path('kids_cloths/', views.kids_cloths, name='kids_cloths'),
+    path('women_cloths/', views.women_cloths, name='women_cloths'),
+    path('mens_cloths/', views.mens_cloths, name='mens_cloths'),
 ]
 
 if settings.DEBUG:

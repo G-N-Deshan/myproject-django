@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloths</title>
+    <link rel="stylesheet" href="{% static 'navbar.css'%}">
+    <link rel="stylesheet" href="{%static 'footer.css'%}">
+    <link rel="stylesheet" href="{% static 'cloths-page.css'%}">
+</head>
+<body>
+
+    {%include 'navbar.html'%}
+
+
+    
+
+<div class="section-9">
+        <div class="section-9__overlay"></div>
+        <div class="section-9__content">
+            <h1 class="section-9__title">Cloths</h1>
+            <p class="section-9__subtitle">Explore curated styles for every age and occasion.</p>
+
+            <div class="selection-section">
+                <div class="card mens-card">
+                    <div class="card__content">
+                        <h2>Mens</h2>
+                        <p>Sharp, comfortable, and timeless essentials.</p>
+                        <a href="{% url 'mens_cloths' %}" class="card__btn">Shop Mens</a>
+                    </div>
+                </div>
+
+                <div class="card womens-card">
+                    <div class="card__content">
+                        <h2>Womens</h2>
+                        <p>Elegant styles designed for every moment.</p>
+                        <a href="{% url 'women_cloths' %}" class="card__btn">Shop Womens</a>
+                    </div>
+                </div>
+
+                <div class="card kids-card">
+                    <div class="card__content">
+                        <h2>Kids</h2>
+                        <p>Playful, durable, and colorful favorites.</p>
+                        <a href="{% url 'kids_cloths' %}" class="card__btn">Shop Kids</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+ {%include 'footer.html'%}
+</body>
+</html>

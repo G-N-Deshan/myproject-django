@@ -63,3 +63,19 @@ def product_detail(request, product_type, product_id):
             pass
     
     return render(request, 'product_detail.html', {'product': product, 'product2': product2})
+
+
+def cloths(request):
+    return render(request, 'cloths.html')
+
+def toys(request):  
+    return render(request, 'toys.html')
+
+def kids_cloths(request):
+    return render(request, 'kids_cloths.html')
+
+def women_cloths(request):
+    return render(request, 'women_cloths.html')
+
+def mens_cloths(request):
+    return render(request, 'mens_cloths.html')
