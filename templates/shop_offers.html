@@ -71,7 +71,7 @@
                     <span class="stock">{{offers.stock_text}}</span>
                     {% endif %} 
                 </div>
-                <a href="" class="offer-btn">{{offers.button_text}}</a>
+                <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn">{{offers.button_text}}</a>
             </article>
 
             {% endfor %}
@@ -342,7 +342,7 @@
                     <span class="stock">{{offers.stock_text}}</span>
                     {% endif %} 
                 </div>
-                <a href="" class="offer-btn">{{offers.button_text}}</a>
+                <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn">{{offers.button_text}}</a>
             </article>
 
             {% endfor %}
@@ -497,7 +497,7 @@
                     <span class="stock">{{offers.stock_text}}</span>
                     {% endif %} 
                 </div>
-                <a href="" class="offer-btn">{{offers.button_text}}</a>
+                <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn">{{offers.button_text}}</a>
             </article>
 
             {% endfor %}

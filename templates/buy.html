@@ -44,7 +44,8 @@
 
         <div class="offers-list">
 
-            {%for offer in offers|slice:":3"%}
+            {%for offer in offers|slice:":3"  reversed %}
+           
             <article class="offer-card">
                 <span class="offer-badge">{{offer.offers_badge}}</span>
                 <img src="{{offer.imageUrl.url}}" alt="{{offer.offers_badge}}">
@@ -61,9 +62,9 @@
                     <span class="stock">{{offer.stock_text}}</span>
                     {% endif %} 
                 </div>
-                <a href="" class="offer-btn">{{offer.button_text}}</a>
+                <a href="{% url 'product_detail' 'offer' offer.id %}" class="offer-btn">{{offer.button_text}}</a>
             </article>
-
+           
             {% endfor %}
 
 
@@ -125,7 +126,7 @@
 
 
             
-            {%for item in kids_arrivals%}
+            {%for item in kids_arrivals|slice:":3" reversed %}
 
             <article class="arrival-card">
                 <div class="arrival-media">
@@ -136,7 +137,7 @@
                 <p>{{item.description}}</p>
                 <div class="arrival-meta">
                     <span class="price">{{item.price}}</span>
-                    <a href="" class="arrival-btn">Add to cart</a>
+                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-btn">Add to cart</a>
                 </div>
             </article>
 

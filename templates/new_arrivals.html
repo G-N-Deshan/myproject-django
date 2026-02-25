@@ -33,7 +33,7 @@
                 <p>{{item.description}}</p>
                 <div class="arrival-meta">
                     <span class="price">{{item.price}}</span>
-                    <a href="" class="arrival-btn">Add to cart</a>
+                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-btn">Add to cart</a>
                 </div>
             </article>
 
@@ -139,7 +139,7 @@
                 <p>{{item.description}}</p>
                 <div class="arrival-meta">
                     <span class="price">{{item.price}}</span>
-                    <a href="" class="arrival-btn">Add to cart</a>
+                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-btn">Add to cart</a>
                 </div>
             </article>
 
@@ -254,7 +254,7 @@
                 <p>{{item.description}}</p>
                 <div class="arrival-meta">
                     <span class="price">{{item.price}}</span>
-                    <a href="" class="arrival-btn">Add to cart</a>
+                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-btn">Add to cart</a>
                 </div>
             </article>
 

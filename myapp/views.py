@@ -1,3 +1,4 @@
+from urllib import request
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Card, Offers, NewArrivals
@@ -20,7 +21,8 @@ def reviews(request):
 
 def buy(request):
     offers = Offers.objects.all()
-    return render(request, 'buy.html', {'offers' : offers})
+    arrivals = NewArrivals.objects.all()
+    return render(request, 'buy.html', {'offers' : offers, 'kids_arrivals' : arrivals})
 
 def shop_offers(request):
     offer = Offers.objects.all()
@@ -44,3 +46,20 @@ def login(request):
 
 def signup(request):
     return render(request, 'signup.html')
+
+def product_detail(request, product_type, product_id):
+    product = None
+    product2 = None
+    
+    if product_type == 'offer':
+        try:
+            product = Offers.objects.get(id=product_id)
+        except Offers.DoesNotExist:
+            pass
+    elif product_type == 'arrival':
+        try:
+            product2 = NewArrivals.objects.get(id=product_id)
+        except NewArrivals.DoesNotExist:
+            pass
+    
+    return render(request, 'product_detail.html', {'product': product, 'product2': product2})
