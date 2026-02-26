@@ -1,20 +1,115 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Women Clothing </title>
-    <link rel="stylesheet" href="{% static 'navbar.css'%}">
-    <link rel="stylesheet" href="{%static 'footer.css'%}">
+    <title>Women's Clothing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <link rel="stylesheet" href="{% static 'women-cloths.css' %}">
 </head>
 <body>
 
-    {%include 'navbar.html'%}
+    {% include 'navbar.html' %}
 
-    <h1>Women Clothing</h1>
+    <section class="women-section">
+        <div class="women-header">
+            <h1 class="women-section__title">Women</h1>
+            <p class="women-section__subtitle">Discover timeless elegance and modern style</p>
+        </div>
 
+        <div class="category-grid">
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="Dresses">
+                </div>
+                <span class="category-label">Dresses</span>
+            </a>
 
-     {%include 'footer.html'%}
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="Handbags">
+                </div>
+                <span class="category-label">Handbags</span>
+            </a>
+
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="Shoes">
+                </div>
+                <span class="category-label">Shoes</span>
+            </a>
+
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="Tops">
+                </div>
+                <span class="category-label">Tops</span>
+            </a>
+
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="Coats & Jackets">
+                </div>
+                <span class="category-label">Coats & Jackets</span>
+            </a>
+
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="Sweaters">
+                </div>
+                <span class="category-label">Sweaters</span>
+            </a>
+
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="Jeans">
+                </div>
+                <span class="category-label">Jeans</span>
+            </a>
+
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="Accessories">
+                </div>
+                <span class="category-label">Accessories</span>
+            </a>
+
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="Pants">
+                </div>
+                <span class="category-label">Pants</span>
+            </a>
+
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="Skirts">
+                </div>
+                <span class="category-label">Skirts</span>
+            </a>
+
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="Activewear">
+                </div>
+                <span class="category-label">Activewear</span>
+            </a>
+
+            <a href="#" class="category-item">
+                <div class="category-image">
+                    <img src="../media/10.jpeg" alt="One-Piece">
+                </div>
+                <span class="category-label">One-Piece</span>
+            </a>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
 </body>
 </html>

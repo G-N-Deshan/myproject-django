@@ -3,16 +3,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kids Clothing </title>
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{%static 'footer.css'%}">
+    <link rel="stylesheet" href="{% static 'kids-cloths.css'%}">
 </head>
 <body>
 
     {%include 'navbar.html'%}
 
-    <h1>Kids Clothing</h1>
+    <section class="section-7">
+       <div class="section-7__overlay"></div>
+        
+        <div class="section-7__content">
+            <div class="section-7__text">
+                <h1 class="section-7__title">Big Style for Small Humans</h1>
+                <p class="section-7__subtitle">Whether it's a school day or a play day, find all the grow-up essentials they need in one place.</p>
+                
+                <div class="section-7__buttons">
+                    <button class="btn btn-primary">Shop Girls</button>
+                    <button class="btn btn-secondary">Shop Boys</button>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
      {%include 'footer.html'%}
