@@ -1,7 +1,9 @@
 from urllib import request
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Card, Offers, NewArrivals, Cloths
+from .models import Card, Offers, NewArrivals, Cloths, Review
+from .forms import ReviewForm
 
 # Create your views here.
 
@@ -16,8 +18,6 @@ def about(request):
 def contact(request):
     return render(request, 'contact.html')
 
-def reviews(request):
-    return render(request, 'reviews.html')
 
 def buy(request):
     offers = Offers.objects.all()
@@ -85,3 +85,18 @@ def women_cloths(request):
 def mens_cloths(request):
     mens_cloths = Cloths.objects.filter(category='men')
     return render(request, 'mens_cloths.html', {'mens_cloths': mens_cloths})
+
+def reviews(request):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Review submitted successfully!')
+            return redirect('review_success')  
+    else:
+        form = ReviewForm()
+    
+    return render(request, 'reviews.html', {'form': form})
+
+def review_success(request):
+    return render(request, 'review_success.html')

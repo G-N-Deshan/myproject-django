@@ -1,3 +1,13 @@
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-x: hidden;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
 .section-9 {
     position: relative;
     background-image: url("../media/cloths-page-background.jpg");

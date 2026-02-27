@@ -3,10 +3,77 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Review</title>
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <link rel="stylesheet" href="{% static 'review.css' %}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <section class="review-form">
+        <h1>Submit a Review</h1>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_name">Name:</label>
+                {{ form.name }}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_email">Email:</label>
+                {{ form.email }}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_rating">Rating:</label>
+                {{ form.rating }}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_uploadImages">Upload Image:</label>
+                {{ form.uploadImages }}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_comment">Comment:</label>
+                {{ form.comment }}
+            </div>
+            
+            <button type="submit">Submit Review</button>
+        </form>
+    </section>
+    
+    {% include 'footer.html' %}
+</body>
+</html>
+
+
+
+
+
+<!-- {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviews</title>
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{%static 'footer.css'%}">
+    <link rel="stylesheet" href="{% static 'review.css'%}">
 </head>
 <body>
    {%include 'navbar.html'%}
@@ -32,6 +99,9 @@
                 <option value="4"> Very Good</option>
                 <option value="5"> Excellent</option>
             </select>
+            
+            <label for="uploadImages">Upload Images:</label>
+            <input type="file" id="uploadImages" name="uploadImages">
 
             <label for="comment">Comment:</label>
             <textarea id="comment" name="comment" rows="4" required></textarea>
@@ -45,3 +115,4 @@
 {%include 'footer.html'%}
 </body>
 </html>
+ -->

@@ -75,4 +75,28 @@ class Cloths(models.Model):
     def __str__(self):
         return self.name
     
+    
+class Review(models.Model):
+    RATING_CHOICES = [
+        (1, 'Poor'),
+        (2, 'Fair'),
+        (3, 'Good'),
+        (4, 'Very Good'),
+        (5, 'Excellent'),
+    ]
+
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    rating = models.IntegerField(choices=RATING_CHOICES)
+    comment = models.TextField()
+    uploadImages = models.ImageField(upload_to='reviews/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.get_rating_display()}"
+
+    class Meta:
+        ordering = ['-created_at']
+    
 # Create your models here.

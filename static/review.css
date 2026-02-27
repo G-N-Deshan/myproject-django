@@ -1,0 +1,100 @@
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-x: hidden;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
+.review-form {
+    max-width: 700px;
+    margin: 60px auto;
+    padding: 50px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
+}
+
+.review-form h1 {
+    font-family: "Playfair Display", serif;
+    font-size: 2rem;
+    color: #0f172a;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.review-form form {
+    display: grid;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-form label {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea,
+.form-file {
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus,
+.form-file:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+button[type="submit"] {
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+}
+
+@media (max-width: 576px) {
+    .review-form {
+        padding: 30px 20px;
+        margin: 40px 20px;
+    }
+    
+    .review-form h1 {
+        font-size: 1.6rem;
+    }
+}

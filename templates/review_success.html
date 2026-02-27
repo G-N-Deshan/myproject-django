@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Submitted</title>
+    <link rel="stylesheet" href="{% static 'review-form.css' %}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <section class="review-form" style="text-align: center;">
+        <h1>✓ Review Submitted Successfully!</h1>
+        <p style="color: #475569; margin: 20px 0;">Thank you for your feedback.</p>
+        <a href="/" style="color: #6366f1; text-decoration: none; font-weight: 600;">← Back to Home</a>
+    </section>
+    
+    {% include 'footer.html' %}
+</body>
+</html>
