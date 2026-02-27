@@ -56,13 +56,21 @@ class NewArrivals(models.Model):
     
     
 class Cloths(models.Model):
+    CATEGORY_CHOICES = [
+        ('kids-men', 'Kids-men'),
+        ('men', 'Men'),
+        ('women','Women'),
+        ('kids-girl', 'Kids-girl')
+    ]
+    
     imageUrl = models.ImageField(upload_to='cloths/')
     name = models.CharField(max_length=150)
     price = models.CharField(max_length=50, blank=True)
     desccription = models.TextField()
     price1 = models.CharField(max_length=50, blank=True)
     price2 = models.CharField(max_length=50, blank=True)
-    discount_text = models.CharField(max_length=50, blank=True)    
+    discount_text = models.CharField(max_length=50, blank=True) 
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='kids-men')   
     
     def __str__(self):
         return self.name

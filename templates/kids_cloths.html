@@ -33,6 +33,63 @@
     </section>
 
 
+
+    <section class="girls-section">
+        <h1>Girls Clothing</h1>
+        <p class="sec-p">Discover the perfect fit and style for your little ones with our girls' clothing collection.
+        </p>
+        <section class="cloths-section">
+        <h2 class="cloths-section__title">Girls' Clothing Collection</h2>
+        <div class="cloths-grid">
+            {% for cloth in kids_girls_cloths %}
+            <div class="cloth-item">
+                <div class="cloth-item__image">
+                    <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                </div>
+                <div class="cloth-item__content">
+                    <h3>{{ cloth.name }}</h3>
+                    <div class="price-container">
+                        <span class="price-current">Rs {{ cloth.price1 }}</span>
+                        <span class="price-old">Rs {{ cloth.price2 }}</span>
+                    </div>
+                    <span class="discount-badge">{{ cloth.discount_text }}</span>
+                    <a href="#" class="cloths-section__btn">Shop Now</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </section>
+
+
+
+    <section class="boys-section">
+        <h1>Boy Clothing</h1>
+        <p class="sec-p">Discover the perfect fit and style for your little ones with our boys' clothing collection.
+        </p>
+        <section class="cloths-section">
+        <h2 class="cloths-section__title">Boys' Clothing Collection</h2>
+        <div class="cloths-grid">
+            {% for cloth in kids_cloths %}
+            <div class="cloth-item">
+                <div class="cloth-item__image">
+                    <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                </div>
+                <div class="cloth-item__content">
+                    <h3>{{ cloth.name }}</h3>
+                    <div class="price-container">
+                        <span class="price-current">Rs {{ cloth.price1 }}</span>
+                        <span class="price-old">Rs {{ cloth.price2 }}</span>
+                    </div>
+                    <span class="discount-badge">{{ cloth.discount_text }}</span>
+                    <a href="#" class="cloths-section__btn">Shop Now</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </section>
+
      {%include 'footer.html'%}
 </body>
 </html>

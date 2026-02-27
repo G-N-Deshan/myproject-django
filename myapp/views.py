@@ -1,7 +1,7 @@
 from urllib import request
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Card, Offers, NewArrivals
+from .models import Card, Offers, NewArrivals, Cloths
 
 # Create your views here.
 
@@ -71,11 +71,17 @@ def cloths(request):
 def toys(request):  
     return render(request, 'toys.html')
 
+    
 def kids_cloths(request):
-    return render(request, 'kids_cloths.html')
+    kids_cloths = Cloths.objects.filter(category='kids-men')
+    kids_girls_cloths = Cloths.objects.filter(category='kids-girl')
+    return render(request, 'kids_cloths.html', {'kids_cloths': kids_cloths, 'kids_girls_cloths': kids_girls_cloths})
 
 def women_cloths(request):
-    return render(request, 'women_cloths.html')
+    women_cloths = Cloths.objects.filter(category='Women')
+    return render(request, 'women_cloths.html', {'women_cloths': women_cloths})
+
 
 def mens_cloths(request):
-    return render(request, 'mens_cloths.html')
+    mens_cloths = Cloths.objects.filter(category='men')
+    return render(request, 'mens_cloths.html', {'mens_cloths': mens_cloths})
