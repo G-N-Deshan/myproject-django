@@ -2,8 +2,8 @@ from urllib import request
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Card, Offers, NewArrivals, Cloths, Review
-from .forms import ReviewForm
+from .models import Card, Offers, NewArrivals, Cloths, Review, ContactMessage, Toy
+from .forms import ReviewForm, ContactForm
 
 # Create your views here.
 
@@ -96,7 +96,55 @@ def reviews(request):
     else:
         form = ReviewForm()
     
-    return render(request, 'reviews.html', {'form': form})
+    # Get latest 20 reviews
+    latest_reviews = Review.objects.all()[:20]
+    
+    return render(request, 'reviews.html', {'form': form, 'latest_reviews': latest_reviews})
 
 def review_success(request):
     return render(request, 'review_success.html')
+
+
+def contact_us(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Thank you! We received your message and will get back to you soon.')
+            return redirect('contact_success')
+    else:
+        form = ContactForm()
+    
+    return render(request, 'contact.html', {'form': form})
+
+def contact_success(request):
+    return render(request, 'contact_success.html')
+
+
+def toys_page(request):
+    # Get filter parameters
+    category = request.GET.get('category', 'all')
+    age_range = request.GET.get('age', 'all')
+    
+    # Filter toys
+    toys = Toy.objects.all()
+    
+    if category != 'all':
+        toys = toys.filter(category=category)
+    
+    if age_range != 'all':
+        toys = toys.filter(age_range=age_range)
+    
+    # Get featured toys
+    featured_toys = Toy.objects.filter(is_bestseller=True)[:4]
+    new_toys = Toy.objects.filter(is_new=True)[:4]
+    
+    context = {
+        'toys': toys,
+        'featured_toys': featured_toys,
+        'new_toys': new_toys,
+        'selected_category': category,
+        'selected_age': age_range,
+    }
+    
+    return render(request, 'toys.html', context)

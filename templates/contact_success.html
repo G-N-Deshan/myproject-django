@@ -1,0 +1,27 @@
+<!-- filepath: c:\Users\nipun\Documents\python\myproject\templates\contact_success.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Sent</title>
+    <link rel="stylesheet" href="{% static 'navbar.css'%}">
+    <link rel="stylesheet" href="{% static 'footer.css'%}">
+    <link rel="stylesheet" href="{% static 'contact.css'%}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <section class="contact-form-section" style="grid-template-columns: 1fr; text-align: center; padding: 100px 20px;">
+        <div class="form-container">
+            <div style="font-size: 4rem; margin-bottom: 20px;">✓</div>
+            <h2 style="color: #10b981; margin-bottom: 15px;">Message Sent Successfully!</h2>
+            <p style="color: #475569; margin-bottom: 30px;">Thank you for contacting us. We'll get back to you within 24 hours.</p>
+            <a href="/" style="display: inline-block; padding: 12px 30px; background: #6366f1; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">← Back to Home</a>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+</body>
+</html>

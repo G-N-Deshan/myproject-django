@@ -3,17 +3,180 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
-    <link rel="stylesheet" href="{%static 'footer.css'%}">
+    <link rel="stylesheet" href="{% static 'footer.css'%}">
+    <link rel="stylesheet" href="{% static 'contact.css'%}">
 </head>
 <body>
-    {%include 'navbar.html'%}
+    {% include 'navbar.html' %}
 
-    <h1>Contact Us</h1>
+    <!-- Hero Section -->
+    <section class="contact-hero">
+        <div class="contact-hero__overlay"></div>
+        <div class="contact-hero__content">
+            <h1 class="contact-hero__title">Get In Touch</h1>
+            <p class="contact-hero__subtitle">We'd love to hear from you. Send us a message!</p>
+        </div>
+    </section>
 
-    
-{%include 'footer.html'%}
+    <!-- Info Cards Section -->
+    <section class="contact-info">
+        <div class="info-container">
+            <div class="info-card">
+                <div class="info-card__icon">📍</div>
+                <h3>Address</h3>
+                <p>123 Fashion Street<br>New York, NY 10001</p>
+            </div>
+            <div class="info-card">
+                <div class="info-card__icon">📞</div>
+                <h3>Phone</h3>
+                <p>+1 (555) 123-4567<br>Mon - Fri: 9AM - 6PM</p>
+            </div>
+            <div class="info-card">
+                <div class="info-card__icon">✉️</div>
+                <h3>Email</h3>
+                <p>support@kidsfashion.com<br>info@kidsfashion.com</p>
+            </div>
+            <div class="info-card">
+                <div class="info-card__icon">⏰</div>
+                <h3>Business Hours</h3>
+                <p>Monday - Friday: 9AM - 6PM<br>Saturday - Sunday: Closed</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-form-section">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Send Us a Message</h2>
+                <p>Our team will respond within 24 hours</p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" class="contact-form">
+                {% csrf_token %}
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_name">Full Name *</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <span class="error">{{ form.name.errors }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_email">Email Address *</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <span class="error">{{ form.email.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_phone">Phone Number</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                            <span class="error">{{ form.phone.errors }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_subject">Subject *</label>
+                        {{ form.subject }}
+                        {% if form.subject.errors %}
+                            <span class="error">{{ form.subject.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="id_message">Message *</label>
+                    {{ form.message }}
+                    {% if form.message.errors %}
+                        <span class="error">{{ form.message.errors }}</span>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+
+        <!-- Map Section -->
+        <div class="map-section">
+            <h3>Find Us Here</h3>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.1234567890!2d-74.0060!3d40.7128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQyJzQ2LjAiTiA3NMKwMDAnMjEuNiJX!5e0!3m2!1sen!2sus!4v1234567890" 
+                    width="100%" 
+                    height="400" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>How long does shipping take?</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    Standard shipping takes 5-7 business days. Express shipping available for 2-3 business days.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>What is your return policy?</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    We offer 30-day returns for unused items. Please contact support for return authorization.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>Do you offer international shipping?</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes! We ship to over 50 countries worldwide. Shipping costs vary by location.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>How can I track my order?</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    You'll receive a tracking number via email once your order ships. Use it to track in real-time.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script src="{% static 'contact.js' %}"></script>
 </body>
 </html>

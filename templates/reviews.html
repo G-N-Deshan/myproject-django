@@ -55,64 +55,63 @@
             <button type="submit">Submit Review</button>
         </form>
     </section>
+
+    <!-- Reviews Display Section -->
+    <section class="reviews-display">
+        <div class="reviews-header">
+            <h2>Latest Reviews</h2>
+            <p class="reviews-header-subtitle">What our customers are saying about us</p>
+            
+            <!-- Review Stats -->
+            <div class="review-stats">
+                <div class="stat-item">
+                    <span class="stat-number">{{ latest_reviews.count }}</span>
+                    <div class="stat-label">Total Reviews</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4.8</span>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">98%</span>
+                    <div class="stat-label">Satisfied Customers</div>
+                </div>
+            </div>
+        </div>
+
+        {% if latest_reviews %}
+            <div class="reviews-list">
+                {% for review in latest_reviews %}
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-info">
+                            <h3>{{ review.name }}</h3>
+                        </div>
+                        <span class="review-rating">{{ review.get_rating_display }} ⭐</span>
+                    </div>
+                    
+                    <p class="review-comment">{{ review.comment }}</p>
+                    
+                    {% if review.uploadImages %}
+                    <img src="{{ review.uploadImages.url }}" alt="Review image" class="review-image">
+                    {% endif %}
+                    
+                    <div class="review-footer">
+                        <p class="review-date">📅 {{ review.created_at|date:"M d, Y" }}</p>
+                        <span class="review-verified">✓ Verified</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-reviews">
+                <span class="no-reviews-icon">📭</span>
+                <h3>No reviews yet</h3>
+                <p>Be the first to share your experience with us!</p>
+            </div>
+        {% endif %}
+    </section>
     
     {% include 'footer.html' %}
 </body>
 </html>
-
-
-
-
-
-<!-- {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviews</title>
-    <link rel="stylesheet" href="{% static 'navbar.css'%}">
-    <link rel="stylesheet" href="{%static 'footer.css'%}">
-    <link rel="stylesheet" href="{% static 'review.css'%}">
-</head>
-<body>
-   {%include 'navbar.html'%}
-
-    
-
-    <section class="review-form">
-        <h1>Submit a Review</h1>
-        <form method="post" action="">
-            {% csrf_token %}
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="rating">Rating:</label>
-            <select id="rating" name="rating" required>
-                <option value="">Select a rating</option>
-                <option value="1"> Poor</option>
-                <option value="2"> Fair</option>
-                <option value="3"> Good</option>
-                <option value="4"> Very Good</option>
-                <option value="5"> Excellent</option>
-            </select>
-            
-            <label for="uploadImages">Upload Images:</label>
-            <input type="file" id="uploadImages" name="uploadImages">
-
-            <label for="comment">Comment:</label>
-            <textarea id="comment" name="comment" rows="4" required></textarea>
-
-            <button type="submit">Submit Review</button>
-        </form>
-
-    </section>
-
-    
-{%include 'footer.html'%}
-</body>
-</html>
- -->
