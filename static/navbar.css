@@ -9,43 +9,76 @@ body{
 }
 
 .section-0{
-
     height: 10rem;
     width: 100%;
     background-color: #ffffff;
     box-shadow: 0rem 0.1rem 0.5rem rgba(0, 0, 0, 0.3);
-    text-align: center;
-
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
+
+.section-0 .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.section-0 .navbar > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
 .section-0 .navbar .nav-logo {
     height: 9rem;
     width: auto;
-    margin-left: 2rem;
+    margin-left: 0.5rem;
+    margin-right: 0;
     margin-top: 0rem;
-    float: left;
+    flex-shrink: 0;
+}
+
+/* Navigation Links Container */
+.nav-links-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 0;
 }
 
 .section-0 .navbar .nav-link{
-
     display: inline-block;
-    margin-top: 4rem;
     font-size: 1.2rem;
     font-weight: 300;
     margin-right: 3rem;
     color: #000000;
-    text-decoration:none;
+    text-decoration: none;
     letter-spacing: 0.2rem;
     background-color: transparent;
     padding: 0.5rem;
     border-radius: 0.5rem;
     transition-property: color, background-color, padding, border-radius, transform;
     transform: scale(1);
-
+    white-space: nowrap;
+    line-height: 1;
 }
+
 .section-0 .navbar .nav-link:hover{
     background-color: #f5f0f0;
     transform: scale(1.1);
-
 }
 
 .section-0 .navbar .nav-link--home:hover{
@@ -93,11 +126,9 @@ body{
     transition-timing-function: ease;
 }
 
-
 .section-0 .navbar .nav-link.active{
     color: #ff5733;
     font-weight: 600;
-
 }
 
 .section-0 .navbar .nav-link--login:hover{
@@ -110,41 +141,39 @@ body{
 }
 
 .section-0 .login-btn{
-    position:relative;
-    right: -5rem;
-    top: 0rem;
     background-color: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
-    margin: 0;
+    margin: 0 2rem 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-
-
-
-
-
 .section-0 .logout-btn{
-    position:relative;
-    right: -5rem;
-    top: 0rem;
     background-color: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
-    margin: 0;
+    margin: 0 2rem 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .section-0 .user-profile-btn{
-    position:relative;
-    right: -4rem;
-    top: 0rem;
     background-color: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
-    margin: 0;
+    margin: 0 1rem 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .section-0 .navbar .nav-link--logout:hover{
@@ -161,40 +190,145 @@ body{
     vertical-align: middle;
 }
 
-
-
 .section-0 button{
     background-color: transparent;
     border: none;
     cursor: pointer;
 }
 
-
-
-
-@media only screen and (max-width: 768px) {
-    .section-0 .navbar .nav-link {
-        display: block;
-        margin: 1rem 0;
-        font-size: 1rem;
+/* Responsive Design */
+@media only screen and (max-width: 1200px) {
+    .section-0 {
+        height: 9rem;
+        min-height: 9rem;
     }
 
-    .section-0 .navbar .nav-links {
-        float: none;
-        text-align: center;
-        margin: 0;
+    .section-0 .navbar .nav-link{
+        margin-right: 2rem;
+        font-size: 1.1rem;
     }
-}
-@media only screen and (max-width: 480px) {
+
     .section-0 .navbar .nav-logo {
-        height: 7rem;
-        margin-left: 1rem;
+        height: 8rem;
+        margin-left: 0.5rem;
     }
 
-    .section-0 .navbar .nav-link {
-        font-size: 0.9rem;
+    .section-0 .login-btn {
+        margin-right: 1.5rem;
+    }
+
+    .section-0 .user-profile-btn {
         margin-right: 1rem;
     }
 }
 
+@media only screen and (max-width: 992px) {
+    .section-0 {
+        height: 8rem;
+        min-height: 8rem;
+    }
 
+    .section-0 .navbar .nav-link{
+        margin-right: 1.5rem;
+        font-size: 1rem;
+    }
+
+    .section-0 .navbar .nav-logo {
+        height: 7rem;
+        margin-left: 0.5rem;
+    }
+
+    .section-0 .login-btn {
+        margin-right: 1rem;
+    }
+
+    .section-0 .user-profile-btn {
+        margin-right: 0.5rem;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .section-0 {
+        height: auto;
+        min-height: 8rem;
+    }
+
+    .section-0 .navbar > div {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        padding: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .nav-links-container {
+        flex: none;
+        gap: 0.5rem;
+    }
+
+    .section-0 .navbar .nav-logo {
+        height: 5rem;
+        margin-left: 0.5rem;
+        margin-right: 0;
+    }
+
+    .section-0 .navbar .nav-link {
+        font-size: 0.85rem;
+        margin-right: 0.8rem;
+        margin-top: 0;
+        padding: 0.25rem;
+    }
+
+    .section-0 .login-btn {
+        position: static;
+        margin-left: 0;
+        margin-right: 0.5rem;
+    }
+
+    .section-0 .user-profile-btn {
+        position: static;
+        margin-left: 0;
+        margin-right: 0.5rem;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .section-0 {
+        height: auto;
+        min-height: 6rem;
+    }
+
+    .section-0 .navbar > div {
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+
+    .nav-links-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .section-0 .navbar .nav-logo {
+        height: 4rem;
+        margin-left: 0.3rem;
+    }
+
+    .section-0 .navbar .nav-link {
+        font-size: 0.75rem;
+        margin-right: 0.5rem;
+        margin-top: 0;
+    }
+
+    .section-0 button {
+        padding: 0;
+    }
+
+    .section-0 .login-btn {
+        margin-right: 0.3rem;
+    }
+
+    .section-0 .user-profile-btn {
+        margin-right: 0.3rem;
+    }
+}
