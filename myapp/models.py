@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Card(models.Model):
@@ -28,6 +29,7 @@ class Offers(models.Model):
 
     button_text = models.CharField(max_length=50)
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='kids')
+    end_time = models.DateTimeField(blank=True, null=True)
     
     def __str__(self):
         return self.title
@@ -159,3 +161,50 @@ class Toy(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        
+        
+
+
+class WishlistItem(models.Model):
+
+    ITEM_TYPE_CHOICES = [
+        ('toy', 'Toy'),
+        ('cloth', 'Cloth'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlist_items')
+    
+    item_type = models.CharField(max_length=10, choices=ITEM_TYPE_CHOICES)
+    
+    cloth = models.ForeignKey('Cloths', on_delete=models.CASCADE, blank=True, null=True, related_name='wishlisted_by')
+    
+    toy = models.ForeignKey('Toy', on_delete=models.CASCADE, blank=True, null=True, related_name='wishlisted_by')
+    
+    added_at = models.DateTimeField(auto_now_add=True)
+    
+    
+    class Meta:
+        unique_together = [('user', 'cloth'), ('user', 'toy'),]
+        
+        ordering = ['-added_at']
+        verbose_name = 'Wishlist Item'
+        verbose_name_plural = 'Wishlist Items'
+      
+        
+    
+    def __str__(self):
+        item_name = self.cloth.name if self.cloth else self.toy.name
+        return f"{self.user.username} - {item_name}"
+    
+    def get_item(self):
+        return self.cloth if self.cloth else self.toy
+    
+    def get_price(self):
+        if self.item_type == 'cloth':
+            return self.cloth.price2 or self.cloth.price
+        else:
+            return str(self.toy.price)
+    
+    def get_category(self):
+        item = self.get_item()
+        return item.get_category_display() if hasattr(item, 'get_category_display') else item.category

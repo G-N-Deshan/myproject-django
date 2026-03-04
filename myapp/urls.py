@@ -26,6 +26,10 @@ urlpatterns = [
     path('toys/', views.toys_page, name='toys_page'),
     path('cart/', views.cart, name='cart'),
     path('cart_details_page/', views.cart_details, name='cart_details'),
+    path('wishlist/', views.wishlist, name='wishlist'),
+    path('wishlist/add/<str:item_type>/<int:item_id>/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('wishlist/remove/<int:wishlist_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
+    path('wishlist/move-to-cart/<int:wishlist_id>/', views.move_to_cart, name='move_to_cart'),
 ]
 
 if settings.DEBUG:

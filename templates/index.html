@@ -42,97 +42,158 @@
     <!-- Hot Offers Section -->
     <section class="hot-offers-section">
         <div class="section-header">
-            <span class="section-badge">🔥 Limited Time</span>
+            <span class="section-badge"> Limited Time</span>
             <h2>Hot Offers</h2>
-            <p>Don't miss out on these amazing deals!</p>
+            <p><b>Don't miss out on these amazing deals!</b></p>
         </div>
 
         <div class="offers-grid">
-            {% for offer in hot_offers %}
+            {% for offer in offers %}
             <div class="offer-card">
-                <div class="offer-badge">-{{ offer.discount }}%</div>
+                <div class="offer-badge">-{{ offer.offers_badge }}%</div>
                 <div class="offer-image">
-                    <img src="{{ offer.image.url }}" alt="{{ offer.name }}">
+                    <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}">
                     <div class="offer-overlay">
-                        <button class="quick-view-btn" onclick="addToCart({{ offer.id }})">Add to Cart</button>
+                        <button class="quick-view-btn">Add to Cart</button>
                     </div>
                 </div>
                 <div class="offer-content">
-                    <h3>{{ offer.name }}</h3>
+                    <h3>{{ offer.title }}</h3>
                     <div class="offer-price">
-                        <span class="original-price">${{ offer.original_price }}</span>
-                        <span class="sale-price">${{ offer.sale_price }}</span>
+                    {% if offer.price1 %}
+                    <span class="original-price">${{ offer.price1 }}</span>
+                    {% endif %}
+                    {% if offer.price2 %}
+                    <span class="sale-price">${{ offer.price2 }}</span>
+                    {% endif %}
+                    {% if offer.stock_text %}
+                    <span class="stock">{{offer.stock_text}}</span>
+                    {% endif %}                        
                     </div>
                     <div class="offer-timer" data-end-time="{{ offer.end_time }}">
-                        <span>⏰ Ends in: <span class="countdown"></span></span>
+                        <span> Ends in: <span class="countdown"></span></span>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+
     </section>
 
     <!-- New Arrivals Section -->
     <section class="new-arrivals-section">
-        <div class="section-header">
-            <span class="section-badge">✨ Fresh</span>
-            <h2>New Arrivals</h2>
-            <p>Check out our latest products</p>
-        </div>
+    <div class="section-header">
+        <span class="section-badge">✨ New</span>
+        <h2>New Arrivals</h2>
+        <p>Fresh products just landed!</p>
+    </div>
 
-        <div class="arrivals-slider">
-            <button class="slider-btn prev-btn" onclick="slideArrivals('prev')">‹</button>
-            
-            <div class="arrivals-track">
-                {% for product in new_arrivals %}
-                <div class="arrival-card">
-                    <div class="arrival-badge">NEW</div>
-                    <div class="arrival-image">
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                        <button class="wishlist-btn" onclick="toggleWishlist({{ product.id }})">
-                            <span class="heart-icon">♡</span>
-                        </button>
-                    </div>
-                    <div class="arrival-content">
-                        <span class="arrival-category">{{ product.category }}</span>
-                        <h3>{{ product.name }}</h3>
-                        <p>{{ product.description|truncatewords:10 }}</p>
-                        <div class="arrival-footer">
-                            <span class="arrival-price">${{ product.price }}</span>
-                            <button class="add-cart-btn" onclick="addToCart({{ product.id }})">
-                                <span>🛒</span>
-                            </button>
-                        </div>
+    <div class="arrivals-slider">
+        <button class="slider-btn prev-btn" aria-label="Previous">‹</button>
+        
+        <div class="arrivals-track">
+            {% for arrival in arrivals %}
+            <div class="arrival-card">
+                <span class="arrival-badge">NEW</span>
+                
+                <div class="arrival-image">
+                    <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.name }}">
+                    <button class="wishlist-btn" aria-label="Add to wishlist">
+                        <span class="heart-icon">♡</span>
+                    </button>
+                </div>
+                
+                <div class="arrival-content">
+                    <span class="arrival-category">{{ arrival.get_category_display }}</span>
+                    <h3>{{ arrival.name }}</h3>
+                    <p>{{ arrival.description|truncatewords:10 }}</p>
+                    
+                    <div class="arrival-footer">
+                        <span class="arrival-price">${{ arrival.price }}</span>
+                        <button class="add-cart-btn" aria-label="Add to cart">🛒</button>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-
-            <button class="slider-btn next-btn" onclick="slideArrivals('next')">›</button>
+            {% empty %}
+            <div class="empty-arrivals">
+                <p>No new arrivals yet. Check back soon!</p>
+            </div>
+            {% endfor %}
         </div>
-    </section>
+        
+        <button class="slider-btn next-btn" aria-label="Next">›</button>
+    </div>
+</section>
 
     <!-- Wishlist Section -->
-    <section class="wishlist-section">
-        <div class="section-header">
-            <span class="section-badge">❤️ Favorites</span>
-            <h2>Your Wishlist</h2>
+   <section class="wishlist-section">
+    <div class="section-header">
+        <span class="section-badge">❤️ Favorites</span>
+        <h2>Your Wishlist</h2>
+        {% if user.is_authenticated %}
+            <p>{{ wishlist_count }} item{{ wishlist_count|pluralize }} saved</p>
+        {% else %}
             <p>Items you love, saved for later</p>
+        {% endif %}
+    </div>
+
+    <div class="wishlist-container">
+        {% if not user.is_authenticated %}
+        <!-- Not Logged In State -->
+        <div class="empty-wishlist">
+            <div class="empty-icon">🔒</div>
+            <h3>Login to view your wishlist</h3>
+            <p>Save your favorite items for later</p>
+            <a href="{% url 'login' %}" class="browse-btn">Login Now</a>
         </div>
 
-        <div class="wishlist-container">
-            <div id="wishlistEmpty" class="empty-wishlist">
-                <div class="empty-icon">💝</div>
-                <h3>Your wishlist is empty</h3>
-                <p>Start adding products you love!</p>
-                <a href="{% url 'buy' %}" class="browse-btn">Browse Products</a>
-            </div>
-
-            <div id="wishlistItems" class="wishlist-grid">
-                <!-- Wishlist items will be loaded dynamically -->
-            </div>
+        {% elif wishlist_count == 0 %}
+        <!-- Empty Wishlist State -->
+        <div class="empty-wishlist">
+            <div class="empty-icon">💝</div>
+            <h3>Your wishlist is empty</h3>
+            <p>Start adding products you love!</p>
+            <a href="{% url 'buy' %}" class="browse-btn">Browse Products</a>
         </div>
-    </section>
+
+        {% else %}
+        <!-- Wishlist Items Grid -->
+        <div class="wishlist-grid">
+            {% for item in wishlist_items %}
+            <div class="wishlist-card">
+                <div class="wishlist-image">
+                    <img src="{{ item.image }}" alt="{{ item.name }}">
+                    <span class="wishlist-type-badge">{{ item.item_type|title }}</span>
+                </div>
+                <div class="wishlist-content">
+                    <span class="wishlist-category">{{ item.category }}</span>
+                    <h4>{{ item.name }}</h4>
+                    <div class="wishlist-footer">
+                        <span class="wishlist-price">${{ item.price }}</span>
+                        <form method="POST" action="{% url 'remove_from_wishlist' item.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="remove-wishlist-btn" title="Remove from wishlist">
+                                ✕
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- View All Link -->
+        {% if wishlist_count > 6 %}
+        <div class="wishlist-view-all">
+            <a href="{% url 'wishlist' %}" class="view-all-btn">
+                View All {{ wishlist_count }} Items →
+            </a>
+        </div>
+        {% endif %}
+
+        {% endif %}
+    </div>
+</section>
 
     <!-- Features Section -->
     <section class="section-3">
