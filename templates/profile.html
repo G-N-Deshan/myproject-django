@@ -1,22 +1,249 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--     <link rel="stylesheet" href="{% static 'profile.css' %}">
- -->     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <title>profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <link rel="stylesheet" href="{% static 'profile.css' %}">
+    <title>User Profile</title>
 </head>
 <body>
-    <h1>Profile Page</h1>
+    {% include 'navbar.html' %}
+    
     {% if user.is_authenticated %}
-        <p>Welcome, {{ user.username }}!</p>
-        <p>Email: {{ user.email }}</p>
-        <p>First Name: {{ user.first_name }}</p>
-        <p>Last Name: {{ user.last_name }}</p>
-        
-       
-     {% endif %}
+    <div class="profile-container">
+        <div class="profile-wrapper">
+            
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-cover"></div>
+                
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <span class="avatar-initial">{{ user.username|first|upper }}</span>
+                    </div>
+                    
+                    <div class="profile-details">
+                        <h1 class="profile-name">{{ user.first_name }} {{ user.last_name }}</h1>
+                        <p class="profile-username">@{{ user.username }}</p>
+                        <p class="profile-member-since">Member since {{ user.date_joined|date:"M Y" }}</p>
+                    </div>
+
+                    <button class="edit-profile-btn" id="editProfileBtn">✎ Edit Profile</button>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="profile-content">
+                
+                <!-- Left Column: Personal Info -->
+                <div class="profile-column left-column">
+                    
+                    <!-- Personal Information Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>📋 Personal Information</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-group">
+                                <label class="info-label">Full Name</label>
+                                <p class="info-value">{{ user.first_name }} {{ user.last_name }}</p>
+                            </div>
+                            
+                            <div class="info-group">
+                                <label class="info-label">Username</label>
+                                <p class="info-value">{{ user.username }}</p>
+                            </div>
+                            
+                            <div class="info-group">
+                                <label class="info-label">Email Address</label>
+                                <p class="info-value">{{ user.email }}</p>
+                            </div>
+                            
+                            <div class="info-group">
+                                <label class="info-label">Account Status</label>
+                                <span class="status-badge active">✓ Active</span>
+                            </div>
+
+                            <div class="info-group">
+                                <label class="info-label">Member Since</label>
+                                <p class="info-value">{{ user.date_joined|date:"F d, Y" }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Settings Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>⚙️ Account Settings</h2>
+                        </div>
+                        <div class="card-body">
+                            <button class="settings-btn">🔐 Change Password</button>
+                            <button class="settings-btn">📧 Update Email</button>
+                            <button class="settings-btn">🔔 Notification Preferences</button>
+                            <button class="settings-btn danger">🚪 Logout</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Activity & Stats -->
+                <div class="profile-column right-column">
+                    
+                    <!-- Statistics Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>📊 Your Activity</h2>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-number">12</div>
+                                <div class="stat-name">Total Orders</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
+                                <div class="stat-name">Reviews Given</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">3</div>
+                                <div class="stat-name">Wishlist Items</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">98%</div>
+                                <div class="stat-name">Satisfaction</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>⚡ Quick Actions</h2>
+                        </div>
+                        <div class="quick-actions">
+                            <a href="{% url 'buy' %}" class="action-btn">
+                                <span class="action-icon">🛍️</span>
+                                <span>Continue Shopping</span>
+                            </a>
+                            <a href="{% url 'reviews' %}" class="action-btn">
+                                <span class="action-icon">⭐</span>
+                                <span>View Reviews</span>
+                            </a>
+                            <a href="#" class="action-btn">
+                                <span class="action-icon">❤️</span>
+                                <span>My Wishlist</span>
+                            </a>
+                            <a href="#" class="action-btn">
+                                <span class="action-icon">📦</span>
+                                <span>Order History</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Recent Reviews Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>⭐ Recent Reviews</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="review-item">
+                                <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                                <p class="review-text">Amazing product! Highly recommended.</p>
+                                <p class="review-date">2 days ago</p>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-rating">⭐⭐⭐⭐</div>
+                                <p class="review-text">Great quality and fast delivery.</p>
+                                <p class="review-date">1 week ago</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <form class="edit-form" method="POST" action="#">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="first_name" value="{{ user.first_name }}" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="last_name" value="{{ user.last_name }}" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" class="form-textarea" placeholder="Tell us about yourself..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+        const editBtn = document.getElementById('editProfileBtn');
+        const modal = document.getElementById('editProfileModal');
+        const closeBtn = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        editBtn.addEventListener('click', () => {
+            modal.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    </script>
+
 </body>
 </html>
+
+{% else %}
+<div class="not-authenticated">
+    <h2>Please login to view your profile</h2>
+    <a href="{% url 'login' %}" class="login-link">Go to Login</a>
+</div>
+{% endif %}
+
+    {% include 'footer.html' %}

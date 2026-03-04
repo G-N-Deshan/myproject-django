@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="{% static 'cart_details_page.css' %}">
+</head>
+<body>
+    <div class="cart-page-container">
+        <h1>Shopping Cart</h1>
+        
+        <div class="cart-content">
+            <div class="cart-items-section">
+                <div id="cartItems" class="cart-items">
+                    <!-- Cart items will be dynamically loaded here -->
+                </div>
+                <div id="emptyCartMessage" class="empty-cart">
+                    <p>Your cart is empty</p>
+                    <a href="{% url 'buy' %}" class="continue-shopping-btn">Continue Shopping</a>
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <h2>Order Summary</h2>
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax (10%):</span>
+                    <span id="tax">$0.00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span id="total">$0.00</span>
+                </div>
+                <button class="checkout-btn">Proceed to Checkout</button>
+                <a href="{% url 'buy' %}" class="continue-shopping">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'cart_page.js' %}"></script>
+</body>
+</html>

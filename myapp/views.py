@@ -148,3 +148,10 @@ def toys_page(request):
     }
     
     return render(request, 'toys.html', context)
+
+
+def cart(request):
+    return render(request, 'cart.html')
+
+def cart_details(request):
+    return render(request, 'cart_details_page.html')

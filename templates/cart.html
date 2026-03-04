@@ -1,0 +1,22 @@
+{% load static %}
+
+<div class="cart-container">
+    <a href="{% url 'cart_details' %}" class="cart-icon-btn" title="Shopping Cart">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-badge" id="cartCount">0</span>
+    </a>
+</div>
+
+<script>
+    // Update cart count from localStorage
+    function updateCartCount() {
+        const cartCount = localStorage.getItem('cartCount') || 0;
+        document.getElementById('cartCount').textContent = cartCount;
+    }
+
+    // Update on page load
+    document.addEventListener('DOMContentLoaded', updateCartCount);
+
+    // Listen for cart updates
+    window.addEventListener('cartUpdated', updateCartCount);
+</script>

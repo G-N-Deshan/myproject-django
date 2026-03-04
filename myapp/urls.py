@@ -24,7 +24,11 @@ urlpatterns = [
     path('contact/', views.contact_us, name='contact_us'),
     path('contact-success/', views.contact_success, name='contact_success'),
     path('toys/', views.toys_page, name='toys_page'),
+    path('cart/', views.cart, name='cart'),
+    path('cart_details_page/', views.cart_details, name='cart_details'),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    
+    

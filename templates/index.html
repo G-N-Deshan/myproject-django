@@ -6,58 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik+Mono+One&family=Zalando+Sans+Expanded:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-
-     <link rel="stylesheet" href="{%static 'index.css'%}">
+    <link rel="stylesheet" href="{%static 'index.css'%}">
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{%static 'footer.css'%}">
-    <title>Home</title>
-<style>
-    .section-2 h2{
-    font-size: clamp(2rem, 8vw, 5rem);
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    font-weight: 900;
-    text-align: center;
-    
-}
-
-@keyframes changebackground {
-    0% {
-        background-image  : url("/media/new-1.jpg");
-    }
-    50% {
-        background-image: url("/media/new-1.jpg");
-    }
-    100% {
-        background-image: url("/media/new-1.jpg");
-    }
-}
-</style>
-
+    <title>Home - G11 Fashion & Toys</title>
 </head>
 <body>
 
     {% include 'navbar.html' %}
 
-
-
-
+    <!-- Hero Section -->
     <section class="section-1">
-       <h2><strong  style="color:blue;">
-        <strong style="font-size: 7rem;">F</strong>ashion </strong>  &
+       <h2><strong style="color:blue;">
+        <strong style="font-size: 7rem;">F</strong>ashion </strong> &
         <strong style="color: red;">Toys</strong></h2>
-       <h3> for Every Smile</h3>
+       <h3>for Every Smile</h3>
        <h1>G11</h1>
-    <a href="{% url 'buy' %}"><button>Browse Products</button></a>
-
+       <a href="{% url 'buy' %}"><button>Browse Products</button></a>
     </section>
 
+    <!-- Welcome Section -->
     <section class="section-2">
         {% if user.is_authenticated %}
         <h2>Welcome {{ user.username }}!</h2>
@@ -65,29 +36,117 @@
         <h2>Welcome to G11!</h2>
         {% endif %}
         <p>Discover trendy clothes and fun toys for your little ones.</p>
-       <p>Shop quality products at great prices with G11 today.</p>
+        <p>Shop quality products at great prices with G11 today.</p>
     </section>
 
-
-    <section class="section-3">
-
-
-        {%for card in cards %}
-        <div class="feature-card">
-            <img src="{{ card.imageUrl.url}}" alt="{{ card.name}}">
-            <h2>{{ card.name}}</h2>
-            <p>{{ card.details }}</p>
+    <!-- Hot Offers Section -->
+    <section class="hot-offers-section">
+        <div class="section-header">
+            <span class="section-badge">🔥 Limited Time</span>
+            <h2>Hot Offers</h2>
+            <p>Don't miss out on these amazing deals!</p>
         </div>
 
-        {% endfor %}
-
-
+        <div class="offers-grid">
+            {% for offer in hot_offers %}
+            <div class="offer-card">
+                <div class="offer-badge">-{{ offer.discount }}%</div>
+                <div class="offer-image">
+                    <img src="{{ offer.image.url }}" alt="{{ offer.name }}">
+                    <div class="offer-overlay">
+                        <button class="quick-view-btn" onclick="addToCart({{ offer.id }})">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="offer-content">
+                    <h3>{{ offer.name }}</h3>
+                    <div class="offer-price">
+                        <span class="original-price">${{ offer.original_price }}</span>
+                        <span class="sale-price">${{ offer.sale_price }}</span>
+                    </div>
+                    <div class="offer-timer" data-end-time="{{ offer.end_time }}">
+                        <span>⏰ Ends in: <span class="countdown"></span></span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </section>
 
+    <!-- New Arrivals Section -->
+    <section class="new-arrivals-section">
+        <div class="section-header">
+            <span class="section-badge">✨ Fresh</span>
+            <h2>New Arrivals</h2>
+            <p>Check out our latest products</p>
+        </div>
 
-    {%include 'footer.html'%}
-    
+        <div class="arrivals-slider">
+            <button class="slider-btn prev-btn" onclick="slideArrivals('prev')">‹</button>
+            
+            <div class="arrivals-track">
+                {% for product in new_arrivals %}
+                <div class="arrival-card">
+                    <div class="arrival-badge">NEW</div>
+                    <div class="arrival-image">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        <button class="wishlist-btn" onclick="toggleWishlist({{ product.id }})">
+                            <span class="heart-icon">♡</span>
+                        </button>
+                    </div>
+                    <div class="arrival-content">
+                        <span class="arrival-category">{{ product.category }}</span>
+                        <h3>{{ product.name }}</h3>
+                        <p>{{ product.description|truncatewords:10 }}</p>
+                        <div class="arrival-footer">
+                            <span class="arrival-price">${{ product.price }}</span>
+                            <button class="add-cart-btn" onclick="addToCart({{ product.id }})">
+                                <span>🛒</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
 
+            <button class="slider-btn next-btn" onclick="slideArrivals('next')">›</button>
+        </div>
+    </section>
 
+    <!-- Wishlist Section -->
+    <section class="wishlist-section">
+        <div class="section-header">
+            <span class="section-badge">❤️ Favorites</span>
+            <h2>Your Wishlist</h2>
+            <p>Items you love, saved for later</p>
+        </div>
+
+        <div class="wishlist-container">
+            <div id="wishlistEmpty" class="empty-wishlist">
+                <div class="empty-icon">💝</div>
+                <h3>Your wishlist is empty</h3>
+                <p>Start adding products you love!</p>
+                <a href="{% url 'buy' %}" class="browse-btn">Browse Products</a>
+            </div>
+
+            <div id="wishlistItems" class="wishlist-grid">
+                <!-- Wishlist items will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section-3">
+        {% for card in cards %}
+        <div class="feature-card">
+            <img src="{{ card.imageUrl.url }}" alt="{{ card.name }}">
+            <h2>{{ card.name }}</h2>
+            <p>{{ card.details }}</p>
+        </div>
+        {% endfor %}
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script src="{% static 'home.js' %}"></script>
 </body>
 </html>
