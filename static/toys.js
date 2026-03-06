@@ -41,17 +41,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add to cart animation
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Create feedback effect
+            const hasDataset = this.dataset.itemType && this.dataset.itemId;
+            if (!hasDataset) return; // let normal default behavior continue if not dataset-driven
+
+            // no preventDefault here if you rely on cart_utils global handler
             const originalText = this.textContent;
             this.textContent = '✓ Added!';
             this.style.background = '#10b981';
-            
             setTimeout(() => {
                 this.textContent = originalText;
                 this.style.background = '';
-            }, 2000);
+            }, 1200);
         });
     });
 });

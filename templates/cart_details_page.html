@@ -37,12 +37,16 @@
                     <span>Total:</span>
                     <span id="total">$0.00</span>
                 </div>
-                <button class="checkout-btn">Proceed to Checkout</button>
+                <form action="{% url 'checkout' %}" method="POST" style="width: 100%;">
+                    {% csrf_token %}
+                    <button type="submit" class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+                </form>
                 <a href="{% url 'buy' %}" class="continue-shopping">Continue Shopping</a>
             </div>
         </div>
     </div>
 
+    <script src="{% static 'cart_utils.js' %}"></script>
     <script src="{% static 'cart_page.js' %}"></script>
 </body>
 </html>

@@ -50,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'myapp.middleware.CartTransferMiddleware',
+    'myapp.middleware.ErrorHandlingMiddleware',
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -127,3 +129,43 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Session security
+SESSION_COOKIE_SECURE = False  # Set True in production with HTTPS
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = False  # Set True in production with HTTPS
+CSRF_COOKIE_HTTPONLY = False  # must be False for JS AJAX cart CRUD
+
+# Security headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_SECURITY_POLICY = {
+    "default-src": ("'self'",),
+    "script-src": ("'self'", "cdn.jsdelivr.net"),
+    "style-src": ("'self'", "'unsafe-inline'", "fonts.googleapis.com", "cdn.jsdelivr.net"),
+    "font-src": ("'self'", "fonts.gstatic.com"),
+    "img-src": ("'self'", "data:", "https:"),
+}
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['file'],
+        'level': 'INFO',
+    },
+}

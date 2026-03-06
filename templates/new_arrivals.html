@@ -33,7 +33,7 @@
                 <p>{{item.description}}</p>
                 <div class="arrival-meta">
                     <span class="price">{{item.price}}</span>
-                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-btn">Add to cart</a>
+                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">Add to cart</a>
                 </div>
             </article>
 
@@ -139,7 +139,7 @@
                 <p>{{item.description}}</p>
                 <div class="arrival-meta">
                     <span class="price">{{item.price}}</span>
-                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-btn">Add to cart</a>
+                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">Add to cart</a>
                 </div>
             </article>
 
@@ -254,7 +254,7 @@
                 <p>{{item.description}}</p>
                 <div class="arrival-meta">
                     <span class="price">{{item.price}}</span>
-                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-btn">Add to cart</a>
+                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">Add to cart</a>
                 </div>
             </article>
 
@@ -336,3 +336,4 @@
 
 
 {% include 'footer.html'%}
+<script src="{% static 'cart_utils.js' %}"></script>

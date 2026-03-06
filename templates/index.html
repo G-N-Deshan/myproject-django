@@ -54,7 +54,13 @@
                 <div class="offer-image">
                     <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}">
                     <div class="offer-overlay">
-                        <button class="quick-view-btn">Add to Cart</button>
+                        <a
+                            class="quick-view-btn"
+                            href="{% url 'add_to_cart' 'offer' offer.id %}"
+                            data-add-to-cart
+                            data-item-type="offer"
+                            data-item-id="{{ offer.id }}"
+                        >Add to Cart</a>
                     </div>
                 </div>
                 <div class="offer-content">
@@ -97,7 +103,7 @@
                 <span class="arrival-badge">NEW</span>
                 
                 <div class="arrival-image">
-                    <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.name }}">
+                    <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }}">
                     <button class="wishlist-btn" aria-label="Add to wishlist">
                         <span class="heart-icon">♡</span>
                     </button>
@@ -105,12 +111,19 @@
                 
                 <div class="arrival-content">
                     <span class="arrival-category">{{ arrival.get_category_display }}</span>
-                    <h3>{{ arrival.name }}</h3>
+                    <h3>{{ arrival.title }}</h3>
                     <p>{{ arrival.description|truncatewords:10 }}</p>
                     
                     <div class="arrival-footer">
                         <span class="arrival-price">${{ arrival.price }}</span>
-                        <button class="add-cart-btn" aria-label="Add to cart">🛒</button>
+                        <a
+                            class="add-cart-btn"
+                            href="{% url 'add_to_cart' 'arrival' arrival.id %}"
+                            data-add-to-cart
+                            data-item-type="arrival"
+                            data-item-id="{{ arrival.id }}"
+                            aria-label="Add to cart"
+                        >🛒</a>
                     </div>
                 </div>
             </div>
@@ -208,6 +221,7 @@
 
     {% include 'footer.html' %}
 
+    <script src="{% static 'cart_utils.js' %}"></script>
     <script src="{% static 'home.js' %}"></script>
 </body>
 </html>

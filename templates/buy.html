@@ -13,9 +13,9 @@
 </head>
 <body>
     {%include 'navbar.html'%}
- {% include 'cart.html' %}   
+    {% include 'cart.html' %}
 
-    <section class= "grid-section">
+    <section class="grid-section">
         <div class="grid-item-1">
             <a href="{% url 'cloths' %}">
                 <img src="{%static 'clothes.png'%}" alt="Cloths">
@@ -23,13 +23,11 @@
             </a>
         </div>
         <div class="grid-item-2">
-            <a href="{% url 'toys' %}">
+            <a href="{% url 'toys_page' %}">
                 <img src="{%static 'teddy-bear.png'%}" alt="Toys">
                 <h2>Toys</h2>
             </a>
         </div>
-        </div>
-
     </section>
 
     <section class="offers">
@@ -42,11 +40,8 @@
             <a class="section-btn" href="{% url 'shop_offers' %}">Shop Offers</a>
         </div>
 
-
         <div class="offers-list">
-
-            {%for offer in offers|slice:":3"  reversed %}
-           
+            {%for offer in offers|slice:":3" reversed %}
             <article class="offer-card">
                 <span class="offer-badge">{{offer.offers_badge}}</span>
                 <img src="{{offer.imageUrl.url}}" alt="{{offer.offers_badge}}">
@@ -63,51 +58,14 @@
                     <span class="stock">{{offer.stock_text}}</span>
                     {% endif %} 
                 </div>
-                <a href="{% url 'product_detail' 'offer' offer.id %}" class="offer-btn">{{offer.button_text}}</a>
+                <button
+                    class="offer-btn"
+                    data-add-to-cart
+                    data-item-type="offer"
+                    data-item-id="{{ offer.id }}"
+                >{{offer.button_text}}</button>
             </article>
-           
             {% endfor %}
-
-
-
-
-
-
-            <!-- <article class="offer-card">
-                <span class="offer-badge">-30%</span>
-                <img src="../../assets/images/protective-clothing.png" alt="Kids wear offer">
-                <h3>Playday Outfit Deal</h3>
-                <p>Soft, breathable outfits designed for everyday fun and comfort for kids.</p>
-                <div class="offer-meta">
-                    <span class="price">Rs. 2,490</span>
-                    <span class="price-old">Rs. 3,550</span>
-                </div>
-                <a href="/G11/Html/pages/add-to-cart.php?product_id=1" class="offer-btn">Grab Deal</a>
-            </article>
-
-            <article class="offer-card">
-                <span class="offer-badge">Bundle</span>
-                <img src="../../assets/images/shopping-bag.png" alt="Bundle offer">
-                <h3>Outfit + Toy Combo</h3>
-                <p>Perfect bundles combining stylish kidswear with fun toys at special prices.</p>
-                <div class="offer-meta">
-                    <span class="price">Save Rs. 800</span>
-                    <span class="stock">Limited stock</span>
-                </div>
-                <a href="/G11/Html/pages/add-to-cart.php?product_id=2" class="offer-btn">Shop Bundle</a>
-            </article>
-
-            <article class="offer-card">
-                <span class="offer-badge">Free Shipping</span>
-                <img src="../../assets/images/4.jpeg" alt="Delivery offer">
-                <h3>Weekend Free Delivery</h3>
-                <p>Enjoy free island-wide delivery on orders above Rs. 4,000 this weekend.</p>
-                <div class="offer-meta">
-                    <span class="price">48h only</span>
-                    <span class="stock">Ends Sunday</span>
-                </div>
-                <a href="/G11/Html/pages/add-to-cart.php?product_id=3" class="offer-btn">Grab Deal</a>
-            </article> -->
         </div>
     </section>
 
@@ -122,13 +80,7 @@
         </div>
 
         <div class="arrivals-list">
-
-
-
-
-            
             {%for item in kids_arrivals|slice:":3" reversed %}
-
             <article class="arrival-card">
                 <div class="arrival-media">
                     <img src="{{ item.imageUrl.url }}" alt="{{item.title}}">
@@ -138,64 +90,19 @@
                 <p>{{item.description}}</p>
                 <div class="arrival-meta">
                     <span class="price">{{item.price}}</span>
-                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-btn">Add to cart</a>
+                    <button
+                        class="arrival-btn"
+                        data-add-to-cart
+                        data-item-type="arrival"
+                        data-item-id="{{ item.id }}"
+                    >Add to cart</button>
                 </div>
             </article>
-
             {% endfor %}
-
-
-
-
-
-            <!-- <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/10.jpeg" alt="New arrival outfit">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Rainbow Hoodie Set</h3>
-                <p>Cozy layers for cool evenings.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 3,200</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=30" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/5.jpeg" alt="New arrival toy">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Soft Buddy Plush</h3>
-                <p>Gentle, washable plush for toddlers.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 1,850</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=31" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/3.jpeg" alt="New arrival dress">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Sunny Day Dress</h3>
-                <p>Lightweight and breezy for playtime.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 2,900</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=32" class="arrival-btn">Add to cart</a>
-                </div>
-            </article> -->
         </div>
-
     </section>
 
-
-
-
-    
-
     {%include 'footer.html'%}
-
+    <script src="{% static 'cart_utils.js' %}"></script>
 </body>
 </html>

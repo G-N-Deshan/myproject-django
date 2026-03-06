@@ -196,6 +196,23 @@ body{
     cursor: pointer;
 }
 
+/* Cart Count Badge */
+.nav-link--cart .cart-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.3rem;
+    height: 1.3rem;
+    margin-left: .35rem;
+    padding: 0 .3rem;
+    border-radius: 999px;
+    background: #ef4444;
+    color: #fff;
+    font-size: .72rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
 /* Responsive Design */
 @media only screen and (max-width: 1200px) {
     .section-0 {

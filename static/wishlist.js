@@ -22,6 +22,7 @@
 
             tabPanes.forEach(pane => {
                 pane.classList.remove('is-active');
+                pane.style.display = 'none';
             });
 
             // Add active class to clicked tab
@@ -32,6 +33,7 @@
             const activePane = document.getElementById(`tab-${tabName}`);
             if (activePane) {
                 activePane.classList.add('is-active');
+                activePane.style.display = 'block';
             }
         });
     });

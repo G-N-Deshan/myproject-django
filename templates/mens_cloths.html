@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mens </title>
+    <title>Mens Clothing</title>
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{%static 'footer.css'%}">
     <link rel="stylesheet" href="{% static 'women-cloths.css'%}">
 </head>
 <body>
-
     {%include 'navbar.html'%}
- <section class="women-section">
+
+    <section class="women-section">
         <div class="women-header">
             <h1 class="women-section__title">Men</h1>
             <p class="women-section__subtitle">Discover timeless elegance and modern style</p>
@@ -28,86 +28,21 @@
             <div class="category-grid" id="categoryGrid">
                 <a href="#" class="category-item">
                     <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Dresses">
+                        <img src="../media/10.jpeg" alt="Shirts">
                     </div>
-                    <span class="category-label">Dresses</span>
+                    <span class="category-label">Shirts</span>
                 </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Handbags">
-                    </div>
-                    <span class="category-label">Handbags</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Shoes">
-                    </div>
-                    <span class="category-label">Shoes</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Tops">
-                    </div>
-                    <span class="category-label">Tops</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Coats & Jackets">
-                    </div>
-                    <span class="category-label">Coats & Jackets</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Sweaters">
-                    </div>
-                    <span class="category-label">Sweaters</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Jeans">
-                    </div>
-                    <span class="category-label">Jeans</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Accessories">
-                    </div>
-                    <span class="category-label">Accessories</span>
-                </a>
-
                 <a href="#" class="category-item">
                     <div class="category-image">
                         <img src="../media/10.jpeg" alt="Pants">
                     </div>
                     <span class="category-label">Pants</span>
                 </a>
-
                 <a href="#" class="category-item">
                     <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Skirts">
+                        <img src="../media/10.jpeg" alt="Jackets">
                     </div>
-                    <span class="category-label">Skirts</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Activewear">
-                    </div>
-                    <span class="category-label">Activewear</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="One-Piece">
-                    </div>
-                    <span class="category-label">One-Piece</span>
+                    <span class="category-label">Jackets</span>
                 </a>
             </div>
 
@@ -119,9 +54,7 @@
         </div>
     </section>
 
-
-
-  <section class="cloths-section">
+    <section class="cloths-section">
         <h2 class="cloths-section__title">Men's Clothing Collection</h2>
         <div class="cloths-grid">
             {% for cloth in mens_cloths %}
@@ -136,18 +69,21 @@
                         <span class="price-old">Rs {{ cloth.price2 }}</span>
                     </div>
                     <span class="discount-badge">{{ cloth.discount_text }}</span>
-                    <a href="#" class="cloths-section__btn">Shop Now</a>
+                    <button
+                        class="cloths-section__btn"
+                        data-add-to-cart
+                        data-item-type="cloth"
+                        data-item-id="{{ cloth.id }}"
+                    >Add to Cart</button>
                 </div>
             </div>
             {% endfor %}
         </div>
     </section>
-    
-    
-    
 
     {% include 'footer.html' %}
 
+    <script src="{% static 'cart_utils.js' %}"></script>
     <script>
         const categoryGrid = document.getElementById('categoryGrid');
         const scrollLeftBtn = document.getElementById('scrollLeft');
@@ -156,37 +92,19 @@
         const scrollAmount = 300;
 
         scrollLeftBtn.addEventListener('click', () => {
-            categoryGrid.scrollBy({
-                left: -scrollAmount,
-                behavior: 'smooth'
-            });
+            categoryGrid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
         });
 
         scrollRightBtn.addEventListener('click', () => {
-            categoryGrid.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
+            categoryGrid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
         });
 
         function updateScrollButtons() {
             const maxScroll = categoryGrid.scrollWidth - categoryGrid.clientWidth;
-            
-            if (categoryGrid.scrollLeft <= 0) {
-                scrollLeftBtn.style.opacity = '0.3';
-                scrollLeftBtn.style.pointerEvents = 'none';
-            } else {
-                scrollLeftBtn.style.opacity = '1';
-                scrollLeftBtn.style.pointerEvents = 'auto';
-            }
-
-            if (categoryGrid.scrollLeft >= maxScroll - 5) {
-                scrollRightBtn.style.opacity = '0.3';
-                scrollRightBtn.style.pointerEvents = 'none';
-            } else {
-                scrollRightBtn.style.opacity = '1';
-                scrollRightBtn.style.pointerEvents = 'auto';
-            }
+            scrollLeftBtn.style.opacity = categoryGrid.scrollLeft <= 0 ? '0.3' : '1';
+            scrollLeftBtn.style.pointerEvents = categoryGrid.scrollLeft <= 0 ? 'none' : 'auto';
+            scrollRightBtn.style.opacity = categoryGrid.scrollLeft >= maxScroll - 5 ? '0.3' : '1';
+            scrollRightBtn.style.pointerEvents = categoryGrid.scrollLeft >= maxScroll - 5 ? 'none' : 'auto';
         }
 
         categoryGrid.addEventListener('scroll', updateScrollButtons);

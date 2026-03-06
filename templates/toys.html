@@ -107,7 +107,13 @@
                         <span class="discount-badge">{{ toy.discount_percentage }}% OFF</span>
                         {% endif %}
                     </div>
-                    <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                    <a
+                        href="{% url 'add_to_cart' 'toy' toy.id %}"
+                        class="add-to-cart-btn"
+                        data-add-to-cart
+                        data-item-type="toy"
+                        data-item-id="{{ toy.id }}"
+                    >Add to Cart</a>
                 </div>
             </div>
             {% endfor %}
@@ -145,7 +151,13 @@
                         <span class="discount-badge">{{ toy.discount_percentage }}% OFF</span>
                         {% endif %}
                     </div>
-                    <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                    <a
+                        href="{% url 'add_to_cart' 'toy' toy.id %}"
+                        class="add-to-cart-btn"
+                        data-add-to-cart
+                        data-item-type="toy"
+                        data-item-id="{{ toy.id }}"
+                    >Add to Cart</a>
                 </div>
             </div>
             {% endfor %}
@@ -185,7 +197,13 @@
                         <span class="discount-badge">{{ toy.discount_percentage }}% OFF</span>
                         {% endif %}
                     </div>
-                    <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                    <a
+                        href="{% url 'add_to_cart' 'toy' toy.id %}"
+                        class="add-to-cart-btn"
+                        data-add-to-cart
+                        data-item-type="toy"
+                        data-item-id="{{ toy.id }}"
+                    >Add to Cart</a>
                 </div>
             </div>
             {% empty %}
@@ -225,6 +243,7 @@
 
     {%include 'footer.html'%}
 
+    <script src="{% static 'cart_utils.js' %}"></script>
     <script src="{% static 'toys.js' %}"></script>
 </body>
 </html>

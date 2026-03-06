@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+import re
 
 class Card(models.Model):
     imageUrl = models.ImageField(upload_to='cards/')
@@ -208,3 +208,165 @@ class WishlistItem(models.Model):
     def get_category(self):
         item = self.get_item()
         return item.get_category_display() if hasattr(item, 'get_category_display') else item.category
+
+
+class Cart(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cart', null=True, blank=True)
+    session_key = models.CharField(max_length=40, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        if self.user:
+            return f"Cart for {self.user.username}"
+        return f"Cart for session {self.session_key}"
+    
+    def get_total(self):
+        total = 0.0
+        for item in self.items.all():
+            try:
+                total += float(item.get_subtotal())
+            except Exception:
+                continue
+        return total
+    
+    def get_item_count(self):
+        return sum(item.quantity for item in self.items.all())
+    
+    class Meta:
+        verbose_name = 'Shopping Cart'
+        verbose_name_plural = 'Shopping Carts'
+
+
+class CartItem(models.Model):
+    ITEM_TYPE_CHOICES = [
+        ('toy', 'Toy'),
+        ('cloth', 'Cloth'),
+        ('offer', 'Offer'),
+        ('arrival', 'New Arrival'),
+    ]
+    
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    item_type = models.CharField(max_length=10, choices=ITEM_TYPE_CHOICES)
+    
+    cloth = models.ForeignKey('Cloths', on_delete=models.CASCADE, null=True, blank=True)
+    toy = models.ForeignKey('Toy', on_delete=models.CASCADE, null=True, blank=True)
+    offer = models.ForeignKey('Offers', on_delete=models.CASCADE, null=True, blank=True)
+    arrival = models.ForeignKey('NewArrivals', on_delete=models.CASCADE, null=True, blank=True)
+    
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        item = self.get_item()
+        return f"{self.quantity}x {item.name if hasattr(item, 'name') else item.title}"
+    
+    def get_item(self):
+        if self.cloth:
+            return self.cloth
+        elif self.toy:
+            return self.toy
+        elif self.offer:
+            return self.offer
+        elif self.arrival:
+            return self.arrival
+        return None
+    
+    @staticmethod
+    def _to_float(value):
+        """
+        Convert values like 'Rs 1,299.00', '$45', '1200' safely to float.
+        """
+        if value is None:
+            return 0.0
+        if isinstance(value, (int, float)):
+            return float(value)
+
+        s = str(value).strip()
+        if not s:
+            return 0.0
+
+        # keep digits, dot, comma, minus
+        s = re.sub(r'[^0-9,.\-]', '', s).replace(',', '')
+        try:
+            return float(s) if s else 0.0
+        except ValueError:
+            return 0.0
+
+    def get_price(self):
+        item = self.get_item()
+        if not item:
+            return 0.0
+
+        if self.item_type == 'cloth':
+            return self._to_float(item.price2 or item.price or 0)
+        elif self.item_type == 'toy':
+            return self._to_float(item.price)
+        elif self.item_type == 'offer':
+            return self._to_float(item.price2 or item.price1 or 0)
+        elif self.item_type == 'arrival':
+            return self._to_float(item.price or 0)
+        return 0.0
+    
+    def get_subtotal(self):
+        return self.get_price() * self.quantity
+    
+    class Meta:
+        verbose_name = 'Cart Item'
+        verbose_name_plural = 'Cart Items'
+
+
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('shipped', 'Shipped'),
+        ('delivered', 'Delivered'),
+        ('cancelled', 'Cancelled'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    order_number = models.CharField(max_length=50, unique=True)
+    
+    # Shipping Information
+    full_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    address = models.TextField()
+    city = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=20)
+    country = models.CharField(max_length=100)
+    
+    # Order Details
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2)
+    tax = models.DecimalField(max_digits=10, decimal_places=2)
+    shipping = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    payment_method = models.CharField(max_length=50, default='cash_on_delivery')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Order {self.order_number} - {self.user.username}"
+    
+    def get_status_display(self):
+        """Return human-readable status"""
+        return dict(self.STATUS_CHOICES).get(self.status, self.status)
+    
+    class Meta:
+        ordering = ['-created_at']
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    item_name = models.CharField(max_length=200)
+    item_type = models.CharField(max_length=10)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    def __str__(self):
+        return f"{self.quantity}x {self.item_name}"

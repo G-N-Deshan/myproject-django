@@ -1,4 +1,3 @@
-
 {% load static %}
 <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{% static 'footer.css'%}">
@@ -71,7 +70,7 @@
                     <span class="stock">{{offers.stock_text}}</span>
                     {% endif %} 
                 </div>
-                <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn">{{offers.button_text}}</a>
+                <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}">{{offers.button_text}}</a>
             </article>
 
             {% endfor %}
@@ -342,7 +341,7 @@
                     <span class="stock">{{offers.stock_text}}</span>
                     {% endif %} 
                 </div>
-                <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn">{{offers.button_text}}</a>
+                <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}">{{offers.button_text}}</a>
             </article>
 
             {% endfor %}
@@ -497,7 +496,7 @@
                     <span class="stock">{{offers.stock_text}}</span>
                     {% endif %} 
                 </div>
-                <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn">{{offers.button_text}}</a>
+                <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}">{{offers.button_text}}</a>
             </article>
 
             {% endfor %}
@@ -584,7 +583,7 @@
                 <div class="offer-meta">
                     <span class="price">Rs. 2,000</span>
                     <span class="price-old">Rs. 2,500</span>
-</div>
+                </div>
                 <a href="/G11/Html/pages/add-to-cart.php?product_id=27" class="offer-btn">Shop Bundle</a>
             </article>
 
@@ -626,4 +625,28 @@
 
 
 {% include 'footer.html'%}
+<script src="{% static 'cart_utils.js' %}"></script>
+<script>
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const kids = document.getElementById('kids-section');
+    const mens = document.getElementById('mens-section');
+    const womens = document.getElementById('womens-section');
+
+    function showSection(type) {
+        kids.style.display = type === 'kids' ? 'block' : 'none';
+        mens.style.display = type === 'mens' ? 'block' : 'none';
+        womens.style.display = type === 'womens' ? 'block' : 'none';
+    }
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            showSection(btn.dataset.category);
+            window.scrollTo({ top: kids.offsetTop - 120, behavior: 'smooth' });
+        });
+    });
+
+    showSection('kids');
+</script>
 

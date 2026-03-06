@@ -32,7 +32,7 @@ html::-webkit-scrollbar-thumb:hover {
 body {
     font-family: 'Poppins', sans-serif;
     color: #334155;
-    background: #ffffff;
+    background: #f8fafc;
     overflow-x: hidden;
     font-weight: 500;
     line-height: 1.6;
@@ -43,84 +43,69 @@ body {
    ============================================ */
 .section-1 {
     width: 100%;
-    min-height: 85vh;
-    padding: 2rem;
-    background: url('/media/new-1.jpg') center/cover no-repeat;
+    min-height: 60vh;
+    padding: 6rem 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    text-align: center;
+    color: #fff;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 
+.section-1 h1 {
+    font-size: 5rem;
+    font-weight: 800;
+    margin: 1rem 0;
+}
+
 .section-1 h2 {
-    font-size: clamp(2rem, 8vw, 5rem);
-    color: #0f172a;
-    font-weight: 900;
+    font-size: 3rem;
     margin-bottom: 0.5rem;
 }
 
 .section-1 h3 {
-    font-size: clamp(1.5rem, 6vw, 4rem);
-    color: #0f172a;
-    font-weight: 800;
-    padding-left: clamp(0rem, 5vw, 9rem);
-    margin-bottom: 0.5rem;
-}
-
-.section-1 h1 {
-    font-size: clamp(3rem, 15vw, 11rem);
-    color: #0f172a;
-    padding-left: clamp(0rem, 5vw, 10rem);
-    font-weight: 900;
-    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
 }
 
 .section-1 button {
-    margin-top: 1rem;
-    margin-left: clamp(0rem, 5vw, 11rem);
-    padding: 1rem 2rem;
-    font-size: clamp(1rem, 2vw, 1.5rem);
-    background: #2563eb;
-    color: #ffffff;
+    background: #fff;
+    color: #667eea;
+    padding: 1rem 2.5rem;
     border: none;
-    border-radius: 10px;
-    cursor: pointer;
+    border-radius: 50px;
     font-weight: 700;
+    cursor: pointer;
+    font-size: 1rem;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
 }
 
 .section-1 button:hover {
-    background: #1e40af;
     transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 /* ============================================
    WELCOME SECTION (Section-2)
    ============================================ */
 .section-2 {
-    width: 100%;
-    padding: 3rem 2rem;
-    background: #0f172a;
     text-align: center;
+    padding: 4rem 2rem;
+    color: #0f172a;
 }
 
 .section-2 h2 {
-    font-size: clamp(1.8rem, 6vw, 3.5rem);
-    color: #ffffff;
-    font-weight: 900;
+    font-size: 2.5rem;
     margin-bottom: 1rem;
 }
 
 .section-2 p {
-    font-size: clamp(1rem, 2.5vw, 1.3rem);
-    color: #e2e8f0;
-    margin-top: 0.8rem;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    font-weight: 600;
-    line-height: 1.7;
+    font-size: 1.1rem;
+    color: #475569;
+    line-height: 1.6;
 }
 
 /* ============================================
@@ -133,59 +118,54 @@ body {
 
 .section-badge {
     display: inline-block;
-    background: #f59e0b;
-    color: #ffffff;
-    padding: 0.5rem 1.2rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 0.5rem 1.5rem;
     border-radius: 50px;
     font-size: 0.85rem;
-    font-weight: 800;
+    font-weight: 600;
     margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .section-header h2 {
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: 2.5rem;
     color: #0f172a;
-    font-weight: 900;
     margin-bottom: 0.5rem;
 }
 
 .section-header p {
-    font-size: 1.05rem;
-    color: #64748b;
-    font-weight: 600;
+    color: #475569;
+    font-size: 1rem;
 }
 
 /* ============================================
    HOT OFFERS SECTION
    ============================================ */
 .hot-offers-section {
-    width: 100%;
     padding: 4rem 2rem;
-    background: #fef3c7;
+    background: #fff;
 }
 
 .offers-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
 .offer-card {
-    background: #ffffff;
-    border-radius: 15px;
+    background: #fff;
+    border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
 }
 
 .offer-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
 .offer-badge {
@@ -193,27 +173,26 @@ body {
     top: 1rem;
     right: 1rem;
     background: #ef4444;
-    color: #ffffff;
-    padding: 0.6rem 1.2rem;
+    color: #fff;
+    padding: 0.5rem 1rem;
     border-radius: 50px;
-    font-weight: 900;
-    font-size: 1.2rem;
+    font-weight: 700;
+    font-size: 0.85rem;
     z-index: 10;
-    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
 }
 
 .offer-image {
     position: relative;
-    width: 100%;
-    height: 280px;
+    height: 200px;
     overflow: hidden;
+    background: #f1f5f9;
 }
 
 .offer-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
 }
 
 .offer-card:hover .offer-image img {
@@ -222,11 +201,8 @@ body {
 
 .offer-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(15, 23, 42, 0.8);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -239,20 +215,17 @@ body {
 }
 
 .quick-view-btn {
-    background: #ffffff;
-    color: #0f172a;
-    padding: 0.8rem 2rem;
-    border: none;
-    border-radius: 50px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    background: #667eea;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s ease;
 }
 
 .quick-view-btn:hover {
-    background: #2563eb;
-    color: #ffffff;
-    transform: scale(1.05);
+    background: #764ba2;
 }
 
 .offer-content {
@@ -260,101 +233,79 @@ body {
 }
 
 .offer-content h3 {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
     color: #0f172a;
-    margin-bottom: 1rem;
-    font-weight: 800;
 }
 
 .offer-price {
     display: flex;
-    align-items: center;
     gap: 1rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+    align-items: center;
 }
 
 .original-price {
+    font-weight: 700;
+    color: #667eea;
     font-size: 1.1rem;
-    color: #94a3b8;
-    text-decoration: line-through;
-    font-weight: 600;
 }
 
 .sale-price {
-    font-size: 2rem;
-    color: #ef4444;
-    font-weight: 900;
+    text-decoration: line-through;
+    color: #94a3b8;
+    font-size: 0.9rem;
 }
 
 .stock {
-    background: #fed7aa;
-    color: #9a3412;
-    padding: 0.3rem 0.8rem;
-    border-radius: 50px;
+    background: #f0fdf4;
+    color: #15803d;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
     font-size: 0.8rem;
-    font-weight: 800;
-    text-transform: uppercase;
+    font-weight: 600;
 }
 
 .offer-timer {
-    background: #fef2f2;
-    border: 2px solid #fecaca;
-    border-radius: 10px;
-    padding: 1rem;
-    text-align: center;
-}
-
-.offer-timer span {
+    color: #f97316;
+    font-weight: 600;
     font-size: 0.9rem;
-    color: #991b1b;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.countdown {
-    font-family: 'Courier New', monospace;
-    font-size: 1.4rem;
-    font-weight: 900;
-    color: #dc2626;
-    letter-spacing: 1px;
 }
 
 /* ============================================
    NEW ARRIVALS SECTION
    ============================================ */
 .new-arrivals-section {
-    width: 100%;
     padding: 4rem 2rem;
-    background: #f0f9ff;
+    background: #f8fafc;
 }
 
 .arrivals-slider {
     position: relative;
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 3rem;
 }
 
 .arrivals-track {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
     overflow-x: auto;
     scroll-behavior: smooth;
-    padding: 1rem 0 2rem;
+    padding: 1rem 0;
+    scroll-padding-left: 2rem;
 }
 
 .arrivals-track::-webkit-scrollbar {
-    height: 8px;
+    height: 6px;
 }
 
 .arrivals-track::-webkit-scrollbar-track {
-    background: #dbeafe;
+    background: #f1f5f9;
+    border-radius: 10px;
 }
 
 .arrivals-track::-webkit-scrollbar-thumb {
-    background: #2563eb;
+    background: #667eea;
     border-radius: 10px;
 }
 
@@ -362,26 +313,23 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
-    background: #ffffff;
-    color: #2563eb;
-    border: 2px solid #2563eb;
+    background: #667eea;
+    color: #fff;
+    border: none;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.5rem;
     transition: all 0.3s ease;
     z-index: 10;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
 }
 
 .slider-btn:hover {
-    background: #2563eb;
-    color: #ffffff;
+    background: #764ba2;
     transform: translateY(-50%) scale(1.1);
 }
 
@@ -394,81 +342,64 @@ body {
 }
 
 .arrival-card {
-    min-width: 320px;
-    max-width: 340px;
-    flex-shrink: 0;
-    background: #ffffff;
-    border-radius: 15px;
+    flex: 0 0 320px;
+    background: #fff;
+    border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .arrival-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
 .arrival-badge {
     position: absolute;
     top: 1rem;
-    left: 1rem;
+    right: 1rem;
     background: #10b981;
-    color: #ffffff;
-    padding: 0.5rem 1rem;
-    border-radius: 50px;
-    font-weight: 800;
-    font-size: 0.8rem;
-    z-index: 10;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: #fff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
 }
 
 .arrival-image {
     position: relative;
-    width: 100%;
-    height: 280px;
+    height: 200px;
     overflow: hidden;
+    background: #f1f5f9;
 }
 
 .arrival-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.arrival-card:hover .arrival-image img {
-    transform: scale(1.1);
 }
 
 .wishlist-btn {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.9);
+    background: #fff;
     border: none;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.5rem;
     transition: all 0.3s ease;
-    z-index: 10;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .wishlist-btn:hover {
-    background: #ffffff;
-    transform: scale(1.15);
-}
-
-.heart-icon {
-    font-size: 1.6rem;
-    color: #ef4444;
-    transition: all 0.3s ease;
+    background: #667eea;
+    color: #fff;
 }
 
 .arrival-content {
@@ -477,373 +408,283 @@ body {
 
 .arrival-category {
     display: inline-block;
-    background: #dbeafe;
-    color: #1e40af;
-    padding: 0.4rem 0.9rem;
-    border-radius: 50px;
+    background: #f0f0f0;
+    color: #667eea;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
     font-size: 0.75rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
 }
 
 .arrival-content h3 {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     color: #0f172a;
     margin-bottom: 0.5rem;
-    font-weight: 800;
 }
 
 .arrival-content p {
-    font-size: 0.95rem;
-    color: #64748b;
+    color: #475569;
+    font-size: 0.9rem;
+    line-height: 1.5;
     margin-bottom: 1rem;
-    font-weight: 500;
-    line-height: 1.6;
 }
 
 .arrival-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 1rem;
-    border-top: 2px solid #f1f5f9;
 }
 
 .arrival-price {
-    font-size: 1.6rem;
-    color: #2563eb;
-    font-weight: 900;
+    font-weight: 700;
+    color: #667eea;
+    font-size: 1.1rem;
 }
 
 .add-cart-btn {
-    width: 50px;
-    height: 50px;
-    background: #2563eb;
-    color: #ffffff;
+    background: #667eea;
+    color: #fff;
     border: none;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1.4rem;
-    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
 }
 
 .add-cart-btn:hover {
-    transform: scale(1.15);
-    background: #1e40af;
-    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+    background: #764ba2;
+    transform: scale(1.1);
 }
 
-/* ============================================
-   WISHLIST SECTION
-   ============================================ */
+/* Wishlist Section */
 .wishlist-section {
     padding: 4rem 2rem;
-    background: #f8fafc;
+    background: #fff;
 }
 
 .wishlist-container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
 .empty-wishlist {
     text-align: center;
-    background: #ffffff;
-    border: 3px dashed #cbd5e1;
-    border-radius: 15px;
-    padding: 4rem 2rem;
-    max-width: 500px;
-    margin: 0 auto;
+    padding: 3rem;
+    background: #f8fafc;
+    border-radius: 1rem;
 }
 
 .empty-icon {
-    font-size: 5rem;
-    margin-bottom: 1.5rem;
+    font-size: 4rem;
+    margin-bottom: 1rem;
 }
 
 .empty-wishlist h3 {
-    font-size: 1.8rem;
-    color: #334155;
-    margin-bottom: 0.8rem;
-    font-weight: 800;
+    font-size: 1.5rem;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
 }
 
 .empty-wishlist p {
-    color: #64748b;
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
+    color: #475569;
+    margin-bottom: 1.5rem;
 }
 
 .browse-btn {
     display: inline-block;
-    background: #2563eb;
-    color: #ffffff;
-    padding: 0.9rem 2rem;
-    border-radius: 50px;
+    background: #667eea;
+    color: #fff;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
     text-decoration: none;
-    font-weight: 700;
+    font-weight: 600;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
 }
 
 .browse-btn:hover {
-    background: #1e40af;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+    background: #764ba2;
+    transform: translateY(-2px);
 }
 
 .wishlist-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 2rem;
-    margin-bottom: 2rem;
 }
 
 .wishlist-card {
-    background: #ffffff;
-    border-radius: 15px;
+    background: #f8fafc;
+    border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
 .wishlist-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .wishlist-image {
     position: relative;
-    height: 220px;
+    height: 150px;
     overflow: hidden;
+    background: #e9ecef;
 }
 
 .wishlist-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.wishlist-card:hover .wishlist-image img {
-    transform: scale(1.1);
 }
 
 .wishlist-type-badge {
     position: absolute;
-    top: 0.9rem;
-    left: 0.9rem;
-    background: rgba(15, 23, 42, 0.9);
-    color: #ffffff;
-    padding: 0.4rem 0.9rem;
-    border-radius: 50px;
-    font-size: 0.8rem;
-    font-weight: 800;
-    text-transform: uppercase;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    background: #667eea;
+    color: #fff;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
 }
 
 .wishlist-content {
-    padding: 1.3rem;
+    padding: 1rem;
 }
 
 .wishlist-category {
     display: inline-block;
-    background: #dbeafe;
-    color: #1e40af;
-    padding: 0.3rem 0.7rem;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    margin-bottom: 0.7rem;
-    text-transform: uppercase;
+    background: #fef3c7;
+    color: #b45309;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
 }
 
 .wishlist-content h4 {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     color: #0f172a;
-    margin-bottom: 0.6rem;
-    font-weight: 800;
+    margin-bottom: 0.75rem;
 }
 
 .wishlist-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 2px solid #f1f5f9;
 }
 
 .wishlist-price {
-    font-size: 1.3rem;
-    color: #2563eb;
-    font-weight: 900;
+    font-weight: 700;
+    color: #667eea;
+    font-size: 1rem;
 }
 
 .remove-wishlist-btn {
-    background: #fee2e2;
-    color: #dc2626;
-    border: 2px solid #fecaca;
-    border-radius: 50px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    font-weight: 800;
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.remove-wishlist-btn:hover {
-    background: #fecaca;
-    transform: scale(1.05);
-}
-
-.wishlist-view-all {
-    text-align: center;
-    margin-top: 2.5rem;
-}
-
-.view-all-btn {
-    display: inline-block;
-    background: #ffffff;
-    color: #2563eb;
-    border: 3px solid #2563eb;
-    padding: 0.9rem 2.5rem;
-    border-radius: 50px;
-    text-decoration: none;
     font-weight: 700;
     transition: all 0.3s ease;
 }
 
-.view-all-btn:hover {
-    background: #2563eb;
-    color: #ffffff;
-    transform: translateY(-3px);
+.remove-wishlist-btn:hover {
+    background: #dc2626;
+    transform: scale(1.1);
 }
 
-/* ============================================
-   FEATURES SECTION (Section-3)
-   ============================================ */
+/* Features Section */
 .section-3 {
-    width: 100%;
-    padding: 4rem 2rem;
-    background: #f8fafc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #f8fafc;
 }
 
 .feature-card {
-    background: #ffffff;
-    border-radius: 15px;
-    padding: 2.5rem 2rem;
-    flex: 1;
-    min-width: 280px;
-    max-width: 400px;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .feature-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
 .feature-card img {
-    width: 25%;
-    height: auto;
-    margin-bottom: 1.5rem;
-    transition: transform 0.3s ease;
-}
-
-.feature-card:hover img {
-    transform: scale(1.1);
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1rem;
 }
 
 .feature-card h2 {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     color: #0f172a;
-    margin-bottom: 1rem;
-    font-weight: 800;
+    margin-bottom: 0.5rem;
 }
 
 .feature-card p {
-    font-size: 1.1rem;
-    color: #64748b;
-    font-weight: 500;
+    color: #475569;
+    font-size: 0.95rem;
     line-height: 1.6;
 }
 
-/* ============================================
-   RESPONSIVE DESIGN
-   ============================================ */
-@media (max-width: 768px) {
-    .section-1 h3,
-    .section-1 h1,
-    .section-1 button {
-        padding-left: 0;
-        margin-left: 0;
+/* Responsive */
+@media (max-width: 1024px) {
+    .section-1 h1 {
+        font-size: 3.5rem;
     }
     
-    .section-1 {
-        padding: 1.5rem;
-        text-align: center;
-    }
-
-    .section-2,
-    .hot-offers-section,
-    .new-arrivals-section,
-    .wishlist-section {
-        padding: 3rem 1.5rem;
-    }
-
-    .offers-grid,
-    .wishlist-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .arrivals-slider {
-        padding: 0 2rem;
-    }
-
-    .arrival-card {
-        min-width: 280px;
-    }
-
-    .slider-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 1.3rem;
+    .offers-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 480px) {
-    .slider-btn {
-        display: none;
+@media (max-width: 768px) {
+    .section-1 h1 {
+        font-size: 2.5rem;
     }
-
-    .arrivals-slider {
-        padding: 0 0.5rem;
+    
+    .section-1 h2 {
+        font-size: 2rem;
     }
-
-    .arrival-card {
-        min-width: 260px;
-    }
-
+    
+    .offers-grid,
     .section-3 {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
-
-    .feature-card {
-        max-width: 100%;
+    
+    .arrivals-track {
+        scroll-snap-type: x mandatory;
+    }
+    
+    .arrival-card {
+        flex: 0 0 280px;
+    }
+    
+    .slider-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
     }
 }

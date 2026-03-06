@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy, WishlistItem 
+from .models import Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy, WishlistItem, Cart, CartItem, Order, OrderItem 
 
 
 admin.site.register(Card)
@@ -39,3 +39,49 @@ class WishlistItemAdmin(admin.ModelAdmin):
         return obj.get_item().name
     
     get_item_name.short_description = 'Item Name'
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'get_item_count', 'get_total', 'created_at']
+    list_filter = ['created_at']
+    search_fields = ['user__username', 'session_key']
+    
+    def get_item_count(self, obj):
+        return obj.get_item_count()
+    
+    def get_total(self, obj):
+        return f"${obj.get_total():.2f}"
+    
+    get_item_count.short_description = 'Items'
+    get_total.short_description = 'Total'
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ['id', 'cart', 'item_type', 'get_item_name', 'quantity', 'get_subtotal']
+    list_filter = ['item_type', 'added_at']
+    
+    def get_item_name(self, obj):
+        item = obj.get_item()
+        return item.name if hasattr(item, 'name') else item.title
+    
+    def get_subtotal(self, obj):
+        return f"${obj.get_subtotal():.2f}"
+    
+    get_item_name.short_description = 'Item'
+    get_subtotal.short_description = 'Subtotal'
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['order_number', 'user', 'full_name', 'total', 'status', 'created_at']
+    list_filter = ['status', 'created_at', 'payment_method']
+    search_fields = ['order_number', 'user__username', 'email', 'full_name']
+    readonly_fields = ['order_number', 'created_at', 'updated_at']
+
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ['order', 'item_name', 'quantity', 'price', 'subtotal']
+    list_filter = ['item_type']

@@ -18,12 +18,10 @@
 
     <section class="section-7">
        <div class="section-7__overlay"></div>
-        
         <div class="section-7__content">
             <div class="section-7__text">
                 <h1 class="section-7__title">Big Style for Small Humans</h1>
                 <p class="section-7__subtitle">Whether it's a school day or a play day, find all the grow-up essentials they need in one place.</p>
-                
                 <div class="section-7__buttons">
                     <button class="btn btn-primary">Shop Girls</button>
                     <button class="btn btn-secondary">Shop Boys</button>
@@ -32,64 +30,69 @@
         </div>
     </section>
 
-
-
     <section class="girls-section">
         <h1>Girls Clothing</h1>
-        <p class="sec-p">Discover the perfect fit and style for your little ones with our girls' clothing collection.
-        </p>
+        <p class="sec-p">Discover the perfect fit and style for your little ones with our girls' clothing collection.</p>
         <section class="cloths-section">
-        <h2 class="cloths-section__title">Girls' Clothing Collection</h2>
-        <div class="cloths-grid">
-            {% for cloth in kids_girls_cloths %}
-            <div class="cloth-item">
-                <div class="cloth-item__image">
-                    <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
-                </div>
-                <div class="cloth-item__content">
-                    <h3>{{ cloth.name }}</h3>
-                    <div class="price-container">
-                        <span class="price-current">Rs {{ cloth.price1 }}</span>
-                        <span class="price-old">Rs {{ cloth.price2 }}</span>
+            <h2 class="cloths-section__title">Girls' Clothing Collection</h2>
+            <div class="cloths-grid">
+                {% for cloth in kids_girls_cloths %}
+                <div class="cloth-item">
+                    <div class="cloth-item__image">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
                     </div>
-                    <span class="discount-badge">{{ cloth.discount_text }}</span>
-                    <a href="#" class="cloths-section__btn">Shop Now</a>
+                    <div class="cloth-item__content">
+                        <h3>{{ cloth.name }}</h3>
+                        <div class="price-container">
+                            <span class="price-current">Rs {{ cloth.price1 }}</span>
+                            <span class="price-old">Rs {{ cloth.price2 }}</span>
+                        </div>
+                        <span class="discount-badge">{{ cloth.discount_text }}</span>
+                        <button
+                            class="cloths-section__btn"
+                            data-add-to-cart
+                            data-item-type="cloth"
+                            data-item-id="{{ cloth.id }}"
+                        >Add to Cart</button>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-        
+        </section>
     </section>
-
-
 
     <section class="boys-section">
         <h1>Boy Clothing</h1>
-        <p class="sec-p">Discover the perfect fit and style for your little ones with our boys' clothing collection.
-        </p>
+        <p class="sec-p">Discover the perfect fit and style for your little ones with our boys' clothing collection.</p>
         <section class="cloths-section">
-        <h2 class="cloths-section__title">Boys' Clothing Collection</h2>
-        <div class="cloths-grid">
-            {% for cloth in kids_cloths %}
-            <div class="cloth-item">
-                <div class="cloth-item__image">
-                    <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
-                </div>
-                <div class="cloth-item__content">
-                    <h3>{{ cloth.name }}</h3>
-                    <div class="price-container">
-                        <span class="price-current">Rs {{ cloth.price1 }}</span>
-                        <span class="price-old">Rs {{ cloth.price2 }}</span>
+            <h2 class="cloths-section__title">Boys' Clothing Collection</h2>
+            <div class="cloths-grid">
+                {% for cloth in kids_cloths %}
+                <div class="cloth-item">
+                    <div class="cloth-item__image">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
                     </div>
-                    <span class="discount-badge">{{ cloth.discount_text }}</span>
-                    <a href="#" class="cloths-section__btn">Shop Now</a>
+                    <div class="cloth-item__content">
+                        <h3>{{ cloth.name }}</h3>
+                        <div class="price-container">
+                            <span class="price-current">Rs {{ cloth.price1 }}</span>
+                            <span class="price-old">Rs {{ cloth.price2 }}</span>
+                        </div>
+                        <span class="discount-badge">{{ cloth.discount_text }}</span>
+                        <button
+                            class="cloths-section__btn"
+                            data-add-to-cart
+                            data-item-type="cloth"
+                            data-item-id="{{ cloth.id }}"
+                        >Add to Cart</button>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-        
+        </section>
     </section>
 
-     {%include 'footer.html'%}
+    {%include 'footer.html'%}
+    <script src="{% static 'cart_utils.js' %}"></script>
 </body>
 </html>

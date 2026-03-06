@@ -11,8 +11,13 @@
                 <button><a href="{% url 'index' %}" class="nav-link nav-link--home">Home</a></button>
                 <button><a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">BUY</a></button>
                 <button><a href="{% url 'reviews' %}" class="nav-link nav-link--reviews">Reviews</a></button>
-                <button><a href="{% url 'contact' %}" class="nav-link nav-link--contact">Contact</a></button>
+                <button><a href="{% url 'contact_us' %}" class="nav-link nav-link--contact">Contact</a></button>
                 <button><a href="{% url 'about' %}" class="nav-link nav-link--about">About</a></button>
+                <button>
+                    <a href="{% url 'cart_details' %}" class="nav-link nav-link--cart">
+                        Cart <span class="cart-count" data-cart-count>{{ cart_count|default:0 }}</span>
+                    </a>
+                </button>
             </div>
 
             <!-- Login/Logout on right -->

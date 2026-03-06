@@ -266,8 +266,8 @@
                     </div>
                     <div class="product-info">
                         <div>
-                            <h2>{{ product.title }}</h2>
-                            <p class="product-description">{{ product.description }}</p>
+                            <h2>{{ product.title|default:product.name }}</h2>
+                            <p class="product-description">{{ product.description|default:product.desccription }}</p>
 
                             <div class="price-section">
                                 {% if product.price1 %}
@@ -289,8 +289,19 @@
                         </div>
 
                         <div class="action-buttons">
-                            <button class="btn btn-primary">🛒 Add to Cart</button>
-                            <button class="btn btn-secondary"> Wishlist</button>
+                            <a
+                                class="btn btn-primary"
+                                href="{% url 'add_to_cart' product_type product.id %}"
+                                data-add-to-cart
+                                data-item-type="{{ product_type }}"
+                                data-item-id="{{ product.id }}"
+                            >🛒 Add to Cart</a>
+
+                            {% if product_type == 'toy' %}
+                            <a class="btn btn-secondary" href="{% url 'add_to_wishlist' 'toy' product.id %}">Wishlist</a>
+                            {% elif product_type == 'cloth' %}
+                            <a class="btn btn-secondary" href="{% url 'add_to_wishlist' 'cloth' product.id %}">Wishlist</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -317,8 +328,13 @@
                         </div>
 
                         <div class="action-buttons">
-                            <button class="btn btn-primary">🛒 Add to Cart</button>
-                            <button class="btn btn-secondary"> Wishlist</button>
+                            <a
+                                class="btn btn-primary"
+                                href="{% url 'add_to_cart' 'arrival' product2.id %}"
+                                data-add-to-cart
+                                data-item-type="arrival"
+                                data-item-id="{{ product2.id }}"
+                            >🛒 Add to Cart</a>
                         </div>
                     </div>
                 </div>
@@ -332,5 +348,6 @@
             {% endif %}
         </div>
     </div>
+    <script src="{% load static %}{% static 'cart_utils.js' %}"></script>
 </body>
 </html>

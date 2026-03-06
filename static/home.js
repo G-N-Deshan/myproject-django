@@ -165,6 +165,31 @@ function showToast(message) {
     }, 2500);
 }
 
+/**
+ * WHY: Card click handler for navigation
+ * Makes cards clickable to go to specific pages
+ */
+function setupCardClickHandlers() {
+    const cards = document.querySelectorAll('.feature-card');
+    
+    cards.forEach(card => {
+        const cardName = (card.querySelector('h2')?.textContent || '').toLowerCase();
+
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function (e) {
+            if (e.target.closest('button, a')) return;
+
+            if (cardName.includes('cloth') || cardName.includes('fashion')) {
+                window.location.href = '/cloths/';
+            } else if (cardName.includes('toy')) {
+                window.location.href = '/toys/';
+            } else {
+                window.location.href = '/buy/';
+            }
+        });
+    });
+}
+
 // Add animations
 const style = document.createElement('style');
 style.textContent = `
@@ -187,5 +212,65 @@ document.addEventListener('DOMContentLoaded', () => {
     initOfferTimers();
     initArrivalsSlider();
     initWishlistButtons();
-    console.log('✅ All features initialized!');
+    setupCardClickHandlers();
+    // bindHomeAddToCart(); // handled globally by cart_utils.js
+    console.log('✅ All home page features initialized!');
 });
+
+// function getCookie(name) {
+//     let cookieValue = null;
+//     if (document.cookie && document.cookie !== '') {
+//         const cookies = document.cookie.split(';');
+//         for (let i = 0; i < cookies.length; i++) {
+//             const cookie = cookies[i].trim();
+//             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+//                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+//                 break;
+//             }
+//         }
+//     }
+//     return cookieValue;
+// }
+
+// function updateCartCountInUI(count) {
+//     document.querySelectorAll('.cart-count, .cart-badge, [data-cart-count]').forEach(el => {
+//         el.textContent = count;
+//     });
+// }
+
+// function bindHomeAddToCart() {
+//     const buttons = document.querySelectorAll('.add-to-cart-btn, .shop-now-btn, [data-add-to-cart]');
+//     buttons.forEach(btn => {
+//         btn.addEventListener('click', async (e) => {
+//             const itemType = btn.dataset.itemType;
+//             const itemId = btn.dataset.itemId;
+
+//             // If data attrs are missing, allow normal link/form behavior.
+//             if (!itemType || !itemId) return;
+
+//             e.preventDefault();
+//             e.stopPropagation();
+
+//             try {
+//                 const res = await fetch(`/cart/add/${itemType}/${itemId}/`, {
+//                     method: 'POST',
+//                     headers: {
+//                         'X-CSRFToken': getCookie('csrftoken'),
+//                         'X-Requested-With': 'XMLHttpRequest',
+//                         'Content-Type': 'application/json'
+//                     }
+//                 });
+//                 const data = await res.json();
+
+//                 if (data.success) {
+//                     updateCartCountInUI(data.cart_count);
+//                     showToast(data.message || 'Added to cart');
+//                 } else {
+//                     showToast(data.error || 'Could not add to cart');
+//                 }
+//             } catch (err) {
+//                 showToast('Could not add to cart');
+//             }
+//         });
+//     });
+// }
