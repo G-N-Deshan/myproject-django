@@ -7,10 +7,327 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kids Clothing </title>
+    <title>Kids Clothing</title>
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{%static 'footer.css'%}">
     <link rel="stylesheet" href="{% static 'kids-cloths.css'%}">
+    <style>
+        /* Filter Styles */
+        .filter-section {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+        }
+        
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .filter-header h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            color: #0f172a;
+            margin: 0;
+        }
+        
+        .filter-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .filter-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-group label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        
+        .price-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .price-inputs input {
+            width: 100%;
+        }
+        
+        .price-inputs span {
+            color: #64748b;
+        }
+        
+        .apply-filters-btn {
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .apply-filters-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .clear-filters-btn {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            margin-left: 10px;
+        }
+        
+        .clear-filters-btn:hover {
+            background: #e2e8f0;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            grid-column: 1 / -1;
+        }
+        
+        /* Size Filter */
+        .size-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .size-option {
+            padding: 8px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            background: #ffffff;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        
+        .size-option:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+        }
+        
+        .size-option.selected {
+            background: #6366f1;
+            color: #ffffff;
+            border-color: #6366f1;
+        }
+        
+        /* Color Filter */
+        .color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 3px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-option.selected {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 2px #6366f1;
+        }
+        
+        /* Tab Navigation */
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 15px 50px;
+          
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border-radius: 30px;
+            margin: 20px 40px;
+            max-width: calc(100% - 40px);
+            position: relative;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+      
+        .tab-scroll-left, .tab-scroll-right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            font-size: 14px;
+            color: #6366f1;
+        }
+        .tab-scroll-left {
+            left: 8px;
+        }
+        .tab-scroll-right {
+            right: 8px;
+        }
+        .tab-scroll-left:hover, .tab-scroll-right:hover {
+            background: #0f172a;
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .category-tab {
+            flex-shrink: 0;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: 0.9rem;
+        }
+        .category-tab:hover {
+            background: rgba(255,255,255,0.4);
+            border-color: #ffffff;
+            transform: translateY(-2px);
+        }
+        .category-tab.active {
+            background: #ffffff;
+            color: #6366f1;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        /* Active Filters Display */
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 0 20px 20px 20px;
+        }
+        
+        .active-filter-tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #f1f5f9;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        
+        .active-filter-tag button {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        /* Section Styles */
+        .kids-section {
+            display: none;
+        }
+        
+        .kids-section.active {
+            display: block;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+        
+        .section-header p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Section-specific colors */
+        .all-section .section-header h2 { color: #6366f1; }
+        .girls-section .section-header h2 { color: #ec4899; }
+        .boys-section .section-header h2 { color: #3b82f6; }
+        .dresses-section .section-header h2 { color: #f59e0b; }
+        .tops-section .section-header h2 { color: #10b981; }
+        .pants-section .section-header h2 { color: #8b5cf6; }
+        .skirts-section .section-header h2 { color: #f472b6; }
+        .shirts-section .section-header h2 { color: #06b6d4; }
+        .shoes-section .section-header h2 { color: #ef4444; }
+        .accessories-section .section-header h2 { color: #14b8a6; }
+    </style>
 </head>
 <body>
 
@@ -23,21 +340,141 @@
                 <h1 class="section-7__title">Big Style for Small Humans</h1>
                 <p class="section-7__subtitle">Whether it's a school day or a play day, find all the grow-up essentials they need in one place.</p>
                 <div class="section-7__buttons">
-                    <button class="btn btn-primary">Shop Girls</button>
-                    <button class="btn btn-secondary">Shop Boys</button>
+                    <button class="btn btn-primary" onclick="switchTab('girls')">Shop Girls</button>
+                    <button class="btn btn-secondary" onclick="switchTab('boys')">Shop Boys</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="girls-section">
-        <h1>Girls Clothing</h1>
-        <p class="sec-p">Discover the perfect fit and style for your little ones with our girls' clothing collection.</p>
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-header" onclick="toggleFilters()">
+            <h3>🔍 Filters</h3>
+            <span class="filter-toggle" id="filterToggle">▼</span>
+        </div>
+        
+        <div class="filter-content" id="filterContent">
+            <!-- Category Filter -->
+            <div class="filter-group">
+                <label>Category</label>
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="girls">Girls</option>
+                    <option value="boys">Boys</option>
+                    <option value="dresses">Dresses</option>
+                    <option value="tops">Tops</option>
+                    <option value="pants">Pants</option>
+                    <option value="skirts">Skirts</option>
+                    <option value="shirts">Shirts</option>
+                    <option value="shoes">Shoes</option>
+                    <option value="accessories">Accessories</option>
+                </select>
+            </div>
+            
+            <!-- Price Filter -->
+            <div class="filter-group">
+                <label>Price Range</label>
+                <div class="price-inputs">
+                    <input type="number" id="minPrice" placeholder="Min" min="0">
+                    <span>-</span>
+                    <input type="number" id="maxPrice" placeholder="Max" min="0">
+                </div>
+            </div>
+            
+            <!-- Size Filter -->
+            <div class="filter-group">
+                <label>Size</label>
+                <div class="size-options">
+                    <button type="button" class="size-option" data-size="2-3Y">2-3Y</button>
+                    <button type="button" class="size-option" data-size="3-4Y">3-4Y</button>
+                    <button type="button" class="size-option" data-size="4-5Y">4-5Y</button>
+                    <button type="button" class="size-option" data-size="5-6Y">5-6Y</button>
+                    <button type="button" class="size-option" data-size="6-7Y">6-7Y</button>
+                    <button type="button" class="size-option" data-size="7-8Y">7-8Y</button>
+                    <button type="button" class="size-option" data-size="8-9Y">8-9Y</button>
+                    <button type="button" class="size-option" data-size="9-10Y">9-10Y</button>
+                </div>
+            </div>
+            
+            <!-- Color Filter -->
+            <div class="filter-group">
+                <label>Color</label>
+                <div class="color-options">
+                    <button type="button" class="color-option" style="background: #ffb6c1;" data-color="pink" title="Pink"></button>
+                    <button type="button" class="color-option" style="background: #87ceeb;" data-color="blue" title="Blue"></button>
+                    <button type="button" class="color-option" style="background: #98fb98;" data-color="green" title="Green"></button>
+                    <button type="button" class="color-option" style="background: #ffd700;" data-color="yellow" title="Yellow"></button>
+                    <button type="button" class="color-option" style="background: #ffffff;" data-color="white" title="White"></button>
+                    <button type="button" class="color-option" style="background: #000000;" data-color="black" title="Black"></button>
+                    <button type="button" class="color-option" style="background: #ff6b6b;" data-color="red" title="Red"></button>
+                    <button type="button" class="color-option" style="background: #9370db;" data-color="purple" title="Purple"></button>
+                </div>
+            </div>
+            
+            <!-- Sort Filter -->
+            <div class="filter-group">
+                <label>Sort By</label>
+                <select id="sortFilter">
+                    <option value="default">Default</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                    <option value="name_asc">Name: A to Z</option>
+                    <option value="name_desc">Name: Z to A</option>
+                </select>
+            </div>
+            
+            <!-- Discount Filter -->
+            <div class="filter-group">
+                <label>Discount</label>
+                <select id="discountFilter">
+                    <option value="all">All Products</option>
+                    <option value="yes">On Sale Only</option>
+                    <option value="no">Regular Price</option>
+                </select>
+            </div>
+            
+            <div class="filter-buttons">
+                <button class="apply-filters-btn" onclick="applyFilters()">Apply Filters</button>
+                <button class="clear-filters-btn" onclick="clearFilters()">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="category-tabs" id="categoryTabsContainer">
+        <button class="tab-scroll-left" onclick="scrollTabs(-200)">◀</button>
+        <button class="category-tab active" data-target="all">All</button>
+        <button class="category-tab" data-target="girls">Girls</button>
+        <button class="category-tab" data-target="boys">Boys</button>
+        <button class="category-tab" data-target="dresses">Dresses</button>
+        <button class="category-tab" data-target="tops">Tops</button>
+        <button class="category-tab" data-target="pants">Pants</button>
+        <button class="category-tab" data-target="skirts">Skirts</button>
+        <button class="category-tab" data-target="shirts">Shirts</button>
+        <button class="category-tab" data-target="shoes">Shoes</button>
+        <button class="category-tab" data-target="accessories">Accessories</button>
+        <button class="tab-scroll-right" onclick="scrollTabs(200)">▶</button>
+    </div>
+
+    <!-- Active Filters -->
+    <div class="active-filters" id="activeFilters"></div>
+
+    <!-- ALL Section -->
+    <section class="kids-section all-section active" id="all">
+        <div class="section-header">
+            <h2>All Kids Clothing</h2>
+            <p>Browse our complete collection of kids clothing for all occasions</p>
+        </div>
         <section class="cloths-section">
-            <h2 class="cloths-section__title">Girls' Clothing Collection</h2>
-            <div class="cloths-grid">
-                {% for cloth in kids_girls_cloths %}
-                <div class="cloth-item">
+            <p class="results-count" id="allResultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
+            <div class="cloths-grid" id="allGrid">
+                {% for cloth in all_kids_cloths %}
+                <div class="cloth-item" 
+                     data-category="{{ cloth.category }}"
+                     data-subcategory="{{ cloth.name|lower }}"
+                     data-price="{{ cloth.price1|default:0 }}"
+                     data-name="{{ cloth.name|lower }}">
                     <div class="cloth-item__image">
                         <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
                     </div>
@@ -61,14 +498,21 @@
         </section>
     </section>
 
-    <section class="boys-section">
-        <h1>Boy Clothing</h1>
-        <p class="sec-p">Discover the perfect fit and style for your little ones with our boys' clothing collection.</p>
+    <!-- GIRLS Section -->
+    <section class="kids-section girls-section" id="girls">
+        <div class="section-header">
+            <h2>Girls Clothing</h2>
+            <p>Discover the perfect fit and style for your little girls with our collection</p>
+        </div>
         <section class="cloths-section">
-            <h2 class="cloths-section__title">Boys' Clothing Collection</h2>
-            <div class="cloths-grid">
-                {% for cloth in kids_cloths %}
-                <div class="cloth-item">
+            <p class="results-count" id="girlsResultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
+            <div class="cloths-grid" id="girlsGrid">
+                {% for cloth in kids_girls_cloths %}
+                <div class="cloth-item" 
+                     data-category="girls"
+                     data-subcategory="{{ cloth.name|lower }}"
+                     data-price="{{ cloth.price1|default:0 }}"
+                     data-name="{{ cloth.name|lower }}">
                     <div class="cloth-item__image">
                         <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
                     </div>
@@ -87,6 +531,324 @@
                         >Add to Cart</button>
                     </div>
                 </div>
+                {% endfor %}
+            </div>
+        </section>
+    </section>
+
+    <!-- BOYS Section -->
+    <section class="kids-section boys-section" id="boys">
+        <div class="section-header">
+            <h2>Boys Clothing</h2>
+            <p>Discover the perfect fit and style for your little boys with our collection</p>
+        </div>
+        <section class="cloths-section">
+            <p class="results-count" id="boysResultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
+            <div class="cloths-grid" id="boysGrid">
+                {% for cloth in kids_cloths %}
+                <div class="cloth-item" 
+                     data-category="boys"
+                     data-subcategory="{{ cloth.name|lower }}"
+                     data-price="{{ cloth.price1|default:0 }}"
+                     data-name="{{ cloth.name|lower }}">
+                    <div class="cloth-item__image">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                    </div>
+                    <div class="cloth-item__content">
+                        <h3>{{ cloth.name }}</h3>
+                        <div class="price-container">
+                            <span class="price-current">Rs {{ cloth.price1 }}</span>
+                            <span class="price-old">Rs {{ cloth.price2 }}</span>
+                        </div>
+                        <span class="discount-badge">{{ cloth.discount_text }}</span>
+                        <button
+                            class="cloths-section__btn"
+                            data-add-to-cart
+                            data-item-type="cloth"
+                            data-item-id="{{ cloth.id }}"
+                        >Add to Cart</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </section>
+
+    <!-- DRESSES Section -->
+    <section class="kids-section dresses-section" id="dresses">
+        <div class="section-header">
+            <h2>Kids Dresses</h2>
+            <p>Beautiful dresses for every occasion - from casual to special events</p>
+        </div>
+        <section class="cloths-section">
+            <p class="results-count" id="dressesResultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
+            <div class="cloths-grid" id="dressesGrid">
+                {% for cloth in all_kids_cloths %}
+                {% if 'dress' in cloth.name|lower or 'frock' in cloth.name|lower or 'gown' in cloth.name|lower %}
+                <div class="cloth-item" 
+                     data-category="{{ cloth.category }}"
+                     data-subcategory="dresses"
+                     data-price="{{ cloth.price1|default:0 }}"
+                     data-name="{{ cloth.name|lower }}">
+                    <div class="cloth-item__image">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                    </div>
+                    <div class="cloth-item__content">
+                        <h3>{{ cloth.name }}</h3>
+                        <div class="price-container">
+                            <span class="price-current">Rs {{ cloth.price1 }}</span>
+                            <span class="price-old">Rs {{ cloth.price2 }}</span>
+                        </div>
+                        <span class="discount-badge">{{ cloth.discount_text }}</span>
+                        <button
+                            class="cloths-section__btn"
+                            data-add-to-cart
+                            data-item-type="cloth"
+                            data-item-id="{{ cloth.id }}"
+                        >Add to Cart</button>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+    </section>
+
+    <!-- TOPS Section -->
+    <section class="kids-section tops-section" id="tops">
+        <div class="section-header">
+            <h2>Kids Tops</h2>
+            <p>Trendy tops and t-shirts for boys and girls</p>
+        </div>
+        <section class="cloths-section">
+            <p class="results-count" id="topsResultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
+            <div class="cloths-grid" id="topsGrid">
+                {% for cloth in all_kids_cloths %}
+                {% if 'top' in cloth.name|lower or 'tshirt' in cloth.name|lower or 't-shirt' in cloth.name|lower or 'tee' in cloth.name|lower or 'blouse' in cloth.name|lower %}
+                <div class="cloth-item" 
+                     data-category="{{ cloth.category }}"
+                     data-subcategory="tops"
+                     data-price="{{ cloth.price1|default:0 }}"
+                     data-name="{{ cloth.name|lower }}">
+                    <div class="cloth-item__image">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                    </div>
+                    <div class="cloth-item__content">
+                        <h3>{{ cloth.name }}</h3>
+                        <div class="price-container">
+                            <span class="price-current">Rs {{ cloth.price1 }}</span>
+                            <span class="price-old">Rs {{ cloth.price2 }}</span>
+                        </div>
+                        <span class="discount-badge">{{ cloth.discount_text }}</span>
+                        <button
+                            class="cloths-section__btn"
+                            data-add-to-cart
+                            data-item-type="cloth"
+                            data-item-id="{{ cloth.id }}"
+                        >Add to Cart</button>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+    </section>
+
+    <!-- PANTS Section -->
+    <section class="kids-section pants-section" id="pants">
+        <div class="section-header">
+            <h2>Kids Pants</h2>
+            <p>Comfortable pants, jeans, and leggings for everyday wear</p>
+        </div>
+        <section class="cloths-section">
+            <p class="results-count" id="pantsResultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
+            <div class="cloths-grid" id="pantsGrid">
+                {% for cloth in all_kids_cloths %}
+                {% if 'pant' in cloth.name|lower or 'jean' in cloth.name|lower or 'trouser' in cloth.name|lower or 'legging' in cloth.name|lower or 'short' in cloth.name|lower %}
+                <div class="cloth-item" 
+                     data-category="{{ cloth.category }}"
+                     data-subcategory="pants"
+                     data-price="{{ cloth.price1|default:0 }}"
+                     data-name="{{ cloth.name|lower }}">
+                    <div class="cloth-item__image">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                    </div>
+                    <div class="cloth-item__content">
+                        <h3>{{ cloth.name }}</h3>
+                        <div class="price-container">
+                            <span class="price-current">Rs {{ cloth.price1 }}</span>
+                            <span class="price-old">Rs {{ cloth.price2 }}</span>
+                        </div>
+                        <span class="discount-badge">{{ cloth.discount_text }}</span>
+                        <button
+                            class="cloths-section__btn"
+                            data-add-to-cart
+                            data-item-type="cloth"
+                            data-item-id="{{ cloth.id }}"
+                        >Add to Cart</button>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+    </section>
+
+    <!-- SKIRTS Section -->
+    <section class="kids-section skirts-section" id="skirts">
+        <div class="section-header">
+            <h2>Kids Skirts</h2>
+            <p>Cute and stylish skirts for girls</p>
+        </div>
+        <section class="cloths-section">
+            <p class="results-count" id="skirtsResultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
+            <div class="cloths-grid" id="skirtsGrid">
+                {% for cloth in all_kids_cloths %}
+                {% if 'skirt' in cloth.name|lower %}
+                <div class="cloth-item" 
+                     data-category="{{ cloth.category }}"
+                     data-subcategory="skirts"
+                     data-price="{{ cloth.price1|default:0 }}"
+                     data-name="{{ cloth.name|lower }}">
+                    <div class="cloth-item__image">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                    </div>
+                    <div class="cloth-item__content">
+                        <h3>{{ cloth.name }}</h3>
+                        <div class="price-container">
+                            <span class="price-current">Rs {{ cloth.price1 }}</span>
+                            <span class="price-old">Rs {{ cloth.price2 }}</span>
+                        </div>
+                        <span class="discount-badge">{{ cloth.discount_text }}</span>
+                        <button
+                            class="cloths-section__btn"
+                            data-add-to-cart
+                            data-item-type="cloth"
+                            data-item-id="{{ cloth.id }}"
+                        >Add to Cart</button>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+    </section>
+
+    <!-- SHIRTS Section -->
+    <section class="kids-section shirts-section" id="shirts">
+        <div class="section-header">
+            <h2>Kids Shirts</h2>
+            <p>Formal and casual shirts for boys and girls</p>
+        </div>
+        <section class="cloths-section">
+            <p class="results-count" id="shirtsResultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
+            <div class="cloths-grid" id="shirtsGrid">
+                {% for cloth in all_kids_cloths %}
+                {% if 'shirt' in cloth.name|lower and 'short' not in cloth.name|lower %}
+                <div class="cloth-item" 
+                     data-category="{{ cloth.category }}"
+                     data-subcategory="shirts"
+                     data-price="{{ cloth.price1|default:0 }}"
+                     data-name="{{ cloth.name|lower }}">
+                    <div class="cloth-item__image">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                    </div>
+                    <div class="cloth-item__content">
+                        <h3>{{ cloth.name }}</h3>
+                        <div class="price-container">
+                            <span class="price-current">Rs {{ cloth.price1 }}</span>
+                            <span class="price-old">Rs {{ cloth.price2 }}</span>
+                        </div>
+                        <span class="discount-badge">{{ cloth.discount_text }}</span>
+                        <button
+                            class="cloths-section__btn"
+                            data-add-to-cart
+                            data-item-type="cloth"
+                            data-item-id="{{ cloth.id }}"
+                        >Add to Cart</button>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+    </section>
+
+    <!-- SHOES Section -->
+    <section class="kids-section shoes-section" id="shoes">
+        <div class="section-header">
+            <h2>Kids Shoes</h2>
+            <p>Footwear for every occasion - from school to play</p>
+        </div>
+        <section class="cloths-section">
+            <p class="results-count" id="shoesResultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
+            <div class="cloths-grid" id="shoesGrid">
+                {% for cloth in all_kids_cloths %}
+                {% if 'shoe' in cloth.name|lower or 'sneaker' in cloth.name|lower or 'sandal' in cloth.name|lower or 'boot' in cloth.name|lower or 'slipper' in cloth.name|lower %}
+                <div class="cloth-item" 
+                     data-category="{{ cloth.category }}"
+                     data-subcategory="shoes"
+                     data-price="{{ cloth.price1|default:0 }}"
+                     data-name="{{ cloth.name|lower }}">
+                    <div class="cloth-item__image">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                    </div>
+                    <div class="cloth-item__content">
+                        <h3>{{ cloth.name }}</h3>
+                        <div class="price-container">
+                            <span class="price-current">Rs {{ cloth.price1 }}</span>
+                            <span class="price-old">Rs {{ cloth.price2 }}</span>
+                        </div>
+                        <span class="discount-badge">{{ cloth.discount_text }}</span>
+                        <button
+                            class="cloths-section__btn"
+                            data-add-to-cart
+                            data-item-type="cloth"
+                            data-item-id="{{ cloth.id }}"
+                        >Add to Cart</button>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+    </section>
+
+    <!-- ACCESSORIES Section -->
+    <section class="kids-section accessories-section" id="accessories">
+        <div class="section-header">
+            <h2>Kids Accessories</h2>
+            <p>Complete the look with our trendy accessories</p>
+        </div>
+        <section class="cloths-section">
+            <p class="results-count" id="accessoriesResultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
+            <div class="cloths-grid" id="accessoriesGrid">
+                {% for cloth in all_kids_cloths %}
+                {% if 'cap' in cloth.name|lower or 'hat' in cloth.name|lower or 'belt' in cloth.name|lower or 'scarf' in cloth.name|lower or 'sunglass' in cloth.name|lower or 'watch' in cloth.name|lower or 'bag' in cloth.name|lower or 'wallet' in cloth.name|lower or 'hair' in cloth.name|lower or 'bow' in cloth.name|lower or 'clip' in cloth.name|lower or 'band' in cloth.name|lower %}
+                <div class="cloth-item" 
+                     data-category="{{ cloth.category }}"
+                     data-subcategory="accessories"
+                     data-price="{{ cloth.price1|default:0 }}"
+                     data-name="{{ cloth.name|lower }}">
+                    <div class="cloth-item__image">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                    </div>
+                    <div class="cloth-item__content">
+                        <h3>{{ cloth.name }}</h3>
+                        <div class="price-container">
+                            <span class="price-current">Rs {{ cloth.price1 }}</span>
+                            <span class="price-old">Rs {{ cloth.price2 }}</span>
+                        </div>
+                        <span class="discount-badge">{{ cloth.discount_text }}</span>
+                        <button
+                            class="cloths-section__btn"
+                            data-add-to-cart
+                            data-item-type="cloth"
+                            data-item-id="{{ cloth.id }}"
+                        >Add to Cart</button>
+                    </div>
+                </div>
+                {% endif %}
                 {% endfor %}
             </div>
         </section>
@@ -94,5 +856,253 @@
 
     {%include 'footer.html'%}
     <script src="{% static 'cart_utils.js' %}"></script>
+    <script>
+        // Size selection
+        document.querySelectorAll('.size-option').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+        
+        // Color selection
+        document.querySelectorAll('.color-option').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+        
+        // Toggle filter section
+        function toggleFilters() {
+            const content = document.getElementById('filterContent');
+            const toggle = document.getElementById('filterToggle');
+            if (content.style.display === 'none') {
+                content.style.display = 'grid';
+                toggle.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.display = 'none';
+                toggle.style.transform = 'rotate(-90deg)';
+            }
+        }
+        
+        // Switch tab function
+        function switchTab(target) {
+            // Update tab active state
+            document.querySelectorAll('.category-tab').forEach(function(tab) {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-target') === target) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // Show/hide sections
+            document.querySelectorAll('.kids-section').forEach(function(section) {
+                section.classList.remove('active');
+            });
+            document.getElementById(target).classList.add('active');
+            
+            // Scroll to section
+            document.getElementById(target).scrollIntoView({ behavior: 'smooth' });
+            
+            // Update filter dropdown
+            document.getElementById('categoryFilter').value = target;
+            applyFilters();
+        }
+        
+        // Tab click functionality
+        document.querySelectorAll('.category-tab').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                var target = this.getAttribute('data-target');
+                switchTab(target);
+            });
+        });
+        
+        // Apply filters
+        function applyFilters() {
+            var category = document.getElementById('categoryFilter').value;
+            var minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+            var maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+            var sortBy = document.getElementById('sortFilter').value;
+            var discount = document.getElementById('discountFilter').value;
+            
+            // Get all grid IDs based on current tab
+            var currentTab = document.querySelector('.category-tab.active').getAttribute('data-target');
+            var gridIds = currentTab === 'all' ? ['allGrid', 'girlsGrid', 'boysGrid', 'dressesGrid', 'topsGrid', 'pantsGrid', 'skirtsGrid', 'shirtsGrid', 'shoesGrid', 'accessoriesGrid'] : [currentTab + 'Grid'];
+            
+            gridIds.forEach(function(gridId) {
+                var grid = document.getElementById(gridId);
+                if (!grid) return;
+                
+                var products = grid.querySelectorAll('.cloth-item');
+                var visibleCount = 0;
+                
+                products.forEach(function(product) {
+                    var section = product.getAttribute('data-category');
+                    var subcategory = product.getAttribute('data-subcategory') || '';
+                    var price = parseFloat(product.getAttribute('data-price')) || 0;
+                    
+                    var show = true;
+                    
+                    // Category filter
+                    if (category !== 'all' && category !== section && subcategory.indexOf(category) === -1) {
+                        show = false;
+                    }
+                    
+                    // Price filter
+                    if (price < minPrice || price > maxPrice) {
+                        show = false;
+                    }
+                    
+                    // Discount filter
+                    if (discount === 'yes') {
+                        var badge = product.querySelector('.discount-badge');
+                        if (!badge || !badge.textContent.trim()) {
+                            show = false;
+                        }
+                    } else if (discount === 'no') {
+                        var badge = product.querySelector('.discount-badge');
+                        if (badge && badge.textContent.trim()) {
+                            show = false;
+                        }
+                    }
+                    
+                    product.style.display = show ? '' : 'none';
+                    if (show) visibleCount++;
+                });
+                
+                // Update count
+                var countEl = document.getElementById(gridId.replace('Grid', 'ResultsCount'));
+                if (countEl) {
+                    countEl.textContent = visibleCount + ' products';
+                }
+                
+                // Sort
+                var productsArray = Array.from(products);
+                productsArray.sort(function(a, b) {
+                    var priceA = parseFloat(a.getAttribute('data-price')) || 0;
+                    var priceB = parseFloat(b.getAttribute('data-price')) || 0;
+                    var nameA = a.getAttribute('data-name') || '';
+                    var nameB = b.getAttribute('data-name') || '';
+                    
+                    switch(sortBy) {
+                        case 'price_low': return priceA - priceB;
+                        case 'price_high': return priceB - priceA;
+                        case 'name_asc': return nameA.localeCompare(nameB);
+                        case 'name_desc': return nameB.localeCompare(nameA);
+                        default: return 0;
+                    }
+                });
+                
+                productsArray.forEach(function(product) { grid.appendChild(product); });
+            });
+            
+            // Update active filters display
+            updateActiveFilters(category, minPrice, maxPrice, sortBy, discount);
+        }
+        
+        // Clear all filters
+        function clearFilters() {
+            document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('sortFilter').value = 'default';
+            document.getElementById('discountFilter').value = 'all';
+            
+            document.querySelectorAll('.size-option.selected').forEach(function(btn) { btn.classList.remove('selected'); });
+            document.querySelectorAll('.color-option.selected').forEach(function(btn) { btn.classList.remove('selected'); });
+            
+            document.querySelectorAll('.cloth-item').forEach(function(product) {
+                product.style.display = '';
+            });
+            
+            // Reset result counts
+            var allCounts = {
+                'allResultsCount': '{{ all_kids_cloths.count }}',
+                'girlsResultsCount': '{{ kids_girls_cloths.count }}',
+                'boysResultsCount': '{{ kids_cloths.count }}'
+            };
+            
+            for (var id in allCounts) {
+                var el = document.getElementById(id);
+                if (el) el.textContent = allCounts[id] + ' products';
+            }
+            
+            document.getElementById('activeFilters').innerHTML = '';
+        }
+        
+        // Update active filters display
+        function updateActiveFilters(category, minPrice, maxPrice, sortBy, discount) {
+            var container = document.getElementById('activeFilters');
+            var html = '';
+            
+            if (category !== 'all') {
+                html += '<span class="active-filter-tag">Category: ' + category + ' <button onclick="removeFilter(\'category\')">×</button></span>';
+            }
+            if (minPrice > 0 || maxPrice < Infinity) {
+                html += '<span class="active-filter-tag">Price: Rs' + minPrice + ' - Rs' + (maxPrice === Infinity ? '+' : maxPrice) + ' <button onclick="removeFilter(\'price\')">×</button></span>';
+            }
+            if (sortBy !== 'default') {
+                html += '<span class="active-filter-tag">Sort: ' + sortBy + ' <button onclick="removeFilter(\'sort\')">×</button></span>';
+            }
+            if (discount !== 'all') {
+                html += '<span class="active-filter-tag">Discount: ' + (discount === 'yes' ? 'On Sale' : 'Regular') + ' <button onclick="removeFilter(\'discount\')">×</button></span>';
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        // Remove specific filter
+        function removeFilter(type) {
+            switch(type) {
+                case 'category':
+                    document.getElementById('categoryFilter').value = 'all';
+                    break;
+                case 'price':
+                    document.getElementById('minPrice').value = '';
+                    document.getElementById('maxPrice').value = '';
+                    break;
+                case 'sort':
+                    document.getElementById('sortFilter').value = 'default';
+                    break;
+                case 'discount':
+                    document.getElementById('discountFilter').value = 'all';
+                    break;
+            }
+            applyFilters();
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial counts from server-side data
+            document.getElementById('allResultsCount').textContent = '{{ all_kids_cloths.count }} products';
+            document.getElementById('girlsResultsCount').textContent = '{{ kids_girls_cloths.count }} products';
+            document.getElementById('boysResultsCount').textContent = '{{ kids_cloths.count }} products';
+            
+            // Set counts for subcategory sections by counting rendered items
+            var dressesCount = document.querySelectorAll('#dressesGrid .cloth-item').length;
+            var topsCount = document.querySelectorAll('#topsGrid .cloth-item').length;
+            var pantsCount = document.querySelectorAll('#pantsGrid .cloth-item').length;
+            var skirtsCount = document.querySelectorAll('#skirtsGrid .cloth-item').length;
+            var shirtsCount = document.querySelectorAll('#shirtsGrid .cloth-item').length;
+            var shoesCount = document.querySelectorAll('#shoesGrid .cloth-item').length;
+            var accessoriesCount = document.querySelectorAll('#accessoriesGrid .cloth-item').length;
+            
+            document.getElementById('dressesResultsCount').textContent = dressesCount + ' products';
+            document.getElementById('topsResultsCount').textContent = topsCount + ' products';
+            document.getElementById('pantsResultsCount').textContent = pantsCount + ' products';
+            document.getElementById('skirtsResultsCount').textContent = skirtsCount + ' products';
+            document.getElementById('shirtsResultsCount').textContent = shirtsCount + ' products';
+            document.getElementById('shoesResultsCount').textContent = shoesCount + ' products';
+            document.getElementById('accessoriesResultsCount').textContent = accessoriesCount + ' products';
+        });
+        
+        // Tab scroll function
+        function scrollTabs(amount) {
+            const container = document.getElementById('categoryTabsContainer');
+            if (container) {
+                container.scrollBy({ left: amount, behavior: 'smooth' });
+            }
+        }
+    </script>
 </body>
 </html>
+

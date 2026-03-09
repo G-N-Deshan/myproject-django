@@ -11,6 +11,292 @@
     <link rel="stylesheet" href="{% static 'navbar.css' %}">
     <link rel="stylesheet" href="{% static 'footer.css' %}">
     <link rel="stylesheet" href="{% static 'women-cloths.css' %}">
+    <style>
+        /* Filter Styles */
+        .filter-section {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+        }
+        
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .filter-header h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            color: #0f172a;
+            margin: 0;
+        }
+        
+        .filter-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .filter-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-group label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        
+        .price-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .price-inputs input {
+            width: 100%;
+        }
+        
+        .price-inputs span {
+            color: #64748b;
+        }
+        
+        .apply-filters-btn {
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .apply-filters-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .clear-filters-btn {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            margin-left: 10px;
+        }
+        
+        .clear-filters-btn:hover {
+            background: #e2e8f0;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            grid-column: 1 / -1;
+        }
+        
+        /* Size Filter */
+        .size-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .size-option {
+            padding: 8px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            background: #ffffff;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        
+        .size-option:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+        }
+        
+        .size-option.selected {
+            background: #6366f1;
+            color: #ffffff;
+            border-color: #6366f1;
+        }
+        
+        /* Color Filter */
+        .color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 3px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-option.selected {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 2px #6366f1;
+        }
+        
+        /* Tab Navigation */
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            -ms-overflow-style: auto;
+            background: #f8fafc;
+            border-radius: 30px;
+            margin: 20px;
+            max-width: 100%;
+            position: relative;
+        }
+        .category-tabs::-webkit-scrollbar {
+            height: 6px;
+            display: block;
+        }
+        .category-tabs::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 3px;
+        }
+        .category-tabs::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 3px;
+        }
+        
+        /* Tab scroll buttons */
+        .tab-scroll-left, .tab-scroll-right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .tab-scroll-left {
+            left: 10px;
+        }
+        .tab-scroll-right {
+            right: 10px;
+        }
+        .tab-scroll-left:hover, .tab-scroll-right:hover {
+            background: #6366f1;
+            color: white;
+            border-color: #6366f1;
+        }
+        
+        .category-tab {
+            flex-shrink: 0;
+            padding: 12px 24px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #0f172a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .category-tab:hover {
+            background: #f1f5f9;
+            border-color: #6366f1;
+            color: #6366f1;
+        }
+        .category-tab.active {
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            color: #ffffff;
+            border-color: transparent;
+        }
+        
+        /* Active Filters Display */
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 0 20px 20px 20px;
+        }
+        
+        .active-filter-tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #f1f5f9;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        
+        .active-filter-tag button {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            line-height: 1;
+        }
+    </style>
 </head>
 <body>
 
@@ -22,112 +308,135 @@
             <p class="women-section__subtitle">Discover timeless elegance and modern style</p>
         </div>
 
-        <div class="category-container">
-            <button class="scroll-btn scroll-btn-left" id="scrollLeft">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-
-            <div class="category-grid" id="categoryGrid">
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Dresses">
-                    </div>
-                    <span class="category-label">Dresses</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Tops">
-                    </div>
-                    <span class="category-label">Tops</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Pants">
-                    </div>
-                    <span class="category-label">Pants</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Skirts">
-                    </div>
-                    <span class="category-label">Skirts</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Activewear">
-                    </div>
-                    <span class="category-label">Activewear</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="One-Piece">
-                    </div>
-                    <span class="category-label">One-Piece</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Handbags">
-                    </div>
-                    <span class="category-label">Handbags</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Shoes">
-                    </div>
-                    <span class="category-label">Shoes</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Coats & Jackets">
-                    </div>
-                    <span class="category-label">Coats & Jackets</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Sweaters">
-                    </div>
-                    <span class="category-label">Sweaters</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Jeans">
-                    </div>
-                    <span class="category-label">Jeans</span>
-                </a>
-
-                <a href="#" class="category-item">
-                    <div class="category-image">
-                        <img src="../media/10.jpeg" alt="Accessories">
-                    </div>
-                    <span class="category-label">Accessories</span>
-                </a>
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-header" onclick="toggleFilters()">
+                <h3>🔍 Filters</h3>
+                <span class="filter-toggle" id="filterToggle">▼</span>
             </div>
+            
+            <div class="filter-content" id="filterContent">
+                <!-- Category Filter -->
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select id="categoryFilter">
+                        <option value="all">All Categories</option>
+                        <option value="dresses">Dresses</option>
+                        <option value="tops">Tops</option>
+                        <option value="pants">Pants</option>
+                        <option value="skirts">Skirts</option>
+                        <option value="activewear">Activewear</option>
+                        <option value="onepiece">One-Piece</option>
+                        <option value="handbags">Handbags</option>
+                        <option value="shoes">Shoes</option>
+                        <option value="coats">Coats & Jackets</option>
+                        <option value="sweaters">Sweaters</option>
+                        <option value="jeans">Jeans</option>
+                        <option value="accessories">Accessories</option>
+                    </select>
+                </div>
+                
+                <!-- Price Filter -->
+                <div class="filter-group">
+                    <label>Price Range</label>
+                    <div class="price-inputs">
+                        <input type="number" id="minPrice" placeholder="Min" min="0">
+                        <span>-</span>
+                        <input type="number" id="maxPrice" placeholder="Max" min="0">
+                    </div>
+                </div>
+                
+                <!-- Size Filter -->
+                <div class="filter-group">
+                    <label>Size</label>
+                    <div class="size-options">
+                        <button type="button" class="size-option" data-size="XS">XS</button>
+                        <button type="button" class="size-option" data-size="S">S</button>
+                        <button type="button" class="size-option" data-size="M">M</button>
+                        <button type="button" class="size-option" data-size="L">L</button>
+                        <button type="button" class="size-option" data-size="XL">XL</button>
+                        <button type="button" class="size-option" data-size="XXL">XXL</button>
+                    </div>
+                </div>
+                
+                <!-- Color Filter -->
+                <div class="filter-group">
+                    <label>Color</label>
+                    <div class="color-options">
+                        <button type="button" class="color-option" style="background: #000000;" data-color="black" title="Black"></button>
+                        <button type="button" class="color-option" style="background: #ffffff;" data-color="white" title="White"></button>
+                        <button type="button" class="color-option" style="background: #1e40af;" data-color="blue" title="Blue"></button>
+                        <button type="button" class="color-option" style="background: #dc2626;" data-color="red" title="Red"></button>
+                        <button type="button" class="color-option" style="background: #16a34a;" data-color="green" title="Green"></button>
+                        <button type="button" class="color-option" style="background: #f59e0b;" data-color="yellow" title="Yellow"></button>
+                        <button type="button" class="color-option" style="background: #7c3aed;" data-color="purple" title="Purple"></button>
+                        <button type="button" class="color-option" style="background: #f97316;" data-color="orange" title="Orange"></button>
+                        <button type="button" class="color-option" style="background: #ec4899;" data-color="pink" title="Pink"></button>
+                        <button type="button" class="color-option" style="background: #78716c;" data-color="brown" title="Brown"></button>
+                    </div>
+                </div>
+                
+                <!-- Sort Filter -->
+                <div class="filter-group">
+                    <label>Sort By</label>
+                    <select id="sortFilter">
+                        <option value="default">Default</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="name_asc">Name: A to Z</option>
+                        <option value="name_desc">Name: Z to A</option>
+                    </select>
+                </div>
+                
+                <!-- Discount Filter -->
+                <div class="filter-group">
+                    <label>Discount</label>
+                    <select id="discountFilter">
+                        <option value="all">All Products</option>
+                        <option value="yes">On Sale Only</option>
+                        <option value="no">Regular Price</option>
+                    </select>
+                </div>
+                
+                <div class="filter-buttons">
+                    <button class="apply-filters-btn" onclick="applyFilters()">Apply Filters</button>
+                    <button class="clear-filters-btn" onclick="clearFilters()">Clear All</button>
+                </div>
+            </div>
+        </div>
 
-            <button class="scroll-btn scroll-btn-right" id="scrollRight">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
+        <!-- Tab Navigation -->
+        <div class="category-tabs" id="categoryTabsContainer">
+            <button class="tab-scroll-left" onclick="scrollTabs(-200)">◀</button>
+            <button class="category-tab active" data-target="all">All</button>
+            <button class="category-tab" data-target="dresses">Dresses</button>
+            <button class="category-tab" data-target="tops">Tops</button>
+            <button class="category-tab" data-target="pants">Pants</button>
+            <button class="category-tab" data-target="skirts">Skirts</button>
+            <button class="category-tab" data-target="activewear">Activewear</button>
+            <button class="category-tab" data-target="onepiece">One-Piece</button>
+            <button class="category-tab" data-target="handbags">Handbags</button>
+            <button class="category-tab" data-target="shoes">Shoes</button>
+            <button class="category-tab" data-target="coats">Coats & Jackets</button>
+            <button class="category-tab" data-target="sweaters">Sweaters</button>
+            <button class="category-tab" data-target="jeans">Jeans</button>
+            <button class="category-tab" data-target="accessories">Accessories</button>
+            <button class="tab-scroll-right" onclick="scrollTabs(200)">▶</button>
         </div>
     </section>
 
-    <section class="cloths-section">
+    <!-- Active Filters -->
+    <div class="active-filters" id="activeFilters"></div>
+
+    <section class="cloths-section" id="allSection">
         <h2 class="cloths-section__title">Women's Clothing Collection</h2>
-        <div class="cloths-grid">
+        <p class="results-count" id="resultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
+        <div class="cloths-grid" id="productsGrid">
             {% for cloth in women_cloths %}
-            <div class="cloth-item">
+            <div class="cloth-item" 
+                 data-category="all" 
+                 data-price="{{ cloth.price1|default:0 }}"
+                 data-name="{{ cloth.name|lower }}">
                 <div class="cloth-item__image">
                     <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
                 </div>
@@ -154,31 +463,222 @@
 
     <script src="{% static 'cart_utils.js' %}"></script>
     <script>
+        // Size selection
+        document.querySelectorAll('.size-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+        
+        // Color selection
+        document.querySelectorAll('.color-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+        
+        // Toggle filter section
+        function toggleFilters() {
+            const content = document.getElementById('filterContent');
+            const toggle = document.getElementById('filterToggle');
+            if (content.style.display === 'none') {
+                content.style.display = 'grid';
+                toggle.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.display = 'none';
+                toggle.style.transform = 'rotate(-90deg)';
+            }
+        }
+        
+        // Tab click functionality
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const target = this.getAttribute('data-target');
+                document.getElementById('categoryFilter').value = target;
+                applyFilters();
+                
+                document.getElementById('allSection').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+        
+        // Apply filters
+        function applyFilters() {
+            const category = document.getElementById('categoryFilter').value;
+            const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+            const sortBy = document.getElementById('sortFilter').value;
+            const discount = document.getElementById('discountFilter').value;
+            
+            const products = document.querySelectorAll('.cloth-item');
+            let visibleCount = 0;
+            
+            products.forEach(product => {
+                const price = parseFloat(product.getAttribute('data-price')) || 0;
+                
+                let show = true;
+                
+                // Category filter
+                if (category !== 'all') {
+                    const productCategory = product.getAttribute('data-category');
+                    if (productCategory !== category && productCategory !== 'all') {
+                        show = false;
+                    }
+                }
+                
+                // Price filter
+                if (price < minPrice || price > maxPrice) {
+                    show = false;
+                }
+                
+                // Discount filter
+                if (discount === 'yes') {
+                    const badge = product.querySelector('.discount-badge');
+                    if (!badge || !badge.textContent.trim()) {
+                        show = false;
+                    }
+                } else if (discount === 'no') {
+                    const badge = product.querySelector('.discount-badge');
+                    if (badge && badge.textContent.trim()) {
+                        show = false;
+                    }
+                }
+                
+                product.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+            
+            // Sort products
+            const productsArray = Array.from(products);
+            productsArray.sort((a, b) => {
+                const priceA = parseFloat(a.getAttribute('data-price')) || 0;
+                const priceB = parseFloat(b.getAttribute('data-price')) || 0;
+                const nameA = a.getAttribute('data-name') || '';
+                const nameB = b.getAttribute('data-name') || '';
+                
+                switch(sortBy) {
+                    case 'price_low': return priceA - priceB;
+                    case 'price_high': return priceB - priceA;
+                    case 'name_asc': return nameA.localeCompare(nameB);
+                    case 'name_desc': return nameB.localeCompare(nameA);
+                    default: return 0;
+                }
+            });
+            
+            const grid = document.getElementById('productsGrid');
+            productsArray.forEach(product => grid.appendChild(product));
+            
+            // Update results count
+            document.getElementById('resultsCount').textContent = `Showing ${visibleCount} products`;
+            
+            // Update active filters display
+            updateActiveFilters(category, minPrice, maxPrice, sortBy, discount);
+        }
+        
+        // Clear all filters
+        function clearFilters() {
+            document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('sortFilter').value = 'default';
+            document.getElementById('discountFilter').value = 'all';
+            
+            document.querySelectorAll('.size-option.selected').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.color-option.selected').forEach(btn => btn.classList.remove('selected'));
+            
+            document.querySelectorAll('.cloth-item').forEach(product => {
+                product.style.display = '';
+            });
+            
+            document.getElementById('resultsCount').textContent = `Showing {{ women_cloths.count }} products`;
+            document.getElementById('activeFilters').innerHTML = '';
+        }
+        
+        // Update active filters display
+        function updateActiveFilters(category, minPrice, maxPrice, sortBy, discount) {
+            const container = document.getElementById('activeFilters');
+            let html = '';
+            
+            if (category !== 'all') {
+                html += `<span class="active-filter-tag">Category: ${category} <button onclick="removeFilter('category')">×</button></span>`;
+            }
+            if (minPrice > 0 || maxPrice < Infinity) {
+                html += `<span class="active-filter-tag">Price: Rs${minPrice} - Rs${maxPrice === Infinity ? '+' : maxPrice} <button onclick="removeFilter('price')">×</button></span>`;
+            }
+            if (sortBy !== 'default') {
+                html += `<span class="active-filter-tag">Sort: ${sortBy} <button onclick="removeFilter('sort')">×</button></span>`;
+            }
+            if (discount !== 'all') {
+                html += `<span class="active-filter-tag">Discount: ${discount === 'yes' ? 'On Sale' : 'Regular'} <button onclick="removeFilter('discount')">×</button></span>`;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        // Remove specific filter
+        function removeFilter(type) {
+            switch(type) {
+                case 'category':
+                    document.getElementById('categoryFilter').value = 'all';
+                    break;
+                case 'price':
+                    document.getElementById('minPrice').value = '';
+                    document.getElementById('maxPrice').value = '';
+                    break;
+                case 'sort':
+                    document.getElementById('sortFilter').value = 'default';
+                    break;
+                case 'discount':
+                    document.getElementById('discountFilter').value = 'all';
+                    break;
+            }
+            applyFilters();
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('resultsCount').textContent = `Showing {{ women_cloths.count }} products`;
+        });
+        
+        // Tab scroll function
+        function scrollTabs(amount) {
+            const container = document.getElementById('categoryTabsContainer');
+            if (container) {
+                container.scrollBy({ left: amount, behavior: 'smooth' });
+            }
+        }
+        
+        // Scroll buttons functionality
         const categoryGrid = document.getElementById('categoryGrid');
         const scrollLeftBtn = document.getElementById('scrollLeft');
         const scrollRightBtn = document.getElementById('scrollRight');
 
-        const scrollAmount = 300;
+        if (categoryGrid && scrollLeftBtn && scrollRightBtn) {
+            const scrollAmount = 300;
 
-        scrollLeftBtn.addEventListener('click', () => {
-            categoryGrid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        });
+            scrollLeftBtn.addEventListener('click', () => {
+                categoryGrid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            });
 
-        scrollRightBtn.addEventListener('click', () => {
-            categoryGrid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        });
+            scrollRightBtn.addEventListener('click', () => {
+                categoryGrid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            });
 
-        function updateScrollButtons() {
-            const maxScroll = categoryGrid.scrollWidth - categoryGrid.clientWidth;
-            scrollLeftBtn.style.opacity = categoryGrid.scrollLeft <= 0 ? '0.3' : '1';
-            scrollLeftBtn.style.pointerEvents = categoryGrid.scrollLeft <= 0 ? 'none' : 'auto';
-            scrollRightBtn.style.opacity = categoryGrid.scrollLeft >= maxScroll - 5 ? '0.3' : '1';
-            scrollRightBtn.style.pointerEvents = categoryGrid.scrollLeft >= maxScroll - 5 ? 'none' : 'auto';
+            function updateScrollButtons() {
+                const maxScroll = categoryGrid.scrollWidth - categoryGrid.clientWidth;
+                scrollLeftBtn.style.opacity = categoryGrid.scrollLeft <= 0 ? '0.3' : '1';
+                scrollLeftBtn.style.pointerEvents = categoryGrid.scrollLeft <= 0 ? 'none' : 'auto';
+                scrollRightBtn.style.opacity = categoryGrid.scrollLeft >= maxScroll - 5 ? '0.3' : '1';
+                scrollRightBtn.style.pointerEvents = categoryGrid.scrollLeft >= maxScroll - 5 ? 'none' : 'auto';
+            }
+
+            categoryGrid.addEventListener('scroll', updateScrollButtons);
+            window.addEventListener('load', updateScrollButtons);
+            window.addEventListener('resize', updateScrollButtons);
         }
-
-        categoryGrid.addEventListener('scroll', updateScrollButtons);
-        window.addEventListener('load', updateScrollButtons);
-        window.addEventListener('resize', updateScrollButtons);
     </script>
 </body>
 </html>
+

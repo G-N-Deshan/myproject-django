@@ -196,7 +196,72 @@ body{
     cursor: pointer;
 }
 
-/* Cart Count Badge */
+/* Cart Icon Container */
+.cart-icon-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-left: 0.5rem;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.cart-icon-link:hover {
+    transform: scale(1.1);
+}
+
+.cart-icon-link:hover .cart-icon {
+    transform: rotate(-10deg);
+}
+
+.cart-icon {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.cart-count-badge {
+    position: absolute;
+    top: 0;
+    right: -8px;
+    min-width: 1.4rem;
+    height: 1.4rem;
+    padding: 0 0.35rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.5);
+    animation: popIn 0.3s ease-out;
+    border: 2px solid #fff;
+}
+
+.cart-count-badge:empty,
+.cart-count-badge[data-cart-count="0"] {
+    display: none;
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Cart Count Badge (Old - kept for compatibility) */
 .nav-link--cart .cart-count {
     display: inline-flex;
     align-items: center;

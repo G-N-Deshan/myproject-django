@@ -48,6 +48,12 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     path('order-success/<str:order_number>/', views.order_success, name='order_success'),
 
+    # Profile Management URLs
+    path('profile/update/', views.update_profile, name='update_profile'),
+    path('profile/change-password/', views.change_password, name='change_password'),
+    path('profile/notification-preferences/', views.notification_preferences, name='notification_preferences'),
+    path('profile/update-email/', views.update_email, name='update_email'),
+
 ]
 
 if settings.DEBUG:

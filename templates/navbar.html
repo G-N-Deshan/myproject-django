@@ -10,14 +10,22 @@
             <div class="nav-links-container">
                 <button><a href="{% url 'index' %}" class="nav-link nav-link--home">Home</a></button>
                 <button><a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">BUY</a></button>
-                <button><a href="{% url 'reviews' %}" class="nav-link nav-link--reviews">Reviews</a></button>
+                <button><a href="{% url 'reviews' %}" class="nav-link nav-link--reviews"> Reviews</a></button>
                 <button><a href="{% url 'contact_us' %}" class="nav-link nav-link--contact">Contact</a></button>
                 <button><a href="{% url 'about' %}" class="nav-link nav-link--about">About</a></button>
-                <button>
-                    <a href="{% url 'cart_details' %}" class="nav-link nav-link--cart">
-                        Cart <span class="cart-count" data-cart-count>{{ cart_count|default:0 }}</span>
-                    </a>
-                </button>
+                
+                <!-- Cart Icon with Conditional Link -->
+                {% if user.is_authenticated %}
+                <a href="{% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count-badge" data-cart-count>{{ cart_count|default:0 }}</span>
+                </a>
+                {% else %}
+                <a href="{% url 'login' %}?next={% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count-badge" data-cart-count>{{ cart_count|default:0 }}</span>
+                </a>
+                {% endif %}
             </div>
 
             <!-- Login/Logout on right -->

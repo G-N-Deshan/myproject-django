@@ -130,6 +130,12 @@ def new_arrivals(request):
 
 # Authentication views
 def user_login(request):
+    # Check if user is being redirected from cart or other protected page
+    next_url = request.GET.get('next', '')
+    if next_url and 'cart' in next_url.lower():
+        # Show info message only when coming from cart
+        pass  # Message will be shown after POST if login fails
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -158,10 +164,14 @@ def user_login(request):
             except Cart.DoesNotExist:
                 pass
             
-            next_url = request.GET.get('next', 'index')
+            next_url = request.POST.get('next', 'index')
             return redirect(next_url)
         else:
             messages.error(request, 'Invalid username or password')
+    
+    # Show message if coming from cart
+    if 'cart' in next_url.lower():
+        messages.info(request, 'Please login to view your cart')
     
     return render(request, 'login.html')
 
@@ -202,7 +212,45 @@ def user_logout(request):
 
 
 def profile(request):
-    return render(request, 'profile.html')
+    if not request.user.is_authenticated:
+        messages.warning(request, 'Please login to view your profile')
+        return redirect('login')
+    
+    # Get user's order count
+    order_count = Order.objects.filter(user=request.user).count()
+    
+    # Get user's review count (reviews by this user's email or name)
+    review_count = Review.objects.filter(email=request.user.email).count()
+    
+    # Get user's wishlist count
+    wishlist_count = WishlistItem.objects.filter(user=request.user).count()
+    
+    # Get recent reviews by user
+    user_reviews = Review.objects.filter(email=request.user.email)[:5]
+    
+    # Get cart count for navigation
+    cart_count = 0
+    try:
+        cart = Cart.objects.get(user=request.user)
+        cart_count = cart.get_item_count()
+    except Cart.DoesNotExist:
+        cart_count = 0
+    
+    # Calculate satisfaction (mock - could be based on actual data)
+    satisfaction = "98%"
+    if order_count == 0:
+        satisfaction = "N/A"
+    
+    context = {
+        'order_count': order_count,
+        'review_count': review_count,
+        'wishlist_count': wishlist_count,
+        'user_reviews': user_reviews,
+        'cart_count': cart_count,
+        'satisfaction': satisfaction,
+    }
+    
+    return render(request, 'profile.html', context)
 
 def product_detail(request, product_type, product_id):
     product = None
@@ -258,9 +306,18 @@ def toys(request):
 
     
 def kids_cloths(request):
+    # Get all kids cloths (both boys and girls)
+    all_kids_cloths = Cloths.objects.filter(category__in=['kids-men', 'kids-girl'])
+    
+    # Separate by gender for display
     kids_cloths = Cloths.objects.filter(category='kids-men')
     kids_girls_cloths = Cloths.objects.filter(category='kids-girl')
-    return render(request, 'kids_cloths.html', {'kids_cloths': kids_cloths, 'kids_girls_cloths': kids_girls_cloths})
+    
+    return render(request, 'kids_cloths.html', {
+        'kids_cloths': kids_cloths, 
+        'kids_girls_cloths': kids_girls_cloths,
+        'all_kids_cloths': all_kids_cloths
+    })
 
 def women_cloths(request):
     women_cloths = Cloths.objects.filter(category='women')
@@ -268,8 +325,21 @@ def women_cloths(request):
 
 
 def mens_cloths(request):
-    mens_cloths = Cloths.objects.filter(category='men')
-    return render(request, 'mens_cloths.html', {'mens_cloths': mens_cloths})
+    all_mens_cloths = Cloths.objects.filter(category='men')
+    
+    # For now, all sections show the same data
+    # You can add subcategory field to Cloths model for proper filtering
+    context = {
+        'mens_cloths': all_mens_cloths,
+        'shirts': all_mens_cloths,
+        'pants': all_mens_cloths,
+        'jackets': all_mens_cloths,
+        'shoes': all_mens_cloths,
+        'accessories': all_mens_cloths,
+        'sports': all_mens_cloths,
+        'formal': all_mens_cloths,
+    }
+    return render(request, 'mens_cloths.html', context)
 
 def reviews(request):
     if request.method == 'POST':
@@ -814,3 +884,131 @@ def order_success(request, order_number):
     }
     
     return render(request, 'order_success.html', context)
+
+
+# Profile Management Views
+@login_required(login_url='login')
+def update_profile(request):
+    """AJAX endpoint to update user profile"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            
+            # Update user fields
+            user = request.user
+            if 'first_name' in data:
+                user.first_name = data['first_name']
+            if 'last_name' in data:
+                user.last_name = data['last_name']
+            if 'email' in data:
+                # Check if email is already taken by another user
+                if User.objects.exclude(pk=user.pk).filter(email=data['email']).exists():
+                    return JsonResponse({'success': False, 'error': 'Email already in use'}, status=400)
+                user.email = data['email']
+            user.save()
+            
+            return JsonResponse({'success': True, 'message': 'Profile updated successfully!'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
+
+
+@login_required(login_url='login')
+def change_password(request):
+    """AJAX endpoint to change user password"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            
+            current_password = data.get('current_password', '')
+            new_password = data.get('new_password', '')
+            confirm_password = data.get('confirm_password', '')
+            
+            user = request.user
+            
+            # Verify current password
+            if not user.check_password(current_password):
+                return JsonResponse({'success': False, 'error': 'Current password is incorrect'}, status=400)
+            
+            # Check password match
+            if new_password != confirm_password:
+                return JsonResponse({'success': False, 'error': 'New passwords do not match'}, status=400)
+            
+            # Check password length
+            if len(new_password) < 6:
+                return JsonResponse({'success': False, 'error': 'Password must be at least 6 characters'}, status=400)
+            
+            # Set new password
+            user.set_password(new_password)
+            user.save()
+            
+            # Re-authenticate user to keep them logged in
+            from django.contrib.auth import update_session_auth_hash
+            update_session_auth_hash(request, user)
+            
+            return JsonResponse({'success': True, 'message': 'Password changed successfully!'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
+
+
+@login_required(login_url='login')
+def notification_preferences(request):
+    """AJAX endpoint to update notification preferences"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            
+            # Store notification preferences in session (or could use a UserProfile model)
+            request.session['notify_orders'] = data.get('notify_orders', True)
+            request.session['notify_promotions'] = data.get('notify_promotions', True)
+            request.session['notify_new_arrivals'] = data.get('notify_new_arrivals', True)
+            request.session['notify_reviews'] = data.get('notify_reviews', True)
+            
+            return JsonResponse({'success': True, 'message': 'Notification preferences updated!'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    
+    # GET request - return current preferences
+    preferences = {
+        'notify_orders': request.session.get('notify_orders', True),
+        'notify_promotions': request.session.get('notify_promotions', True),
+        'notify_new_arrivals': request.session.get('notify_new_arrivals', True),
+        'notify_reviews': request.session.get('notify_reviews', True),
+    }
+    return JsonResponse({'success': True, 'preferences': preferences})
+
+
+@login_required(login_url='login')
+def update_email(request):
+    """AJAX endpoint to update user email"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            new_email = data.get('email', '').strip()
+            
+            if not new_email:
+                return JsonResponse({'success': False, 'error': 'Email is required'}, status=400)
+            
+            # Validate email format
+            import re
+            email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            if not re.match(email_pattern, new_email):
+                return JsonResponse({'success': False, 'error': 'Invalid email format'}, status=400)
+            
+            user = request.user
+            
+            # Check if email is already taken
+            if User.objects.exclude(pk=user.pk).filter(email=new_email).exists():
+                return JsonResponse({'success': False, 'error': 'Email already in use'}, status=400)
+            
+            user.email = new_email
+            user.save()
+            
+            return JsonResponse({'success': True, 'message': 'Email updated successfully!'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)

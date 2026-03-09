@@ -8,220 +8,444 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <link rel="stylesheet" href="{%static 'index.css'%}">
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{%static 'footer.css'%}">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f172a',
+                        accent: '#38bdf8',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                        'bounce-slow': 'bounce 3s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(50px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
     <title>Home - G11 Fashion & Toys</title>
 </head>
-<body>
+<body class="font-['Poppins']">
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <p class="{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
 
     {% include 'navbar.html' %}
 
     <!-- Hero Section -->
-    <section class="section-1">
-       <h2><strong style="color:blue;">
-        <strong style="font-size: 7rem;">F</strong>ashion </strong> &
-        <strong style="color: red;">Toys</strong></h2>
-       <h3>for Every Smile</h3>
-       <h1>G11</h1>
-       <a href="{% url 'buy' %}"><button>Browse Products</button></a>
+    <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="../media/cloths-page-background.jpg" alt="Fashion and Toys" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-800/85 to-slate-900/90"></div>
+        </div>
+        
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden z-0">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-accent/20 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        </div>
+        
+        <!-- Floating Shapes -->
+        <div class="absolute top-20 left-10 w-20 h-20 border-2 border-white/10 rounded-lg rotate-12 animate-float z-0"></div>
+        <div class="absolute bottom-32 right-16 w-16 h-16 border-2 border-accent/20 rounded-full animate-float z-0" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/3 right-1/4 w-12 h-12 bg-accent/10 rounded-lg rotate-45 animate-float z-0" style="animation-delay: 2s;"></div>
+        
+        <div class="relative z-10 container mx-auto px-6 text-center">
+            <!-- Main Heading -->
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white mb-6 animate-slide-up">
+                <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
+                    Fashion
+                </span>
+                <span class="text-white drop-shadow-lg">&</span>
+                <span class="bg-gradient-to-r from-pink-400 via-red-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg">
+                    Toys
+                </span>
+            </h1>
+            
+            <!-- Subtitle -->
+            <p class="text-xl md:text-2xl text-white font-semibold mb-4 max-w-2xl mx-auto animate-slide-up drop-shadow-lg" style="animation-delay: 0.1s;">
+                Bring <span class="text-accent">joy</span> to your little ones with our amazing collection
+            </p>
+            
+            <p class="text-lg md:text-xl text-white/90 font-medium mb-10 animate-slide-up drop-shadow-lg" style="animation-delay: 0.2s;">
+                Premium quality clothes & toys for kids • Up to <span class="text-green-400 font-bold">50% OFF</span>
+            </p>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up" style="animation-delay: 0.3s;">
+                <a href="{% url 'buy' %}" class="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/40 hover:scale-105">
+                    <span class="relative z-10 flex items-center gap-2">
+                        <i class="bi bi-bag-check"></i>
+                        Shop Now
+                    </span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </a>
+                
+                <a href="{% url 'shop_offers' %}" class="group px-8 py-4 border-2 border-white/50 text-white font-bold rounded-full hover:bg-white/20 transition-all duration-300 hover:border-white/70 backdrop-blur-sm flex items-center gap-2">
+                    <i class="bi bi-fire text-orange-400"></i>
+                    View Offers
+                </a>
+            </div>
+            
+            <!-- Stats -->
+            <div class="flex flex-wrap justify-center gap-8 md:gap-16 mt-16 animate-slide-up" style="animation-delay: 0.4s;">
+                <div class="text-center">
+                    <div class="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">10K+</div>
+                    <div class="text-white/80 text-sm font-medium">Happy Customers</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">500+</div>
+                    <div class="text-white/80 text-sm font-medium">Products</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">4.9★</div>
+                    <div class="text-white/80 text-sm font-medium">Rating</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-slow">
+            <div class="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center pt-2">
+                <div class="w-1 h-3 bg-white/70 rounded-full animate-pulse"></div>
+            </div>
+        </div>
     </section>
 
     <!-- Welcome Section -->
-    <section class="section-2">
-        {% if user.is_authenticated %}
-        <h2>Welcome {{ user.username }}!</h2>
-        {% else %}
-        <h2>Welcome to G11!</h2>
-        {% endif %}
-        <p>Discover trendy clothes and fun toys for your little ones.</p>
-        <p>Shop quality products at great prices with G11 today.</p>
+    <section class="py-20 bg-gradient-to-b from-white to-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center">
+                {% if user.is_authenticated %}
+                <h2 class="text-4xl font-bold text-gray-800 mb-4 animate-slide-up">
+                    Welcome back, <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">{{ user.username }}</span>! 👋
+                </h2>
+                {% else %}
+                <h2 class="text-4xl font-bold text-gray-800 mb-4 animate-slide-up">
+                    Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">G11</span>!
+                </h2>
+                {% endif %}
+                <p class="text-xl text-gray-600 mb-4">Discover trendy clothes and fun toys for your little ones.</p>
+                <p class="text-lg text-gray-500">Shop quality products at great prices with G11 today.</p>
+            </div>
+        </div>
     </section>
 
     <!-- Hot Offers Section -->
-    <section class="hot-offers-section">
-        <div class="section-header">
-            <span class="section-badge"> Limited Time</span>
-            <h2>Hot Offers</h2>
-            <p><b>Don't miss out on these amazing deals!</b></p>
-        </div>
-
-        <div class="offers-grid">
-            {% for offer in offers %}
-            <div class="offer-card">
-                <div class="offer-badge">-{{ offer.offers_badge }}%</div>
-                <div class="offer-image">
-                    <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}">
-                    <div class="offer-overlay">
-                        <a
-                            class="quick-view-btn"
-                            href="{% url 'add_to_cart' 'offer' offer.id %}"
-                            data-add-to-cart
-                            data-item-type="offer"
-                            data-item-id="{{ offer.id }}"
-                        >Add to Cart</a>
-                    </div>
-                </div>
-                <div class="offer-content">
-                    <h3>{{ offer.title }}</h3>
-                    <div class="offer-price">
-                    {% if offer.price1 %}
-                    <span class="original-price">${{ offer.price1 }}</span>
-                    {% endif %}
-                    {% if offer.price2 %}
-                    <span class="sale-price">${{ offer.price2 }}</span>
-                    {% endif %}
-                    {% if offer.stock_text %}
-                    <span class="stock">{{offer.stock_text}}</span>
-                    {% endif %}                        
-                    </div>
-                    <div class="offer-timer" data-end-time="{{ offer.end_time }}">
-                        <span> Ends in: <span class="countdown"></span></span>
-                    </div>
-                </div>
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-1 bg-red-100 text-red-600 font-semibold rounded-full text-sm mb-4 animate-pulse">
+                    🔥 Limited Time Offer
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Hot Deals</h2>
+                <p class="text-xl text-gray-600">Don't miss out on these amazing deals!</p>
             </div>
-            {% endfor %}
-        </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                {% for offer in offers %}
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="relative overflow-hidden">
+                        <div class="absolute top-4 left-4 z-10 px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full animate-pulse">
+                            -{{ offer.offers_badge }}%
+                        </div>
+                        <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                            <button 
+                                class="add-to-cart-btn px-6 py-2 bg-white text-gray-800 font-semibold rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
+                                data-add-to-cart
+                                data-item-type="offer"
+                                data-item-id="{{ offer.id }}"
+                            >
+                                <i class="bi bi-cart-plus mr-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">{{ offer.title }}</h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            {% if offer.price1 %}
+                            <span class="text-gray-400 line-through">${{ offer.price1 }}</span>
+                            {% endif %}
+                            {% if offer.price2 %}
+                            <span class="text-2xl font-bold text-red-500">${{ offer.price2 }}</span>
+                            {% endif %}
+                        </div>
+                        {% if offer.stock_text %}
+                        <span class="inline-block px-2 py-1 bg-orange-100 text-orange-600 text-xs rounded-full">
+                            {{ offer.stock_text }}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="{% url 'shop_offers' %}" class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 hover:scale-105">
+                    View All Offers <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
     </section>
 
     <!-- New Arrivals Section -->
-    <section class="new-arrivals-section">
-    <div class="section-header">
-        <span class="section-badge">✨ New</span>
-        <h2>New Arrivals</h2>
-        <p>Fresh products just landed!</p>
-    </div>
-
-    <div class="arrivals-slider">
-        <button class="slider-btn prev-btn" aria-label="Previous">‹</button>
-        
-        <div class="arrivals-track">
-            {% for arrival in arrivals %}
-            <div class="arrival-card">
-                <span class="arrival-badge">NEW</span>
-                
-                <div class="arrival-image">
-                    <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }}">
-                    <button class="wishlist-btn" aria-label="Add to wishlist">
-                        <span class="heart-icon">♡</span>
-                    </button>
-                </div>
-                
-                <div class="arrival-content">
-                    <span class="arrival-category">{{ arrival.get_category_display }}</span>
-                    <h3>{{ arrival.title }}</h3>
-                    <p>{{ arrival.description|truncatewords:10 }}</p>
-                    
-                    <div class="arrival-footer">
-                        <span class="arrival-price">${{ arrival.price }}</span>
-                        <a
-                            class="add-cart-btn"
-                            href="{% url 'add_to_cart' 'arrival' arrival.id %}"
-                            data-add-to-cart
-                            data-item-type="arrival"
-                            data-item-id="{{ arrival.id }}"
-                            aria-label="Add to cart"
-                        >🛒</a>
-                    </div>
-                </div>
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-1 bg-green-100 text-green-600 font-semibold rounded-full text-sm mb-4">
+                    ✨ Just Landed
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">New Arrivals</h2>
+                <p class="text-xl text-gray-600">Fresh products just dropped!</p>
             </div>
-            {% empty %}
-            <div class="empty-arrivals">
-                <p>No new arrivals yet. Check back soon!</p>
-            </div>
-            {% endfor %}
-        </div>
-        
-        <button class="slider-btn next-btn" aria-label="Next">›</button>
-    </div>
-</section>
 
-    <!-- Wishlist Section -->
-   <section class="wishlist-section">
-    <div class="section-header">
-        <span class="section-badge">❤️ Favorites</span>
-        <h2>Your Wishlist</h2>
-        {% if user.is_authenticated %}
-            <p>{{ wishlist_count }} item{{ wishlist_count|pluralize }} saved</p>
-        {% else %}
-            <p>Items you love, saved for later</p>
-        {% endif %}
-    </div>
-
-    <div class="wishlist-container">
-        {% if not user.is_authenticated %}
-        <!-- Not Logged In State -->
-        <div class="empty-wishlist">
-            <div class="empty-icon">🔒</div>
-            <h3>Login to view your wishlist</h3>
-            <p>Save your favorite items for later</p>
-            <a href="{% url 'login' %}" class="browse-btn">Login Now</a>
-        </div>
-
-        {% elif wishlist_count == 0 %}
-        <!-- Empty Wishlist State -->
-        <div class="empty-wishlist">
-            <div class="empty-icon">💝</div>
-            <h3>Your wishlist is empty</h3>
-            <p>Start adding products you love!</p>
-            <a href="{% url 'buy' %}" class="browse-btn">Browse Products</a>
-        </div>
-
-        {% else %}
-        <!-- Wishlist Items Grid -->
-        <div class="wishlist-grid">
-            {% for item in wishlist_items %}
-            <div class="wishlist-card">
-                <div class="wishlist-image">
-                    <img src="{{ item.image }}" alt="{{ item.name }}">
-                    <span class="wishlist-type-badge">{{ item.item_type|title }}</span>
-                </div>
-                <div class="wishlist-content">
-                    <span class="wishlist-category">{{ item.category }}</span>
-                    <h4>{{ item.name }}</h4>
-                    <div class="wishlist-footer">
-                        <span class="wishlist-price">${{ item.price }}</span>
-                        <form method="POST" action="{% url 'remove_from_wishlist' item.id %}" style="display: inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="remove-wishlist-btn" title="Remove from wishlist">
-                                ✕
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {% for arrival in arrivals %}
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+                    <div class="relative overflow-hidden">
+                        <span class="absolute top-4 right-4 z-10 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">NEW</span>
+                        <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }}" class="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-4 left-4">
+                            <button class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors">
+                                <i class="bi bi-heart"></i>
                             </button>
-                        </form>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs text-blue-600 font-semibold uppercase">{{ arrival.category }}</span>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ arrival.title }}</h3>
+                        <p class="text-sm text-gray-500 mb-4 line-clamp-2">{{ arrival.description }}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-gray-800">${{ arrival.price }}</span>
+                            <button 
+                                class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                                data-add-to-cart
+                                data-item-type="arrival"
+                                data-item-id="{{ arrival.id }}"
+                            >
+                                <i class="bi bi-cart-plus"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
+                {% empty %}
+                <div class="col-span-full text-center py-12">
+                    <i class="bi bi-inbox text-6xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500 text-lg">No new arrivals yet. Check back soon!</p>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
-
-        <!-- View All Link -->
-        {% if wishlist_count > 6 %}
-        <div class="wishlist-view-all">
-            <a href="{% url 'wishlist' %}" class="view-all-btn">
-                View All {{ wishlist_count }} Items →
-            </a>
-        </div>
-        {% endif %}
-
-        {% endif %}
-    </div>
-</section>
-
-    <!-- Features Section -->
-    <section class="section-3">
-        {% for card in cards %}
-        <div class="feature-card">
-            <img src="{{ card.imageUrl.url }}" alt="{{ card.name }}">
-            <h2>{{ card.name }}</h2>
-            <p>{{ card.details }}</p>
-        </div>
-        {% endfor %}
     </section>
 
+    <!-- Wishlist Section -->
+    <section class="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-1 bg-pink-100 text-pink-600 font-semibold rounded-full text-sm mb-4">
+                    ❤️ Your Favorites
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Your Wishlist</h2>
+                {% if user.is_authenticated %}
+                    <p class="text-xl text-gray-600">{{ wishlist_count }} item{{ wishlist_count|pluralize }} saved</p>
+                {% else %}
+                    <p class="text-xl text-gray-600">Items you love, saved for later</p>
+                {% endif %}
+            </div>
+
+            {% if not user.is_authenticated %}
+            <div class="max-w-md mx-auto text-center bg-white rounded-3xl shadow-xl p-12">
+                <div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="bi bi-heart text-4xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Login to view your wishlist</h3>
+                <p class="text-gray-500 mb-6">Save your favorite items for later</p>
+                <a href="{% url 'login' %}" class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300">
+                    <i class="bi bi-box-arrow-in-right"></i> Login Now
+                </a>
+            </div>
+            {% elif wishlist_count == 0 %}
+            <div class="max-w-md mx-auto text-center bg-white rounded-3xl shadow-xl p-12">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="bi bi-heart text-4xl text-gray-300"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Your wishlist is empty</h3>
+                <p class="text-gray-500 mb-6">Start adding products you love!</p>
+                <a href="{% url 'buy' %}" class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300">
+                    <i class="bi bi-bag"></i> Browse Products
+                </a>
+            </div>
+            {% else %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+                {% for item in wishlist_items %}
+                <div class="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <div class="relative">
+                        <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-40 object-cover">
+                        <span class="absolute top-2 left-2 px-2 py-1 bg-gray-800/70 text-white text-xs rounded">{{ item.category }}</span>
+                    </div>
+                    <div class="p-3">
+                        <h4 class="font-semibold text-gray-800 text-sm truncate">{{ item.name }}</h4>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="font-bold text-blue-600">${{ item.price }}</span>
+                            <button class="text-red-500 hover:scale-110 transition-transform">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if wishlist_count > 6 %}
+            <div class="text-center mt-8">
+                <a href="{% url 'wishlist' %}" class="inline-flex items-center gap-2 text-blue-600 font-semibold hover:underline">
+                    View All {{ wishlist_count }} Items <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Features/Cards Section -->
+    <section class="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Why Choose Us</h2>
+                <p class="text-xl text-gray-400">Experience the best shopping</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for card in cards %}
+                <div class="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <i class="bi bi-star text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">{{ card.name }}</h3>
+                        <p class="text-gray-400">{{ card.details }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%2338bdf8&quot; fill-opacity=&quot;0.6&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    <div class="container mx-auto px-6 relative z-10 text-center">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">Ready to Shop?</h2>
+        <p class="text-xl text-white font-medium mb-8 max-w-2xl mx-auto drop-shadow-md">Join thousands of happy customers and get amazing deals on premium quality products!</p>
+        <a href="{% url 'buy' %}" class="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold text-lg rounded-full hover:shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300">
+            <i class="bi bi-bag-check"></i> Start Shopping
+        </a>
+    </div>
+</section>
     {% include 'footer.html' %}
 
     <script src="{% static 'cart_utils.js' %}"></script>
     <script src="{% static 'home.js' %}"></script>
+    
+    <style>
+        /* Custom Animations */
+        @keyframes slideUp {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.8s ease-out forwards;
+        }
+        
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Messages Styling */
+        .messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+        }
+        
+        .messages p {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            animation: slideIn 0.3s ease-out, fadeOut 0.5s ease-out 4.5s forwards;
+        }
+        
+        .messages .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .messages .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
 </body>
 </html>
