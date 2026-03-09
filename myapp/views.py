@@ -1,4 +1,3 @@
-from urllib import request
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
@@ -85,9 +84,6 @@ def index(request):
 
 def about(request):
     return render(request, 'about.html')
-
-def contact(request):
-    return render(request, 'contact.html')
 
 
 def buy(request):
@@ -253,10 +249,7 @@ def product_detail(request, product_type, product_id):
 def cloths(request):
     return render(request, 'cloths.html')
 
-def toys(request):  
-    return render(request, 'toys.html')
 
-    
 def kids_cloths(request):
     kids_cloths = Cloths.objects.filter(category='kids-men')
     kids_girls_cloths = Cloths.objects.filter(category='kids-girl')
