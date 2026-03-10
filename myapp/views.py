@@ -658,6 +658,12 @@ def mens_cloths(request):
     })
 
 def reviews(request):
+    cart_count = 0
+    try:
+        cart_count = get_or_create_cart(request).get_item_count()
+    except Exception:
+        cart_count = 0
+
     if request.method == 'POST':
         form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
@@ -670,7 +676,7 @@ def reviews(request):
     # Get latest 20 reviews
     latest_reviews = Review.objects.all()[:20]
     
-    return render(request, 'reviews.html', {'form': form, 'latest_reviews': latest_reviews})
+    return render(request, 'reviews.html', {'form': form, 'latest_reviews': latest_reviews, 'cart_count': cart_count})
 
 def review_success(request):
     return render(request, 'review_success.html')
