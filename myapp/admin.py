@@ -1,3 +1,4 @@
+
 from django.contrib import admin
 from .models import Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy, WishlistItem, Cart, CartItem, Order, OrderItem 
 
@@ -5,7 +6,13 @@ from .models import Card, Cloths, Offers, NewArrivals, Review, ContactMessage, T
 admin.site.register(Card)
 admin.site.register(Offers)
 admin.site.register(NewArrivals)
-admin.site.register(Cloths)
+
+@admin.register(Cloths)
+class ClothsAdmin(admin.ModelAdmin):
+    list_display = ['name', 'category', 'subcategory', 'price1', 'discount_text']
+    list_filter = ['category', 'subcategory']
+    search_fields = ['name', 'desccription']
+    ordering = ['-id']
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
@@ -85,3 +92,4 @@ class OrderAdmin(admin.ModelAdmin):
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['order', 'item_name', 'quantity', 'price', 'subtotal']
     list_filter = ['item_type']
+

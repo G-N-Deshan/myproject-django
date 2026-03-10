@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 import re
@@ -34,8 +35,6 @@ class Offers(models.Model):
     def __str__(self):
         return self.title
     
-    
-    
 
 class NewArrivals(models.Model):
     
@@ -55,14 +54,24 @@ class NewArrivals(models.Model):
     def __str__(self):
         return self.title
     
-    
-    
+
 class Cloths(models.Model):
     CATEGORY_CHOICES = [
-        ('kids-men', 'Kids-men'),
+        ('kids-men', 'Kids Boys'),
         ('men', 'Men'),
         ('women','Women'),
-        ('kids-girl', 'Kids-girl')
+        ('kids-girl', 'Kids Girls')
+    ]
+    
+    SUBCATEGORY_CHOICES = [
+        ('', 'None'),
+        ('dresses', 'Dresses'),
+        ('tops', 'Tops'),
+        ('pants', 'Pants'),
+        ('skirts', 'Skirts'),
+        ('shirts', 'Shirts'),
+        ('shoes', 'Shoes'),
+        ('accessories', 'Accessories'),
     ]
     
     imageUrl = models.ImageField(upload_to='cloths/')
@@ -72,12 +81,13 @@ class Cloths(models.Model):
     price1 = models.CharField(max_length=50, blank=True)
     price2 = models.CharField(max_length=50, blank=True)
     discount_text = models.CharField(max_length=50, blank=True) 
-    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='kids-men')   
+    category = models.CharField(max_length=15, choices=CATEGORY_CHOICES, default='kids-men')
+    subcategory = models.CharField(max_length=20, choices=SUBCATEGORY_CHOICES, blank=True, default='')
     
     def __str__(self):
         return self.name
     
-    
+
 class Review(models.Model):
     RATING_CHOICES = [
         (1, 'Poor'),
@@ -101,6 +111,7 @@ class Review(models.Model):
     class Meta:
         ordering = ['-created_at']
     
+
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
@@ -116,9 +127,6 @@ class ContactMessage(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-
-
-from django.db import models
 
 class Toy(models.Model):
     CATEGORY_CHOICES = [
@@ -162,8 +170,6 @@ class Toy(models.Model):
     class Meta:
         ordering = ['-created_at']
         
-        
-
 
 class WishlistItem(models.Model):
 
@@ -370,3 +376,4 @@ class OrderItem(models.Model):
     
     def __str__(self):
         return f"{self.quantity}x {self.item_name}"
+

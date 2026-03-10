@@ -125,6 +125,13 @@ function updateGlobalCartCount(count) {
             el.classList.remove('has-items');
         }
     });
+    
+    // Cache cart count in localStorage for instant display on next page load
+    try {
+        localStorage.setItem('kids_cart_count', count);
+    } catch(e) {
+        // localStorage not available
+    }
 }
 
 function showGlobalToast(message, type = 'success') {

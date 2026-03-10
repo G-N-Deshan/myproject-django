@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Women's Clothing</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,289 +12,118 @@
     <link rel="stylesheet" href="{% static 'footer.css' %}">
     <link rel="stylesheet" href="{% static 'women-cloths.css' %}">
     <style>
-        /* Filter Styles */
+        /* Base */
+        :root {
+            --brand-1: #ec4899; /* pink */
+            --brand-1-dark: #db2777;
+            --brand-2: #9333ea; /* purple */
+            --ink-1: #0f172a;
+            --ink-2: #334155;
+            --ink-3: #64748b;
+            --surface: #ffffff;
+            --muted: #f8fafc;
+            --ring: #e2e8f0;
+        }
+        * { box-sizing: border-box; }
+        body { background: #ffffff; }
+
+        /* Hero */
+        .hero-women {
+            position: relative;
+            min-height: 58vh;
+            display: grid;
+            place-items: center;
+            padding: 80px 20px;
+            overflow: hidden;
+            background: radial-gradient(1200px 400px at -10% -20%, rgba(236, 72, 153, .20), transparent 60%),
+                        radial-gradient(1200px 400px at 110% 120%, rgba(147, 51, 234, .18), transparent 60%),
+                        linear-gradient(135deg, #faf5ff 0%, #fff1f2 100%);
+        }
+        .hero-women__inner { position: relative; z-index: 2; text-align: center; max-width: 900px; }
+        .hero-women__eyebrow {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 14px; border-radius: 999px; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            font-weight: 600; letter-spacing: .3px; color: var(--brand-1);
+            background: #fff; border: 1px solid #ffe4ef; box-shadow: 0 6px 20px rgba(236,72,153,.15);
+        }
+        .hero-women__title {
+            font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 4.5vw, 3.6rem); line-height: 1.1; color: var(--ink-1);
+            margin: 18px 0 12px; letter-spacing: .3px;
+        }
+        .hero-women__subtitle {
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; font-size: clamp(.98rem, 1.2vw, 1.08rem);
+            color: var(--ink-3); max-width: 700px; margin: 0 auto 26px; line-height: 1.75;
+        }
+        .hero-women__cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 14px 22px; border-radius: 12px; border: 1px solid transparent; cursor: pointer;
+            font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; font-weight: 600; letter-spacing: .3px;
+            transition: all .25s ease; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+        }
+        .btn-primary { background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); color: #fff; box-shadow: 0 10px 26px rgba(236,72,153,.28); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(236,72,153,.40); }
+        .btn-secondary { background: #ffffff; border-color: #e5e7eb; color: var(--ink-2); }
+        .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(2, 6, 23, .08); }
+
+        /* Filter Bar */
         .filter-section {
-            background: #ffffff;
+            background: var(--surface);
             border-radius: 16px;
             padding: 20px;
-            margin: 20px;
-            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+            margin: -40px auto 20px; /* lift under hero */
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            border: 1px solid var(--ring);
+            max-width: 1200px;
+            position: sticky; top: 10px; z-index: 30;
         }
-        
-        .filter-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
-        
-        .filter-header h3 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.1rem;
-            color: #0f172a;
-            margin: 0;
-        }
-        
-        .filter-toggle {
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-        }
-        
-        .filter-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .filter-group label {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-        
-        .filter-group select,
-        .filter-group input {
-            padding: 10px 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-        
-        .filter-group select:focus,
-        .filter-group input:focus {
-            outline: none;
-            border-color: #6366f1;
-        }
-        
-        .price-inputs {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .price-inputs input {
-            width: 100%;
-        }
-        
-        .price-inputs span {
-            color: #64748b;
-        }
-        
-        .apply-filters-btn {
-            background: linear-gradient(135deg, #6366f1, #ec4899);
-            color: #ffffff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-        
-        .apply-filters-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-        }
-        
-        .clear-filters-btn {
-            background: #f1f5f9;
-            color: #64748b;
-            border: 2px solid #e2e8f0;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            margin-left: 10px;
-        }
-        
-        .clear-filters-btn:hover {
-            background: #e2e8f0;
-        }
-        
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            grid-column: 1 / -1;
-        }
-        
-        /* Size Filter */
-        .size-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .size-option {
-            padding: 8px 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 6px;
-            background: #ffffff;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-        }
-        
-        .size-option:hover {
-            border-color: #6366f1;
-            color: #6366f1;
-        }
-        
-        .size-option.selected {
-            background: #6366f1;
-            color: #ffffff;
-            border-color: #6366f1;
-        }
-        
-        /* Color Filter */
-        .color-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .color-option {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 3px solid #e2e8f0;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .color-option:hover {
-            transform: scale(1.1);
-        }
-        
-        .color-option.selected {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 2px #6366f1;
-        }
-        
-        /* Tab Navigation */
-        .category-tabs {
-            display: flex;
-            gap: 10px;
-            padding: 20px;
-            overflow-x: auto;
-            scrollbar-width: thin;
-            -ms-overflow-style: auto;
-            background: #f8fafc;
-            border-radius: 30px;
-            margin: 20px;
-            max-width: 100%;
-            position: relative;
-        }
-        .category-tabs::-webkit-scrollbar {
-            height: 6px;
-            display: block;
-        }
-        .category-tabs::-webkit-scrollbar-track {
-            background: #e2e8f0;
-            border-radius: 3px;
-        }
-        .category-tabs::-webkit-scrollbar-thumb {
-            background: #6366f1;
-            border-radius: 3px;
-        }
-        
-        /* Tab scroll buttons */
-        .tab-scroll-left, .tab-scroll-right {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #ffffff;
-            border: 2px solid #e2e8f0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .tab-scroll-left {
-            left: 10px;
-        }
-        .tab-scroll-right {
-            right: 10px;
-        }
-        .tab-scroll-left:hover, .tab-scroll-right:hover {
-            background: #6366f1;
-            color: white;
-            border-color: #6366f1;
-        }
-        
-        .category-tab {
-            flex-shrink: 0;
-            padding: 12px 24px;
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 30px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            color: #0f172a;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-        .category-tab:hover {
-            background: #f1f5f9;
-            border-color: #6366f1;
-            color: #6366f1;
-        }
-        .category-tab.active {
-            background: linear-gradient(135deg, #6366f1, #ec4899);
-            color: #ffffff;
-            border-color: transparent;
-        }
-        
-        /* Active Filters Display */
-        .active-filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 0 20px 20px 20px;
-        }
-        
-        .active-filter-tag {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background: #f1f5f9;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-        
-        .active-filter-tag button {
-            background: none;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 0;
-            line-height: 1;
+        .filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; cursor: pointer; }
+        .filter-header h3 { font-family: Poppins, sans-serif; font-size: 1rem; color: var(--ink-1); margin: 0; }
+        .filter-toggle { font-size: 1.1rem; transition: transform .3s ease; }
+        .filter-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+        .filter-group { display: flex; flex-direction: column; gap: 8px; }
+        .filter-group label { font-family: Poppins, sans-serif; font-weight: 600; font-size: .85rem; color: var(--ink-3); }
+        .filter-group select, .filter-group input { padding: 10px 12px; border: 2px solid var(--ring); border-radius: 8px; font-family: Inter, sans-serif; font-size: .95rem; }
+        .filter-group select:focus, .filter-group input:focus { outline: none; border-color: var(--brand-1); }
+        .price-inputs { display: flex; gap: 10px; align-items: center; }
+        .apply-filters-btn { background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); color: #fff; border: none; padding: 12px 20px; border-radius: 10px; font-family: Poppins; font-weight: 600; }
+        .clear-filters-btn { background: #f8fafc; color: var(--ink-3); border: 2px solid var(--ring); padding: 12px 20px; border-radius: 10px; font-family: Poppins; font-weight: 600; }
+        .filter-buttons { display: flex; gap: 10px; grid-column: 1 / -1; }
+        .size-options, .color-options { display: flex; flex-wrap: wrap; gap: 8px; }
+        .size-option { padding: 8px 14px; border: 2px solid var(--ring); border-radius: 999px; background: #fff; cursor: pointer; font-family: Poppins; font-weight: 600; font-size: .85rem; }
+        .size-option.selected { background: var(--ink-1); color: #fff; border-color: var(--ink-1); }
+        .color-option { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--ring); cursor: pointer; }
+        .color-option.selected { box-shadow: 0 0 0 2px var(--brand-1); border-color: var(--brand-1); }
+
+        /* Tabs */
+        .tabs { position: relative; margin: 20px auto; max-width: 1200px; border-radius: 16px; background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); box-shadow: 0 8px 24px rgba(147, 51, 234, .25); overflow: hidden; }
+        .tabs__scroller { display: flex; gap: 10px; overflow-x: auto; padding: 12px 56px; scroll-behavior: smooth; }
+        .tabs__scroller::-webkit-scrollbar { height: 6px; }
+        .tabs__scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,.6); border-radius: 3px; }
+        .tabs::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 48px; background: linear-gradient(90deg, rgba(236,72,153,1), rgba(236,72,153,0)); z-index: 5; pointer-events: none; }
+        .tabs::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 48px; background: linear-gradient(270deg, rgba(147,51,234,1), rgba(147,51,234,0)); z-index: 5; pointer-events: none; }
+        .tabs__arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: #fff; color: var(--brand-1); border: none; cursor: pointer; display: grid; place-items: center; z-index: 10; box-shadow: 0 8px 22px rgba(0,0,0,.18); }
+        .tabs__arrow--left { left: 10px; }
+        .tabs__arrow--right { right: 10px; }
+        .tabs__arrow[disabled] { opacity: .35; cursor: default; box-shadow: none; }
+        .tab { flex-shrink: 0; padding: 10px 18px; background: rgba(255,255,255,.18); border: 2px solid rgba(255,255,255,.35); color: #fff; border-radius: 999px; font-family: Poppins; font-weight: 700; font-size: .92rem; cursor: pointer; transition: all .2s ease; white-space: nowrap; }
+        .tab:hover { background: rgba(255,255,255,.35); }
+        .tab.active { background: #fff; color: var(--brand-1); border-color: transparent; box-shadow: 0 6px 16px rgba(255,255,255,.3); }
+
+        /* Catalog */
+        .catalog { max-width: 1200px; margin: 20px auto 80px; padding: 0 12px; }
+        .catalog__header { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+        .catalog__title { font-family: Poppins, sans-serif; font-weight: 700; color: var(--ink-1); letter-spacing: .2px; font-size: 1.35rem; }
+        .results-count { font-family: Inter, sans-serif; color: var(--ink-3); font-size: .95rem; }
+
+        /* Active Filters Chips */
+        .active-filters { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 18px; }
+        .active-filter-tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 999px; font-size: .85rem; color: var(--ink-3); }
+        .active-filter-tag button { all: unset; cursor: pointer; color: #ef4444; font-weight: 700; }
+
+        /* Responsive tweaks */
+        @media (max-width: 768px) {
+            .catalog__header { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .filter-section { position: static; margin: 10px auto; }
         }
     </style>
 </head>
@@ -302,263 +131,249 @@
 
     {% include 'navbar.html' %}
 
-    <section class="women-section">
-        <div class="women-header">
-            <h1 class="women-section__title">Women</h1>
-            <p class="women-section__subtitle">Discover timeless elegance and modern style</p>
-        </div>
-
-        <!-- Filter Section -->
-        <div class="filter-section">
-            <div class="filter-header" onclick="toggleFilters()">
-                <h3>🔍 Filters</h3>
-                <span class="filter-toggle" id="filterToggle">▼</span>
+    <!-- HERO -->
+    <section class="hero-women">
+        <div class="hero-women__inner">
+            <span class="hero-women__eyebrow">New Season • Curated Styles</span>
+            <h1 class="hero-women__title">Elevate Your Everyday Wardrobe</h1>
+            <p class="hero-women__subtitle">Discover timeless silhouettes, modern essentials, and statement pieces crafted for comfort and confidence.</p>
+            <div class="hero-women__cta">
+                <a href="#catalog" class="btn btn-primary">Shop Collection</a>
+                <a href="#filters" class="btn btn-secondary">Filter & Sort</a>
             </div>
-            
-            <div class="filter-content" id="filterContent">
-                <!-- Category Filter -->
-                <div class="filter-group">
-                    <label>Category</label>
-                    <select id="categoryFilter">
-                        <option value="all">All Categories</option>
-                        <option value="dresses">Dresses</option>
-                        <option value="tops">Tops</option>
-                        <option value="pants">Pants</option>
-                        <option value="skirts">Skirts</option>
-                        <option value="activewear">Activewear</option>
-                        <option value="onepiece">One-Piece</option>
-                        <option value="handbags">Handbags</option>
-                        <option value="shoes">Shoes</option>
-                        <option value="coats">Coats & Jackets</option>
-                        <option value="sweaters">Sweaters</option>
-                        <option value="jeans">Jeans</option>
-                        <option value="accessories">Accessories</option>
-                    </select>
-                </div>
-                
-                <!-- Price Filter -->
-                <div class="filter-group">
-                    <label>Price Range</label>
-                    <div class="price-inputs">
-                        <input type="number" id="minPrice" placeholder="Min" min="0">
-                        <span>-</span>
-                        <input type="number" id="maxPrice" placeholder="Max" min="0">
-                    </div>
-                </div>
-                
-                <!-- Size Filter -->
-                <div class="filter-group">
-                    <label>Size</label>
-                    <div class="size-options">
-                        <button type="button" class="size-option" data-size="XS">XS</button>
-                        <button type="button" class="size-option" data-size="S">S</button>
-                        <button type="button" class="size-option" data-size="M">M</button>
-                        <button type="button" class="size-option" data-size="L">L</button>
-                        <button type="button" class="size-option" data-size="XL">XL</button>
-                        <button type="button" class="size-option" data-size="XXL">XXL</button>
-                    </div>
-                </div>
-                
-                <!-- Color Filter -->
-                <div class="filter-group">
-                    <label>Color</label>
-                    <div class="color-options">
-                        <button type="button" class="color-option" style="background: #000000;" data-color="black" title="Black"></button>
-                        <button type="button" class="color-option" style="background: #ffffff;" data-color="white" title="White"></button>
-                        <button type="button" class="color-option" style="background: #1e40af;" data-color="blue" title="Blue"></button>
-                        <button type="button" class="color-option" style="background: #dc2626;" data-color="red" title="Red"></button>
-                        <button type="button" class="color-option" style="background: #16a34a;" data-color="green" title="Green"></button>
-                        <button type="button" class="color-option" style="background: #f59e0b;" data-color="yellow" title="Yellow"></button>
-                        <button type="button" class="color-option" style="background: #7c3aed;" data-color="purple" title="Purple"></button>
-                        <button type="button" class="color-option" style="background: #f97316;" data-color="orange" title="Orange"></button>
-                        <button type="button" class="color-option" style="background: #ec4899;" data-color="pink" title="Pink"></button>
-                        <button type="button" class="color-option" style="background: #78716c;" data-color="brown" title="Brown"></button>
-                    </div>
-                </div>
-                
-                <!-- Sort Filter -->
-                <div class="filter-group">
-                    <label>Sort By</label>
-                    <select id="sortFilter">
-                        <option value="default">Default</option>
-                        <option value="price_low">Price: Low to High</option>
-                        <option value="price_high">Price: High to Low</option>
-                        <option value="name_asc">Name: A to Z</option>
-                        <option value="name_desc">Name: Z to A</option>
-                    </select>
-                </div>
-                
-                <!-- Discount Filter -->
-                <div class="filter-group">
-                    <label>Discount</label>
-                    <select id="discountFilter">
-                        <option value="all">All Products</option>
-                        <option value="yes">On Sale Only</option>
-                        <option value="no">Regular Price</option>
-                    </select>
-                </div>
-                
-                <div class="filter-buttons">
-                    <button class="apply-filters-btn" onclick="applyFilters()">Apply Filters</button>
-                    <button class="clear-filters-btn" onclick="clearFilters()">Clear All</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab Navigation -->
-        <div class="category-tabs" id="categoryTabsContainer">
-            <button class="tab-scroll-left" onclick="scrollTabs(-200)">◀</button>
-            <button class="category-tab active" data-target="all">All</button>
-            <button class="category-tab" data-target="dresses">Dresses</button>
-            <button class="category-tab" data-target="tops">Tops</button>
-            <button class="category-tab" data-target="pants">Pants</button>
-            <button class="category-tab" data-target="skirts">Skirts</button>
-            <button class="category-tab" data-target="activewear">Activewear</button>
-            <button class="category-tab" data-target="onepiece">One-Piece</button>
-            <button class="category-tab" data-target="handbags">Handbags</button>
-            <button class="category-tab" data-target="shoes">Shoes</button>
-            <button class="category-tab" data-target="coats">Coats & Jackets</button>
-            <button class="category-tab" data-target="sweaters">Sweaters</button>
-            <button class="category-tab" data-target="jeans">Jeans</button>
-            <button class="category-tab" data-target="accessories">Accessories</button>
-            <button class="tab-scroll-right" onclick="scrollTabs(200)">▶</button>
         </div>
     </section>
 
-    <!-- Active Filters -->
-    <div class="active-filters" id="activeFilters"></div>
-
-    <section class="cloths-section" id="allSection">
-        <h2 class="cloths-section__title">Women's Clothing Collection</h2>
-        <p class="results-count" id="resultsCount" style="margin-bottom: 20px; color: #64748b;"></p>
-        <div class="cloths-grid" id="productsGrid">
-            {% for cloth in women_cloths %}
-            <div class="cloth-item" 
-                 data-category="all" 
-                 data-price="{{ cloth.price1|default:0 }}"
-                 data-name="{{ cloth.name|lower }}">
-                <div class="cloth-item__image">
-                    <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
-                </div>
-                <div class="cloth-item__content">
-                    <h3>{{ cloth.name }}</h3>
-                    <div class="price-container">
-                        <span class="price-current">Rs {{ cloth.price1 }}</span>
-                        <span class="price-old">Rs {{ cloth.price2 }}</span>
-                    </div>
-                    <span class="discount-badge">{{ cloth.discount_text }}</span>
-                    <button
-                        class="cloths-section__btn"
-                        data-add-to-cart
-                        data-item-type="cloth"
-                        data-item-id="{{ cloth.id }}"
-                    >Add to Cart</button>
+    <!-- FILTERS -->
+    <div id="filters" class="filter-section">
+        <div class="filter-header" onclick="toggleFilters()">
+            <h3>Filters</h3>
+            <span class="filter-toggle" id="filterToggle">▼</span>
+        </div>
+        <div class="filter-content" id="filterContent">
+            <div class="filter-group">
+                <label>Category</label>
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="dresses">Dresses</option>
+                    <option value="tops">Tops</option>
+                    <option value="pants">Pants</option>
+                    <option value="skirts">Skirts</option>
+                    <option value="activewear">Activewear</option>
+                    <option value="onepiece">One-Piece</option>
+                    <option value="handbags">Handbags</option>
+                    <option value="shoes">Shoes</option>
+                    <option value="coats">Coats & Jackets</option>
+                    <option value="sweaters">Sweaters</option>
+                    <option value="jeans">Jeans</option>
+                    <option value="accessories">Accessories</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Price Range</label>
+                <div class="price-inputs">
+                    <input type="number" id="minPrice" placeholder="Min" min="0">
+                    <span>-</span>
+                    <input type="number" id="maxPrice" placeholder="Max" min="0">
                 </div>
             </div>
-            {% endfor %}
+            <div class="filter-group">
+                <label>Size</label>
+                <div class="size-options">
+                    <button type="button" class="size-option" data-size="XS">XS</button>
+                    <button type="button" class="size-option" data-size="S">S</button>
+                    <button type="button" class="size-option" data-size="M">M</button>
+                    <button type="button" class="size-option" data-size="L">L</button>
+                    <button type="button" class="size-option" data-size="XL">XL</button>
+                    <button type="button" class="size-option" data-size="XXL">XXL</button>
+                </div>
+            </div>
+            <div class="filter-group">
+                <label>Color</label>
+                <div class="color-options">
+                    <button type="button" class="color-option" style="background:#000" data-color="black" title="Black"></button>
+                    <button type="button" class="color-option" style="background:#fff" data-color="white" title="White"></button>
+                    <button type="button" class="color-option" style="background:#1e40af" data-color="blue" title="Blue"></button>
+                    <button type="button" class="color-option" style="background:#dc2626" data-color="red" title="Red"></button>
+                    <button type="button" class="color-option" style="background:#16a34a" data-color="green" title="Green"></button>
+                    <button type="button" class="color-option" style="background:#f59e0b" data-color="yellow" title="Yellow"></button>
+                    <button type="button" class="color-option" style="background:#7c3aed" data-color="purple" title="Purple"></button>
+                    <button type="button" class="color-option" style="background:#f97316" data-color="orange" title="Orange"></button>
+                    <button type="button" class="color-option" style="background:#ec4899" data-color="pink" title="Pink"></button>
+                    <button type="button" class="color-option" style="background:#78716c" data-color="brown" title="Brown"></button>
+                </div>
+            </div>
+            <div class="filter-group">
+                <label>Sort By</label>
+                <select id="sortFilter">
+                    <option value="default">Default</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                    <option value="name_asc">Name: A to Z</option>
+                    <option value="name_desc">Name: Z to A</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Discount</label>
+                <select id="discountFilter">
+                    <option value="all">All Products</option>
+                    <option value="yes">On Sale Only</option>
+                    <option value="no">Regular Price</option>
+                </select>
+            </div>
+            <div class="filter-buttons">
+                <button class="apply-filters-btn" onclick="applyFilters()">Apply Filters</button>
+                <button class="clear-filters-btn" onclick="clearFilters()">Clear All</button>
+            </div>
         </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs" id="tabs">
+        <button class="tabs__arrow tabs__arrow--left" onclick="scrollTabs(-220)" aria-label="Scroll tabs left">◀</button>
+        <div class="tabs__scroller" id="tabsScroller" role="tablist">
+            <button class="tab active category-tab" data-target="all" role="tab">All</button>
+            <button class="tab category-tab" data-target="dresses" role="tab">Dresses</button>
+            <button class="tab category-tab" data-target="tops" role="tab">Tops</button>
+            <button class="tab category-tab" data-target="pants" role="tab">Pants</button>
+            <button class="tab category-tab" data-target="skirts" role="tab">Skirts</button>
+            <button class="tab category-tab" data-target="activewear" role="tab">Activewear</button>
+            <button class="tab category-tab" data-target="onepiece" role="tab">One-Piece</button>
+            <button class="tab category-tab" data-target="handbags" role="tab">Handbags</button>
+            <button class="tab category-tab" data-target="shoes" role="tab">Shoes</button>
+            <button class="tab category-tab" data-target="coats" role="tab">Coats & Jackets</button>
+            <button class="tab category-tab" data-target="sweaters" role="tab">Sweaters</button>
+            <button class="tab category-tab" data-target="jeans" role="tab">Jeans</button>
+            <button class="tab category-tab" data-target="accessories" role="tab">Accessories</button>
+        </div>
+        <button class="tabs__arrow tabs__arrow--right" onclick="scrollTabs(220)" aria-label="Scroll tabs right">▶</button>
+    </div>
+
+    <!-- CATALOG -->
+    <section id="catalog" class="catalog">
+        <div class="catalog__header">
+            <h2 class="catalog__title">Explore Women's Collection</h2>
+            <p class="results-count" id="resultsCount"></p>
+        </div>
+        <div class="active-filters" id="activeFilters"></div>
+        <section class="cloths-section">
+            <div class="cloths-grid" id="catalogGrid">
+                {% for cloth in women_cloths %}
+                <div class="cloth-item"
+                     data-category="{{ cloth.category }}"
+                     data-subcategory="{{ cloth.subcategory }}"
+                     data-price="{{ cloth.price1|default:0 }}"
+                     data-name="{{ cloth.name|lower }}">
+                    <div class="cloth-item__image">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                    </div>
+                    <div class="cloth-item__content">
+                        <h3>{{ cloth.name }}</h3>
+                        <div class="price-container">
+                            <span class="price-current">Rs {{ cloth.price1 }}</span>
+                            <span class="price-old">Rs {{ cloth.price2 }}</span>
+                        </div>
+                        <span class="discount-badge">{{ cloth.discount_text }}</span>
+                        <button class="cloths-section__btn"
+                                data-add-to-cart
+                                data-item-type="cloth"
+                                data-item-id="{{ cloth.id }}">Add to Cart</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
     </section>
 
     {% include 'footer.html' %}
 
     <script src="{% static 'cart_utils.js' %}"></script>
     <script>
-        // Size selection
-        document.querySelectorAll('.size-option').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.classList.toggle('selected');
-            });
-        });
-        
-        // Color selection
-        document.querySelectorAll('.color-option').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.classList.toggle('selected');
-            });
-        });
-        
+        // Size & color toggles
+        document.querySelectorAll('.size-option').forEach(btn => btn.addEventListener('click', () => btn.classList.toggle('selected')));
+        document.querySelectorAll('.color-option').forEach(btn => btn.addEventListener('click', () => btn.classList.toggle('selected')));
+
         // Toggle filter section
         function toggleFilters() {
             const content = document.getElementById('filterContent');
             const toggle = document.getElementById('filterToggle');
-            if (content.style.display === 'none') {
-                content.style.display = 'grid';
-                toggle.style.transform = 'rotate(0deg)';
-            } else {
-                content.style.display = 'none';
-                toggle.style.transform = 'rotate(-90deg)';
-            }
+            const isHidden = getComputedStyle(content).display === 'none';
+            content.style.display = isHidden ? 'grid' : 'none';
+            toggle.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(-90deg)';
         }
-        
-        // Tab click functionality
+
+        // Tabs behavior
         document.querySelectorAll('.category-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
+            tab.addEventListener('click', function () {
                 document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
-                
-                const target = this.getAttribute('data-target');
-                document.getElementById('categoryFilter').value = target;
                 applyFilters();
-                
-                document.getElementById('allSection').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
             });
         });
-        
-        // Apply filters
+
+        // Filtering / Sorting for the single catalog grid
         function applyFilters() {
+            const activeTab = document.querySelector('.category-tab.active')?.getAttribute('data-target') || 'all';
             const category = document.getElementById('categoryFilter').value;
             const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
             const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
             const sortBy = document.getElementById('sortFilter').value;
             const discount = document.getElementById('discountFilter').value;
-            
-            const products = document.querySelectorAll('.cloth-item');
+
+            const grid = document.getElementById('catalogGrid');
+            const products = Array.from(grid.querySelectorAll('.cloth-item'));
+
             let visibleCount = 0;
-            
+
             products.forEach(product => {
+                const subcat = (product.getAttribute('data-subcategory') || '').toLowerCase();
+                const cat = (product.getAttribute('data-category') || '').toLowerCase();
+                const name = (product.getAttribute('data-name') || '').toLowerCase();
                 const price = parseFloat(product.getAttribute('data-price')) || 0;
-                
+
                 let show = true;
-                
-                // Category filter
-                if (category !== 'all') {
-                    const productCategory = product.getAttribute('data-category');
-                    if (productCategory !== category && productCategory !== 'all') {
+
+                // Tab filter (subcategory)
+                if (activeTab !== 'all') {
+                    if (!(subcat === activeTab || name.includes(activeTab))) {
                         show = false;
                     }
                 }
-                
-                // Price filter
+
+                // Category select filter (works with either major category or subcategory keywords)
+                if (category !== 'all') {
+                    if (!(subcat === category || cat === category || name.includes(category))) {
+                        show = false;
+                    }
+                }
+
+                // Price range
                 if (price < minPrice || price > maxPrice) {
                     show = false;
                 }
-                
+
                 // Discount filter
                 if (discount === 'yes') {
                     const badge = product.querySelector('.discount-badge');
-                    if (!badge || !badge.textContent.trim()) {
-                        show = false;
-                    }
+                    if (!badge || !badge.textContent.trim()) show = false;
                 } else if (discount === 'no') {
                     const badge = product.querySelector('.discount-badge');
-                    if (badge && badge.textContent.trim()) {
-                        show = false;
-                    }
+                    if (badge && badge.textContent.trim()) show = false;
                 }
-                
+
                 product.style.display = show ? '' : 'none';
                 if (show) visibleCount++;
             });
-            
-            // Sort products
-            const productsArray = Array.from(products);
-            productsArray.sort((a, b) => {
+
+            // Sort visible products
+            const visibleProducts = products.filter(p => p.style.display !== 'none');
+            visibleProducts.sort((a, b) => {
                 const priceA = parseFloat(a.getAttribute('data-price')) || 0;
                 const priceB = parseFloat(b.getAttribute('data-price')) || 0;
                 const nameA = a.getAttribute('data-name') || '';
                 const nameB = b.getAttribute('data-name') || '';
-                
-                switch(sortBy) {
+                switch (sortBy) {
                     case 'price_low': return priceA - priceB;
                     case 'price_high': return priceB - priceA;
                     case 'name_asc': return nameA.localeCompare(nameB);
@@ -566,119 +381,95 @@
                     default: return 0;
                 }
             });
-            
-            const grid = document.getElementById('productsGrid');
-            productsArray.forEach(product => grid.appendChild(product));
-            
-            // Update results count
-            document.getElementById('resultsCount').textContent = `Showing ${visibleCount} products`;
-            
-            // Update active filters display
-            updateActiveFilters(category, minPrice, maxPrice, sortBy, discount);
+            visibleProducts.forEach(p => grid.appendChild(p));
+
+            // Update results count and active filter chips
+            document.getElementById('resultsCount').textContent = visibleCount + ' products';
+            updateActiveFilters(category, minPrice, maxPrice, sortBy, discount, activeTab);
         }
-        
-        // Clear all filters
+
         function clearFilters() {
             document.getElementById('categoryFilter').value = 'all';
             document.getElementById('minPrice').value = '';
             document.getElementById('maxPrice').value = '';
             document.getElementById('sortFilter').value = 'default';
             document.getElementById('discountFilter').value = 'all';
-            
             document.querySelectorAll('.size-option.selected').forEach(btn => btn.classList.remove('selected'));
             document.querySelectorAll('.color-option.selected').forEach(btn => btn.classList.remove('selected'));
-            
-            document.querySelectorAll('.cloth-item').forEach(product => {
-                product.style.display = '';
-            });
-            
-            document.getElementById('resultsCount').textContent = `Showing {{ women_cloths.count }} products`;
-            document.getElementById('activeFilters').innerHTML = '';
+            document.querySelector('.category-tab[data-target="all"]').click();
         }
-        
-        // Update active filters display
-        function updateActiveFilters(category, minPrice, maxPrice, sortBy, discount) {
+
+        function updateActiveFilters(category, minPrice, maxPrice, sortBy, discount, activeTab) {
             const container = document.getElementById('activeFilters');
             let html = '';
-            
-            if (category !== 'all') {
-                html += `<span class="active-filter-tag">Category: ${category} <button onclick="removeFilter('category')">×</button></span>`;
-            }
-            if (minPrice > 0 || maxPrice < Infinity) {
-                html += `<span class="active-filter-tag">Price: Rs${minPrice} - Rs${maxPrice === Infinity ? '+' : maxPrice} <button onclick="removeFilter('price')">×</button></span>`;
-            }
-            if (sortBy !== 'default') {
-                html += `<span class="active-filter-tag">Sort: ${sortBy} <button onclick="removeFilter('sort')">×</button></span>`;
-            }
-            if (discount !== 'all') {
-                html += `<span class="active-filter-tag">Discount: ${discount === 'yes' ? 'On Sale' : 'Regular'} <button onclick="removeFilter('discount')">×</button></span>`;
-            }
-            
+            if (activeTab && activeTab !== 'all') html += `<span class="active-filter-tag">Tab: ${activeTab} <button onclick="removeFilter('tab')">×</button></span>`;
+            if (category !== 'all') html += `<span class="active-filter-tag">Category: ${category} <button onclick="removeFilter('category')">×</button></span>`;
+            if (minPrice > 0 || maxPrice < Infinity) html += `<span class="active-filter-tag">Price: Rs${minPrice} - Rs${maxPrice === Infinity ? '+' : maxPrice} <button onclick="removeFilter('price')">×</button></span>`;
+            if (sortBy !== 'default') html += `<span class="active-filter-tag">Sort: ${sortBy} <button onclick="removeFilter('sort')">×</button></span>`;
+            if (discount !== 'all') html += `<span class="active-filter-tag">Discount: ${discount === 'yes' ? 'On Sale' : 'Regular'} <button onclick="removeFilter('discount')">×</button></span>`;
             container.innerHTML = html;
         }
-        
-        // Remove specific filter
+
         function removeFilter(type) {
-            switch(type) {
+            switch (type) {
+                case 'tab':
+                    document.querySelector('.category-tab[data-target="all"]').click();
+                    break;
                 case 'category':
                     document.getElementById('categoryFilter').value = 'all';
+                    applyFilters();
                     break;
                 case 'price':
                     document.getElementById('minPrice').value = '';
                     document.getElementById('maxPrice').value = '';
+                    applyFilters();
                     break;
                 case 'sort':
                     document.getElementById('sortFilter').value = 'default';
+                    applyFilters();
                     break;
                 case 'discount':
                     document.getElementById('discountFilter').value = 'all';
+                    applyFilters();
                     break;
             }
-            applyFilters();
         }
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('resultsCount').textContent = `Showing {{ women_cloths.count }} products`;
-        });
-        
-        // Tab scroll function
+
+        // Tabs scroll logic
+        function updateTabArrows() {
+            const scroller = document.getElementById('tabsScroller');
+            const left = document.querySelector('.tabs__arrow--left');
+            const right = document.querySelector('.tabs__arrow--right');
+            if (!scroller) return;
+            const maxScroll = scroller.scrollWidth - scroller.clientWidth - 1;
+            left.disabled = scroller.scrollLeft <= 0;
+            right.disabled = scroller.scrollLeft >= maxScroll;
+        }
         function scrollTabs(amount) {
-            const container = document.getElementById('categoryTabsContainer');
-            if (container) {
-                container.scrollBy({ left: amount, behavior: 'smooth' });
+            const scroller = document.getElementById('tabsScroller');
+            if (scroller) {
+                scroller.scrollBy({ left: amount, behavior: 'smooth' });
+                setTimeout(updateTabArrows, 300);
             }
         }
-        
-        // Scroll buttons functionality
-        const categoryGrid = document.getElementById('categoryGrid');
-        const scrollLeftBtn = document.getElementById('scrollLeft');
-        const scrollRightBtn = document.getElementById('scrollRight');
 
-        if (categoryGrid && scrollLeftBtn && scrollRightBtn) {
-            const scrollAmount = 300;
-
-            scrollLeftBtn.addEventListener('click', () => {
-                categoryGrid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-            });
-
-            scrollRightBtn.addEventListener('click', () => {
-                categoryGrid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            });
-
-            function updateScrollButtons() {
-                const maxScroll = categoryGrid.scrollWidth - categoryGrid.clientWidth;
-                scrollLeftBtn.style.opacity = categoryGrid.scrollLeft <= 0 ? '0.3' : '1';
-                scrollLeftBtn.style.pointerEvents = categoryGrid.scrollLeft <= 0 ? 'none' : 'auto';
-                scrollRightBtn.style.opacity = categoryGrid.scrollLeft >= maxScroll - 5 ? '0.3' : '1';
-                scrollRightBtn.style.pointerEvents = categoryGrid.scrollLeft >= maxScroll - 5 ? 'none' : 'auto';
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initial counts
+            const total = document.querySelectorAll('#catalogGrid .cloth-item').length;
+            document.getElementById('resultsCount').textContent = total + ' products';
+            // Scroll events
+            const scroller = document.getElementById('tabsScroller');
+            if (scroller) {
+                scroller.addEventListener('scroll', updateTabArrows, { passive: true });
+                scroller.addEventListener('wheel', function (e) {
+                    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                        scroller.scrollLeft += e.deltaY;
+                        e.preventDefault();
+                    }
+                }, { passive: false });
             }
-
-            categoryGrid.addEventListener('scroll', updateScrollButtons);
-            window.addEventListener('load', updateScrollButtons);
-            window.addEventListener('resize', updateScrollButtons);
-        }
+            updateTabArrows();
+        });
     </script>
 </body>
 </html>
-
