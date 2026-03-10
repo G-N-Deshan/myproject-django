@@ -5,8 +5,8 @@ html, body{
 body{
     margin: 0rem;
     padding: 0rem;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 100;
+    font-family: 'Inter', 'Poppins', sans-serif;
+    font-weight: 400;
     font-style: normal;
     min-height: 100vh;
     display: flex;
@@ -65,7 +65,7 @@ body{
 
 .brand-tagline{
     margin: 0.2rem 0 0;
-    color: #38bdf8;
+    color: #818cf8;
     font-size: 0.95rem;
     font-weight: 400;
 }
@@ -96,7 +96,7 @@ body{
 }
 
 .contact-item:hover {
-    color: #38bdf8;
+    color: #818cf8;
 }
 
 .contact-icon {
@@ -130,9 +130,9 @@ body{
 }
 
 .social-link:hover {
-    background: #38bdf8;
+    background: #6366f1;
     transform: translateY(-3px);
-    border-color: #38bdf8;
+    border-color: #6366f1;
 }
 
 .social-link span {
@@ -165,7 +165,7 @@ body{
     left: 0;
     width: 40px;
     height: 3px;
-    background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+    background: linear-gradient(90deg, #818cf8, #6366f1);
     border-radius: 2px;
 }
 
@@ -194,11 +194,11 @@ body{
     opacity: 0;
     transform: translateX(-5px);
     transition: all 0.2s ease;
-    color: #38bdf8;
+    color: #818cf8;
 }
 
 .footer-list a:hover {
-    color: #38bdf8;
+    color: #818cf8;
     padding-left: 18px;
 }
 
@@ -244,16 +244,16 @@ body{
 }
 
 .newsletter-form input:focus {
-    border-color: #38bdf8;
+    border-color: #818cf8;
     background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
 .newsletter-form button {
     padding: 0.9rem 1.5rem;
     border: none;
     border-radius: 10px;
-    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
     color: #ffffff;
     font-size: 0.95rem;
     font-weight: 600;
@@ -262,9 +262,9 @@ body{
 }
 
 .newsletter-form button:hover {
-    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
 
 .newsletter-note {
@@ -309,7 +309,7 @@ body{
 }
 
 .footer-bottom-links a:hover {
-    color: #38bdf8;
+    color: #818cf8;
 }
 
 .footer-bottom-links span {

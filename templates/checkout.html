@@ -229,10 +229,37 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* 3D Floating Shapes */
+        .ck-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .ck-s { position: absolute; opacity: .07; animation: ckFloat 8s ease-in-out infinite; }
+        .ck-s--c { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg,#818cf8,#c084fc); top: 8%; left: 4%; animation-duration: 7s; }
+        .ck-s--sq { width: 70px; height: 70px; border-radius: 14px; background: linear-gradient(135deg,#ec4899,#f472b6); bottom: 15%; right: 6%; animation-delay: 2s; animation-duration: 9s; transform: rotate(45deg); }
+        .ck-s--r { width: 80px; height: 80px; border-radius: 50%; border: 5px solid rgba(99,102,241,.1); top: 40%; right: 12%; animation-delay: 3.5s; animation-duration: 10s; }
+        @keyframes ckFloat {
+            0%,100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-18px) rotate(4deg); }
+            50% { transform: translateY(-30px) rotate(-3deg); }
+            75% { transform: translateY(-12px) rotate(3deg); }
+        }
+        .checkout-container { position: relative; z-index: 1; }
+        /* Form entrance animation */
+        .checkout-form { animation: ckSlideUp .5s ease-out; }
+        .order-summary-card { animation: ckSlideUp .5s .1s ease-out both; }
+        @keyframes ckSlideUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
     {% include 'navbar.html' %}
+    <!-- 3D Floating Shapes -->
+    <div class="ck-shapes" aria-hidden="true">
+        <div class="ck-s ck-s--c"></div>
+        <div class="ck-s ck-s--sq"></div>
+        <div class="ck-s ck-s--r"></div>
+    </div>
     
     <div class="checkout-container">
         <div class="checkout-header">

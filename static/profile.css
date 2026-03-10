@@ -52,6 +52,66 @@ body {
     height: 200px;
     background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
     position: relative;
+    overflow: hidden;
+}
+
+/* 3D Floating Shapes on Cover */
+.cover-shape {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.15;
+    animation: coverFloat 8s ease-in-out infinite;
+}
+.cover-shape--circle {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    top: 10%; left: 5%;
+    animation-duration: 7s;
+}
+.cover-shape--square {
+    width: 60px; height: 60px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.15);
+    bottom: 15%; right: 8%;
+    animation-delay: 2s;
+    animation-duration: 9s;
+    transform: rotate(45deg);
+}
+.cover-shape--ring {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.12);
+    top: 20%; right: 20%;
+    animation-delay: 3.5s;
+    animation-duration: 10s;
+}
+.cover-shape--dot {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(251,191,36,0.2);
+    bottom: 25%; left: 25%;
+    animation-delay: 1.5s;
+    animation-duration: 6s;
+}
+
+@keyframes coverFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-12px) rotate(4deg); }
+    50% { transform: translateY(-20px) rotate(-3deg); }
+    75% { transform: translateY(-8px) rotate(3deg); }
+}
+
+/* Card entrance animation */
+.profile-card {
+    animation: profCardUp .5s ease-out both;
+}
+.profile-card:nth-child(2) { animation-delay: .1s; }
+.profile-card:nth-child(3) { animation-delay: .2s; }
+
+@keyframes profCardUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .profile-avatar {

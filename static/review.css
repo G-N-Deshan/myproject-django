@@ -50,3 +50,21 @@ html::-webkit-scrollbar { display: none; }
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+/* 3D Floating Shape Animations */
+@keyframes floatSlow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(-3deg); }
+}
+@keyframes floatMid {
+    0%, 100% { transform: translateY(0) rotate(45deg); }
+    50% { transform: translateY(-22px) rotate(48deg); }
+}
+@keyframes floatFast {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-18px) rotate(5deg); }
+}
+
+.animate-float-slow { animation: floatSlow 7s ease-in-out infinite; }
+.animate-float-mid { animation: floatMid 9s ease-in-out infinite; }
+.animate-float-fast { animation: floatFast 6s ease-in-out infinite; }

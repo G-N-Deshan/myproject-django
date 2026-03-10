@@ -169,7 +169,7 @@
         }
 
         .btn-apply {
-            background: linear-gradient(135deg, var(--brand-blue), #2563eb);
+            background: linear-gradient(135deg, var(--brand-blue), #6366f1);
             color: white;
         }
 
@@ -409,6 +409,22 @@
             .grid { grid-template-columns: 1fr; }
             .section-head { flex-direction: column; align-items: flex-start; }
         }
+
+        /* 3D Floating Shapes */
+        @keyframes pgFloat {
+            0%,100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-18px) rotate(4deg); }
+            50% { transform: translateY(-30px) rotate(-3deg); }
+            75% { transform: translateY(-12px) rotate(3deg); }
+        }
+        @keyframes cardUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .grid article { animation: cardUp .5s ease-out both; }
+        .grid article:nth-child(2) { animation-delay: .06s; }
+        .grid article:nth-child(3) { animation-delay: .12s; }
+        .grid article:nth-child(4) { animation-delay: .18s; }
     </style>
 </head>
 <body>
@@ -417,6 +433,10 @@
     <div class="kids-wrap">
         <div id="top-section" data-observe="top-section" class="section-anchor-top"></div>
         <section class="hero">
+            <!-- 3D Floating Shapes -->
+            <div class="absolute top-[10%] left-[6%] w-24 h-24 rounded-full bg-white/10 pointer-events-none" style="position:absolute;animation:pgFloat 7s ease-in-out infinite"></div>
+            <div class="absolute bottom-[12%] right-[7%] w-16 h-16 rounded-2xl bg-white/8 rotate-45 pointer-events-none" style="position:absolute;animation:pgFloat 9s 2s ease-in-out infinite"></div>
+            <div class="absolute top-[25%] right-[15%] w-20 h-20 rounded-full border-4 border-white/10 pointer-events-none" style="position:absolute;animation:pgFloat 10s 3.5s ease-in-out infinite"></div>
             <h1>Playful Kids Wardrobe</h1>
             <p>Fresh fits for school, park time, birthday plans, and everything in-between. Use filters and sorting to quickly find what families actually want.</p>
         </section>

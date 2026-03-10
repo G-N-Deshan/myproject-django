@@ -6,6 +6,13 @@
             <!-- Logo on left -->
             <a href="{% url 'index' %}"><img src="{%static 'bird_2.jpg'%}" alt="logo" class="nav-logo"></a>
             
+            <!-- Hamburger Toggle Button (mobile only) -->
+            <button class="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('nav-open');this.setAttribute('aria-expanded',this.classList.contains('open'))">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
             <!-- Navigation Links Centered -->
             <div class="nav-links-container">
                 <button><a href="{% url 'index' %}" class="nav-link nav-link--home">Home</a></button>
@@ -14,28 +21,31 @@
                 <button><a href="{% url 'contact_us' %}" class="nav-link nav-link--contact">Contact</a></button>
                 <button><a href="{% url 'about' %}" class="nav-link nav-link--about">About</a></button>
                 
-                <!-- Cart Icon with Conditional Link -->
+                <!-- Cart Icon - Only for authenticated users -->
                 {% if user.is_authenticated %}
                 <a href="{% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
                     <span class="cart-icon">🛒</span>
                     <span class="cart-count-badge" data-cart-count>{{ cart_count|default:0 }}</span>
                 </a>
+                {% endif %}
+
+                <!-- Mobile-only auth links -->
+                {% if user.is_authenticated %}
+                <button class="nav-mobile-auth"><a href="{% url 'profile' %}" class="nav-link">{{ user.username }}</a></button>
+                <button class="nav-mobile-auth"><a href="{% url 'logout' %}" class="nav-link nav-link--logout">Logout</a></button>
                 {% else %}
-                <a href="{% url 'login' %}?next={% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
-                    <span class="cart-icon">🛒</span>
-                    <span class="cart-count-badge" data-cart-count>{{ cart_count|default:0 }}</span>
-                </a>
+                <button class="nav-mobile-auth"><a href="{% url 'login' %}" class="nav-link nav-link--login">Login</a></button>
                 {% endif %}
             </div>
 
-            <!-- Login/Logout on right -->
+            <!-- Login/Logout on right (desktop) -->
             {% if user.is_authenticated %}
-            <button class="logout-btn"><a href="{%url 'logout'%}" class="nav-link nav-link--logout">Logout</a></button>
-            <button class="user-profile-btn" title="{{ user.username }}">
+            <button class="logout-btn nav-desktop-auth"><a href="{%url 'logout'%}" class="nav-link nav-link--logout">Logout</a></button>
+            <button class="user-profile-btn nav-desktop-auth" title="{{ user.username }}">
                 <a href="{% url 'profile' %}" class="nav-link">{{ user.username }}</a>
             </button>
             {% else %}
-            <button class="login-btn"><a href="{% url 'login' %}" class="nav-link nav-link--login">Login</a></button>
+            <button class="login-btn nav-desktop-auth"><a href="{% url 'login' %}" class="nav-link nav-link--login">Login</a></button>
             {% endif %}
         </div>
     </nav>

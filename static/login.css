@@ -11,14 +11,14 @@ html::-webkit-scrollbar {
 body {
     margin: 0rem;
     padding: 0rem;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', 'Poppins', sans-serif;
     font-weight: 200;
     font-style: normal;
     overflow-x: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding-top: 8rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
     min-height: 84vh;
 }
 
@@ -27,7 +27,8 @@ body::-webkit-scrollbar {
 }
 
 .login-section{
-    width: 30%;
+    width: 90%;
+    max-width: 420px;
     min-height: 50vh;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -89,7 +90,7 @@ body::-webkit-scrollbar {
     padding: 1rem;
     margin-top: 1rem;
     margin-bottom: 2rem;
-    background-color: #2563eb;
+    background-color: #6366f1;
     color: #ffffff;
     border: none;
     border-radius: 0.5rem;
@@ -98,7 +99,72 @@ body::-webkit-scrollbar {
     transition: background-color 0.3s ease;
 }
 .login-section button:hover{
-    background-color: #1e40af;
+    background-color: #4f46e5;
+}
+
+/* 3D Floating Shapes */
+.auth-shapes {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.shape {
+    position: absolute;
+    opacity: 0.1;
+    animation: shapeFloat 8s ease-in-out infinite;
+}
+
+.shape--circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    top: 10%;
+    left: 5%;
+    animation-duration: 7s;
+}
+
+.shape--square {
+    width: 90px;
+    height: 90px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    bottom: 15%;
+    right: 8%;
+    animation-delay: 2s;
+    animation-duration: 9s;
+    transform: rotate(45deg);
+}
+
+.shape--ring {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.08);
+    top: 50%;
+    right: 20%;
+    animation-delay: 3.5s;
+    animation-duration: 10s;
+}
+
+.login-section {
+    position: relative;
+    z-index: 1;
+    animation: formEntrance .55s ease-out;
+}
+@keyframes formEntrance {
+    from { opacity: 0; transform: translateY(24px) scale(.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes shapeFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-20px) rotate(5deg); }
+    50% { transform: translateY(-35px) rotate(-3deg); }
+    75% { transform: translateY(-15px) rotate(4deg); }
 }
 
 /* Messages */
@@ -156,4 +222,26 @@ body::-webkit-scrollbar {
 @keyframes fadeOut {
     from { opacity: 1; }
     to { opacity: 0; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body { padding-top: 6rem; }
+    .login-section { width: 92%; max-width: 400px; border-radius: 1.4rem; }
+    .login-section label,
+    .login-section input { width: 80%; }
+    .login-section button { width: 50%; }
+    .login-section .login-header { font-size: 0.9rem; }
+    .messages { max-width: 90%; right: 5%; left: 5%; }
+}
+@media (max-width: 480px) {
+    body { padding-top: 5rem; }
+    .login-section { width: 95%; border-radius: 1.2rem; padding-bottom: 0.5rem; }
+    .login-section label,
+    .login-section input { width: 88%; }
+    .login-section button { width: 60%; padding: 0.85rem; font-size: 0.9rem; }
+    .login-section .login-header img { width: 12%; height: 12%; }
+    .shape--circle { width: 80px; height: 80px; }
+    .shape--square { width: 50px; height: 50px; }
+    .shape--ring { width: 60px; height: 60px; }
 }
