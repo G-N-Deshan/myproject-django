@@ -1,11 +1,51 @@
 
 from django.contrib import admin
-from .models import Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy, WishlistItem, Cart, CartItem, Order, OrderItem 
+from .models import Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy, WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview
 
 
 admin.site.register(Card)
-admin.site.register(Offers)
-admin.site.register(NewArrivals)
+
+
+@admin.register(Offers)
+class OffersAdmin(admin.ModelAdmin):
+    list_display = ['title', 'category', 'offers_badge', 'price1', 'price2', 'end_time']
+    list_filter = ['category']
+    search_fields = ['title', 'description']
+    ordering = ['-id']
+    fieldsets = (
+        ('Basic Info', {
+            'fields': ('imageUrl', 'title', 'offers_badge', 'description', 'button_text', 'category'),
+        }),
+        ('Pricing', {
+            'fields': ('price1', 'price2', 'stock_text', 'end_time'),
+        }),
+        ('Product Detail Page Content', {
+            'fields': ('long_description', 'features', 'material'),
+            'description': 'These fields appear on the product detail page. '
+                           'For "Features", enter one feature per line.',
+            'classes': ('collapse',),
+        }),
+    )
+
+
+@admin.register(NewArrivals)
+class NewArrivalsAdmin(admin.ModelAdmin):
+    list_display = ['title', 'category', 'offers_badge', 'price']
+    list_filter = ['category']
+    search_fields = ['title', 'description']
+    ordering = ['-id']
+    fieldsets = (
+        ('Basic Info', {
+            'fields': ('imageUrl', 'title', 'offers_badge', 'description', 'price', 'category'),
+        }),
+        ('Product Detail Page Content', {
+            'fields': ('long_description', 'features', 'material'),
+            'description': 'These fields appear on the product detail page. '
+                           'For "Features", enter one feature per line.',
+            'classes': ('collapse',),
+        }),
+    )
+
 
 @admin.register(Cloths)
 class ClothsAdmin(admin.ModelAdmin):
@@ -13,6 +53,21 @@ class ClothsAdmin(admin.ModelAdmin):
     list_filter = ['category', 'subcategory']
     search_fields = ['name', 'desccription']
     ordering = ['-id']
+    fieldsets = (
+        ('Basic Info', {
+            'fields': ('imageUrl', 'name', 'desccription', 'category', 'subcategory'),
+        }),
+        ('Pricing', {
+            'fields': ('price', 'price1', 'price2', 'discount_text'),
+        }),
+        ('Product Detail Page Content', {
+            'fields': ('long_description', 'features', 'material', 'care_instructions', 'sizes_available'),
+            'description': 'These fields appear on the product detail page. '
+                           'Enter "Features" one per line. '
+                           'Enter "Sizes" comma-separated (e.g. S, M, L, XL).',
+            'classes': ('collapse',),
+        }),
+    )
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
@@ -33,6 +88,20 @@ class ToyAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'age_range', 'price', 'is_bestseller', 'is_new']
     list_filter = ['category', 'age_range', 'is_bestseller', 'is_new']
     search_fields = ['name', 'description']
+    fieldsets = (
+        ('Basic Info', {
+            'fields': ('imageUrl', 'name', 'description', 'category', 'age_range'),
+        }),
+        ('Pricing & Flags', {
+            'fields': ('price', 'original_price', 'rating', 'is_bestseller', 'is_new'),
+        }),
+        ('Product Detail Page Content', {
+            'fields': ('long_description', 'features', 'material', 'safety_info', 'dimensions'),
+            'description': 'These fields appear on the product detail page. '
+                           'Enter "Features" one per line.',
+            'classes': ('collapse',),
+        }),
+    )
     
     
 @admin.register(WishlistItem)
@@ -92,4 +161,12 @@ class OrderAdmin(admin.ModelAdmin):
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['order', 'item_name', 'quantity', 'price', 'subtotal']
     list_filter = ['item_type']
+
+
+@admin.register(ProductReview)
+class ProductReviewAdmin(admin.ModelAdmin):
+    list_display = ['name', 'product_type', 'rating', 'title', 'created_at']
+    list_filter = ['product_type', 'rating', 'created_at']
+    search_fields = ['name', 'title', 'comment']
+    readonly_fields = ['created_at']
 

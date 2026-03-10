@@ -358,6 +358,60 @@ body::-webkit-scrollbar {
     background: #f8fafc;
     border-radius: 1rem;
     padding: 1rem;
+    overflow: hidden;
+}
+
+/* ── Quick View Overlays ── */
+.offer-img-wrap {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.75rem;
+}
+
+.offer-img-wrap img,
+.arrival-media img {
+    transition: transform 0.4s ease;
+}
+
+.offer-card:hover .offer-img-wrap img,
+.arrival-card:hover .arrival-media img {
+    transform: scale(1.08);
+}
+
+.offer-overlay,
+.arrival-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    text-decoration: none;
+    z-index: 2;
+}
+
+.offer-card:hover .offer-overlay,
+.arrival-card:hover .arrival-overlay {
+    opacity: 1;
+}
+
+.offer-overlay span,
+.arrival-overlay span {
+    background: #ffffff;
+    color: #0f172a;
+    padding: 0.5rem 1.4rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    transition: transform 0.25s ease;
+}
+
+.offer-overlay:hover span,
+.arrival-overlay:hover span {
+    transform: scale(1.08);
 }
 
 .arrival-badge {

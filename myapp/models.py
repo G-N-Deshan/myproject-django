@@ -31,6 +31,9 @@ class Offers(models.Model):
     button_text = models.CharField(max_length=50)
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='kids')
     end_time = models.DateTimeField(blank=True, null=True)
+    long_description = models.TextField(blank=True, default='', help_text='Detailed description shown on the product detail page')
+    features = models.TextField(blank=True, default='', help_text='Key features, one per line')
+    material = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 100% Cotton, Polyester blend')
     
     def __str__(self):
         return self.title
@@ -50,6 +53,9 @@ class NewArrivals(models.Model):
     description = models.TextField()
     price = models.CharField(max_length=50, blank=True)
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='kids')
+    long_description = models.TextField(blank=True, default='', help_text='Detailed description shown on the product detail page')
+    features = models.TextField(blank=True, default='', help_text='Key features, one per line')
+    material = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 100% Cotton, Polyester blend')
     
     def __str__(self):
         return self.title
@@ -83,6 +89,11 @@ class Cloths(models.Model):
     discount_text = models.CharField(max_length=50, blank=True) 
     category = models.CharField(max_length=15, choices=CATEGORY_CHOICES, default='kids-men')
     subcategory = models.CharField(max_length=20, choices=SUBCATEGORY_CHOICES, blank=True, default='')
+    long_description = models.TextField(blank=True, default='', help_text='Detailed description shown on the product detail page')
+    features = models.TextField(blank=True, default='', help_text='Key features, one per line')
+    material = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 100% Cotton, Polyester blend')
+    care_instructions = models.TextField(blank=True, default='', help_text='Washing and care instructions')
+    sizes_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. S, M, L, XL or 2T, 3T, 4T')
     
     def __str__(self):
         return self.name
@@ -157,6 +168,11 @@ class Toy(models.Model):
     is_new = models.BooleanField(default=False)
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=5.0)
     created_at = models.DateTimeField(auto_now_add=True)
+    long_description = models.TextField(blank=True, default='', help_text='Detailed description shown on the product detail page')
+    features = models.TextField(blank=True, default='', help_text='Key features, one per line')
+    material = models.CharField(max_length=200, blank=True, default='', help_text='e.g. Wood, Plastic, Plush fabric')
+    safety_info = models.TextField(blank=True, default='', help_text='Safety certifications and age warnings')
+    dimensions = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 30cm x 20cm x 15cm')
 
     def __str__(self):
         return self.name
@@ -376,4 +392,34 @@ class OrderItem(models.Model):
     
     def __str__(self):
         return f"{self.quantity}x {self.item_name}"
+
+
+class ProductReview(models.Model):
+    RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
+
+    PRODUCT_TYPE_CHOICES = [
+        ('cloth', 'Cloth'),
+        ('toy', 'Toy'),
+        ('offer', 'Offer'),
+        ('arrival', 'Arrival'),
+    ]
+
+    product_type = models.CharField(max_length=10, choices=PRODUCT_TYPE_CHOICES)
+    cloth = models.ForeignKey('Cloths', on_delete=models.CASCADE, blank=True, null=True, related_name='product_reviews')
+    toy = models.ForeignKey('Toy', on_delete=models.CASCADE, blank=True, null=True, related_name='product_reviews')
+    offer = models.ForeignKey('Offers', on_delete=models.CASCADE, blank=True, null=True, related_name='product_reviews')
+    arrival = models.ForeignKey('NewArrivals', on_delete=models.CASCADE, blank=True, null=True, related_name='product_reviews')
+
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=100)
+    rating = models.IntegerField(choices=RATING_CHOICES)
+    title = models.CharField(max_length=200, blank=True)
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.name} - {self.rating}/5"
 

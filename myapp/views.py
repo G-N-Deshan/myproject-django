@@ -2,7 +2,7 @@ from urllib import request
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from .models import Card, Offers, NewArrivals, Cloths, Review, ContactMessage, Toy, WishlistItem, Cart, CartItem, Order, OrderItem
+from .models import Card, Offers, NewArrivals, Cloths, Review, ContactMessage, Toy, WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview
 from .forms import ReviewForm, ContactForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from decimal import Decimal
 import uuid
+import re
 
 
 # Helper function for cart management
@@ -30,6 +31,26 @@ def get_or_create_cart(request):
             cart = Cart.objects.create(session_key=session_key, user=None)
 
     return cart
+
+
+def parse_catalog_price(raw_value):
+    if raw_value is None:
+        return 0.0
+    text = str(raw_value).strip()
+    if not text:
+        return 0.0
+    text = re.sub(r'[^0-9,.-]', '', text).replace(',', '')
+    try:
+        return float(text) if text else 0.0
+    except ValueError:
+        return 0.0
+
+
+def parse_query_float(raw_value):
+    try:
+        return float(raw_value)
+    except (TypeError, ValueError):
+        return None
 
 
 # Create your views here.
@@ -254,47 +275,136 @@ def profile(request):
 
 def product_detail(request, product_type, product_id):
     product = None
-    product2 = None
+    back_url = '/'
+    back_label = 'Home'
+    category_label = ''
+    related_products = []
     cart_count = 0
-    
+
     # Get cart count
-    if request.user.is_authenticated:
-        try:
-            cart = Cart.objects.get(user=request.user)
-            cart_count = cart.get_item_count()
-        except Cart.DoesNotExist:
-            cart_count = 0
-    
+    cart = get_or_create_cart(request)
+    cart_count = cart.get_item_count()
+
+    # ── Fetch the product ──
     if product_type == 'offer':
-        try:
-            product = Offers.objects.get(id=product_id)
-        except Offers.DoesNotExist:
-            messages.error(request, 'Product not found')
-            return redirect('buy')
+        product = get_object_or_404(Offers, id=product_id)
+        back_url = '/shop-offers/'
+        back_label = 'Shop Offers'
+        category_label = product.get_category_display() if product.category else 'Offer'
+        related_products = list(
+            Offers.objects.filter(category=product.category).exclude(id=product.id)[:4]
+        )
     elif product_type == 'arrival':
-        try:
-            product2 = NewArrivals.objects.get(id=product_id)
-        except NewArrivals.DoesNotExist:
-            messages.error(request, 'Product not found')
-            return redirect('new_arrivals')
+        product = get_object_or_404(NewArrivals, id=product_id)
+        back_url = '/new_arrivals/'
+        back_label = 'New Arrivals'
+        category_label = product.get_category_display() if product.category else 'Arrival'
+        related_products = list(
+            NewArrivals.objects.filter(category=product.category).exclude(id=product.id)[:4]
+        )
     elif product_type == 'toy':
-        try:
-            product = Toy.objects.get(id=product_id)
-        except Toy.DoesNotExist:
-            messages.error(request, 'Toy not found')
-            return redirect('toys_page')
+        product = get_object_or_404(Toy, id=product_id)
+        back_url = '/toys/'
+        back_label = 'Toys'
+        category_label = product.get_category_display()
+        related_products = list(
+            Toy.objects.filter(category=product.category).exclude(id=product.id)[:4]
+        )
     elif product_type == 'cloth':
-        try:
-            product = Cloths.objects.get(id=product_id)
-        except Cloths.DoesNotExist:
-            messages.error(request, 'Cloth not found')
-            return redirect('cloths')
-    
+        product = get_object_or_404(Cloths, id=product_id)
+        cat = product.category
+        if cat in ('kids-men', 'kids-girl'):
+            back_url = '/kids_cloths/'
+            back_label = 'Kids Cloths'
+        elif cat == 'women':
+            back_url = '/women_cloths/'
+            back_label = "Women's Cloths"
+        else:
+            back_url = '/mens_cloths/'
+            back_label = "Men's Cloths"
+        category_label = product.get_category_display()
+        related_products = list(
+            Cloths.objects.filter(category=product.category).exclude(id=product.id)[:4]
+        )
+    else:
+        messages.error(request, 'Invalid product type')
+        return redirect('index')
+
+    # ── Reviews ──
+    fk_field = product_type  # FK field name matches product_type: cloth, toy, offer, arrival
+    reviews = ProductReview.objects.filter(product_type=product_type, **{fk_field: product})
+    review_count = reviews.count()
+    avg_rating = 0
+    if review_count:
+        avg_rating = round(sum(r.rating for r in reviews) / review_count, 1)
+    rating_dist = {i: reviews.filter(rating=i).count() for i in range(5, 0, -1)}
+
+    # ── Handle review POST ──
+    review_error = ''
+    if request.method == 'POST':
+        r_name = request.POST.get('reviewer_name', '').strip()
+        r_rating = request.POST.get('review_rating')
+        r_title = request.POST.get('review_title', '').strip()
+        r_comment = request.POST.get('review_comment', '').strip()
+        if r_name and r_rating and r_comment:
+            ProductReview.objects.create(
+                product_type=product_type,
+                **{fk_field: product},
+                user=request.user if request.user.is_authenticated else None,
+                name=r_name,
+                rating=int(r_rating),
+                title=r_title,
+                comment=r_comment,
+            )
+            return redirect('product_detail', product_type=product_type, product_id=product_id)
+        else:
+            review_error = 'Please fill in your name, rating, and comment.'
+
+    # ── Check wishlist ──
+    in_wishlist = False
+    if request.user.is_authenticated and product_type in ('cloth', 'toy'):
+        fk = {'cloth': product} if product_type == 'cloth' else {'toy': product}
+        in_wishlist = WishlistItem.objects.filter(user=request.user, **fk).exists()
+
+    # Normalize name (Offers/NewArrivals use 'title', Cloths/Toy use 'name')
+    product_name = getattr(product, 'name', '') or getattr(product, 'title', '')
+
+    # Normalize description (Cloths model has typo 'desccription')
+    product_description = getattr(product, 'description', '') or getattr(product, 'desccription', '')
+
+    # Rich detail fields for the Detail tab
+    long_description = getattr(product, 'long_description', '') or ''
+    features_raw = getattr(product, 'features', '') or ''
+    features_list = [f.strip() for f in features_raw.split('\n') if f.strip()] if features_raw else []
+    material = getattr(product, 'material', '') or ''
+    care_instructions = getattr(product, 'care_instructions', '') or ''
+    sizes_available = getattr(product, 'sizes_available', '') or ''
+    safety_info = getattr(product, 'safety_info', '') or ''
+    dimensions = getattr(product, 'dimensions', '') or ''
+
     return render(request, 'product_detail.html', {
         'product': product,
-        'product2': product2,
         'product_type': product_type,
+        'product_name': product_name,
+        'product_description': product_description,
+        'back_url': back_url,
+        'back_label': back_label,
+        'category_label': category_label,
+        'related_products': related_products,
+        'reviews': reviews,
+        'review_count': review_count,
+        'avg_rating': avg_rating,
+        'rating_dist': rating_dist,
+        'review_error': review_error,
+        'in_wishlist': in_wishlist,
         'cart_count': cart_count,
+        'long_description': long_description,
+        'features_list': features_list,
+        'material': material,
+        'care_instructions': care_instructions,
+        'sizes_available': sizes_available,
+        'safety_info': safety_info,
+        'dimensions': dimensions,
     })
 
 
@@ -306,40 +416,246 @@ def toys(request):
 
     
 def kids_cloths(request):
-    # Get all kids cloths (both boys and girls)
-    all_kids_cloths = Cloths.objects.filter(category__in=['kids-men', 'kids-girl'])
-    
-    # Separate by gender for display
-    kids_cloths = Cloths.objects.filter(category='kids-men')
-    kids_girls_cloths = Cloths.objects.filter(category='kids-girl')
-    
+    def parse_price(raw_value):
+        if raw_value is None:
+            return 0.0
+        text = str(raw_value).strip()
+        if not text:
+            return 0.0
+        text = re.sub(r'[^0-9,.-]', '', text).replace(',', '')
+        try:
+            return float(text) if text else 0.0
+        except ValueError:
+            return 0.0
+
+    def parse_float(raw_value):
+        try:
+            return float(raw_value)
+        except (TypeError, ValueError):
+            return None
+
+    gender = request.GET.get('gender', 'all')
+    subcategory = request.GET.get('subcategory', 'all')
+    sort = request.GET.get('sort', 'featured')
+    min_price = parse_float(request.GET.get('min_price'))
+    max_price = parse_float(request.GET.get('max_price'))
+    search = request.GET.get('q', '').strip()
+
+    kids_queryset = Cloths.objects.filter(category__in=['kids-men', 'kids-girl'])
+
+    if gender in ['kids-men', 'kids-girl']:
+        kids_queryset = kids_queryset.filter(category=gender)
+
+    if subcategory and subcategory != 'all':
+        kids_queryset = kids_queryset.filter(subcategory=subcategory)
+
+    if search:
+        kids_queryset = kids_queryset.filter(name__icontains=search)
+
+    all_filtered_items = list(kids_queryset)
+
+    for item in all_filtered_items:
+        item.numeric_price = parse_price(item.price2 or item.price1 or item.price)
+
+    if min_price is not None:
+        all_filtered_items = [item for item in all_filtered_items if item.numeric_price >= min_price]
+    if max_price is not None:
+        all_filtered_items = [item for item in all_filtered_items if item.numeric_price <= max_price]
+
+    if sort == 'price_asc':
+        all_filtered_items.sort(key=lambda item: item.numeric_price)
+    elif sort == 'price_desc':
+        all_filtered_items.sort(key=lambda item: item.numeric_price, reverse=True)
+    elif sort == 'name_asc':
+        all_filtered_items.sort(key=lambda item: item.name.lower())
+    elif sort == 'name_desc':
+        all_filtered_items.sort(key=lambda item: item.name.lower(), reverse=True)
+    elif sort == 'newest':
+        all_filtered_items.sort(key=lambda item: item.id, reverse=True)
+    elif sort == 'oldest':
+        all_filtered_items.sort(key=lambda item: item.id)
+    else:
+        all_filtered_items.sort(key=lambda item: item.id, reverse=True)
+
+    kids_girls_cloths = [item for item in all_filtered_items if item.category == 'kids-girl']
+    kids_cloths = [item for item in all_filtered_items if item.category == 'kids-men']
+
+    cart_count = 0
+    try:
+        cart_count = get_or_create_cart(request).get_item_count()
+    except Exception:
+        cart_count = 0
+
+    subcategory_options = [
+        option for option in Cloths.SUBCATEGORY_CHOICES if option[0]
+    ]
+
     return render(request, 'kids_cloths.html', {
-        'kids_cloths': kids_cloths, 
+        'kids_cloths': kids_cloths,
         'kids_girls_cloths': kids_girls_cloths,
-        'all_kids_cloths': all_kids_cloths
+        'all_kids_cloths': all_filtered_items,
+        'selected_gender': gender,
+        'selected_subcategory': subcategory,
+        'selected_sort': sort,
+        'selected_min_price': request.GET.get('min_price', ''),
+        'selected_max_price': request.GET.get('max_price', ''),
+        'search_query': search,
+        'subcategory_options': subcategory_options,
+        'cart_count': cart_count,
     })
 
 def women_cloths(request):
-    women_cloths = Cloths.objects.filter(category='women')
-    return render(request, 'women_cloths.html', {'women_cloths': women_cloths})
+    base_queryset = Cloths.objects.filter(category='women')
+
+    search = request.GET.get('q', '').strip()
+    subcategory = request.GET.get('subcategory', 'all')
+    sort = request.GET.get('sort', 'featured')
+    min_price = parse_query_float(request.GET.get('min_price'))
+    max_price = parse_query_float(request.GET.get('max_price'))
+
+    filtered = base_queryset
+    if search:
+        filtered = filtered.filter(name__icontains=search)
+    if subcategory and subcategory != 'all':
+        filtered = filtered.filter(subcategory=subcategory)
+
+    products = list(filtered)
+    for product in products:
+        product.numeric_price = parse_catalog_price(product.price2 or product.price1 or product.price)
+
+    if min_price is not None:
+        products = [product for product in products if product.numeric_price >= min_price]
+    if max_price is not None:
+        products = [product for product in products if product.numeric_price <= max_price]
+
+    if sort == 'price_asc':
+        products.sort(key=lambda item: item.numeric_price)
+    elif sort == 'price_desc':
+        products.sort(key=lambda item: item.numeric_price, reverse=True)
+    elif sort == 'name_asc':
+        products.sort(key=lambda item: item.name.lower())
+    elif sort == 'name_desc':
+        products.sort(key=lambda item: item.name.lower(), reverse=True)
+    elif sort == 'oldest':
+        products.sort(key=lambda item: item.id)
+    else:
+        products.sort(key=lambda item: item.id, reverse=True)
+
+    sections_map = {}
+    for item in products:
+        slug = item.subcategory if item.subcategory else 'styles'
+        label = item.get_subcategory_display() if item.subcategory else 'Featured Styles'
+        if slug not in sections_map:
+            sections_map[slug] = {
+                'slug': slug,
+                'label': label,
+                'items': [],
+            }
+        sections_map[slug]['items'].append(item)
+
+    sections = list(sections_map.values())
+    sections.sort(key=lambda entry: entry['label'].lower())
+
+    subcategory_values = set(base_queryset.values_list('subcategory', flat=True))
+    filter_subcategories = [
+        option for option in Cloths.SUBCATEGORY_CHOICES
+        if option[0] and option[0] in subcategory_values
+    ]
+
+    cart_count = 0
+    try:
+        cart_count = get_or_create_cart(request).get_item_count()
+    except Exception:
+        cart_count = 0
+
+    return render(request, 'women_cloths.html', {
+        'women_cloths': products,
+        'sections': sections,
+        'filter_subcategories': filter_subcategories,
+        'selected_subcategory': subcategory,
+        'selected_sort': sort,
+        'selected_min_price': request.GET.get('min_price', ''),
+        'selected_max_price': request.GET.get('max_price', ''),
+        'search_query': search,
+        'cart_count': cart_count,
+    })
 
 
 def mens_cloths(request):
-    all_mens_cloths = Cloths.objects.filter(category='men')
-    
-    # For now, all sections show the same data
-    # You can add subcategory field to Cloths model for proper filtering
-    context = {
-        'mens_cloths': all_mens_cloths,
-        'shirts': all_mens_cloths,
-        'pants': all_mens_cloths,
-        'jackets': all_mens_cloths,
-        'shoes': all_mens_cloths,
-        'accessories': all_mens_cloths,
-        'sports': all_mens_cloths,
-        'formal': all_mens_cloths,
-    }
-    return render(request, 'mens_cloths.html', context)
+    base_queryset = Cloths.objects.filter(category='men')
+
+    search = request.GET.get('q', '').strip()
+    subcategory = request.GET.get('subcategory', 'all')
+    sort = request.GET.get('sort', 'featured')
+    min_price = parse_query_float(request.GET.get('min_price'))
+    max_price = parse_query_float(request.GET.get('max_price'))
+
+    filtered = base_queryset
+    if search:
+        filtered = filtered.filter(name__icontains=search)
+    if subcategory and subcategory != 'all':
+        filtered = filtered.filter(subcategory=subcategory)
+
+    products = list(filtered)
+    for product in products:
+        product.numeric_price = parse_catalog_price(product.price2 or product.price1 or product.price)
+
+    if min_price is not None:
+        products = [product for product in products if product.numeric_price >= min_price]
+    if max_price is not None:
+        products = [product for product in products if product.numeric_price <= max_price]
+
+    if sort == 'price_asc':
+        products.sort(key=lambda item: item.numeric_price)
+    elif sort == 'price_desc':
+        products.sort(key=lambda item: item.numeric_price, reverse=True)
+    elif sort == 'name_asc':
+        products.sort(key=lambda item: item.name.lower())
+    elif sort == 'name_desc':
+        products.sort(key=lambda item: item.name.lower(), reverse=True)
+    elif sort == 'oldest':
+        products.sort(key=lambda item: item.id)
+    else:
+        products.sort(key=lambda item: item.id, reverse=True)
+
+    sections_map = {}
+    for item in products:
+        slug = item.subcategory if item.subcategory else 'styles'
+        label = item.get_subcategory_display() if item.subcategory else 'Featured Styles'
+        if slug not in sections_map:
+            sections_map[slug] = {
+                'slug': slug,
+                'label': label,
+                'items': [],
+            }
+        sections_map[slug]['items'].append(item)
+
+    sections = list(sections_map.values())
+    sections.sort(key=lambda entry: entry['label'].lower())
+
+    subcategory_values = set(base_queryset.values_list('subcategory', flat=True))
+    filter_subcategories = [
+        option for option in Cloths.SUBCATEGORY_CHOICES
+        if option[0] and option[0] in subcategory_values
+    ]
+
+    cart_count = 0
+    try:
+        cart_count = get_or_create_cart(request).get_item_count()
+    except Exception:
+        cart_count = 0
+
+    return render(request, 'mens_cloths.html', {
+        'mens_cloths': products,
+        'sections': sections,
+        'filter_subcategories': filter_subcategories,
+        'selected_subcategory': subcategory,
+        'selected_sort': sort,
+        'selected_min_price': request.GET.get('min_price', ''),
+        'selected_max_price': request.GET.get('max_price', ''),
+        'search_query': search,
+        'cart_count': cart_count,
+    })
 
 def reviews(request):
     if request.method == 'POST':
@@ -361,6 +677,12 @@ def review_success(request):
 
 
 def contact_us(request):
+    cart_count = 0
+    try:
+        cart_count = get_or_create_cart(request).get_item_count()
+    except Exception:
+        cart_count = 0
+
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -370,10 +692,21 @@ def contact_us(request):
     else:
         form = ContactForm()
     
-    return render(request, 'contact.html', {'form': form})
+    return render(request, 'contact.html', {
+        'form': form,
+        'cart_count': cart_count,
+    })
 
 def contact_success(request):
-    return render(request, 'contact_success.html')
+    cart_count = 0
+    try:
+        cart_count = get_or_create_cart(request).get_item_count()
+    except Exception:
+        cart_count = 0
+
+    return render(request, 'contact_success.html', {
+        'cart_count': cart_count,
+    })
 
 
 def toys_page(request):
@@ -583,14 +916,17 @@ def get_cart_data(request):
                 product = item.get_item()
                 if not product:
                     continue
+                product_name = product.name if hasattr(product, 'name') else product.title
+                product_url = f'/product/{item.item_type}/{product.id}/'
                 items_data.append({
                     'id': item.id,
-                    'name': product.name if hasattr(product, 'name') else product.title,
+                    'name': product_name,
                     'price': float(item.get_price()),
                     'quantity': int(item.quantity),
                     'subtotal': float(item.get_subtotal()),
                     'image': product.imageUrl.url if getattr(product, 'imageUrl', None) else '',
                     'item_type': item.item_type,
+                    'product_url': product_url,
                 })
             except Exception:
                 continue

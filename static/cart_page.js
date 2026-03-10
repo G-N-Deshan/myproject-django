@@ -63,10 +63,16 @@ function renderCart(data) {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
             cartItem.dataset.itemId = item.id;
+            const detailUrl = item.product_url || '#';
             cartItem.innerHTML = `
-                <img src="${item.image}" alt="${item.name}" onerror="this.src='/static/placeholder.jpg'">
+                <div class="cart-item-img-wrap">
+                    <a href="${detailUrl}">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.src='/static/placeholder.jpg'">
+                    </a>
+                    <a href="${detailUrl}" class="cart-quick-view">Quick View</a>
+                </div>
                 <div class="item-details">
-                    <h3>${item.name}</h3>
+                    <h3><a href="${detailUrl}" class="cart-item-link">${item.name}</a></h3>
                     <p>${item.item_type.charAt(0).toUpperCase() + item.item_type.slice(1)}</p>
                     <div class="item-price">$${item.price.toFixed(2)}</div>
                     <div class="quantity-control">

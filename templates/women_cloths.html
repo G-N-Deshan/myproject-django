@@ -2,474 +2,322 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Women's Clothing</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'navbar.css' %}">
     <link rel="stylesheet" href="{% static 'footer.css' %}">
-    <link rel="stylesheet" href="{% static 'women-cloths.css' %}">
     <style>
-        /* Base */
         :root {
-            --brand-1: #ec4899; /* pink */
-            --brand-1-dark: #db2777;
-            --brand-2: #9333ea; /* purple */
-            --ink-1: #0f172a;
-            --ink-2: #334155;
-            --ink-3: #64748b;
-            --surface: #ffffff;
-            --muted: #f8fafc;
-            --ring: #e2e8f0;
+            --rose-1: #f43f5e;
+            --rose-2: #fb7185;
+            --peach: #fb923c;
+            --sand: #fffbeb;
+            --ink: #111827;
+            --slate: #475569;
         }
-        * { box-sizing: border-box; }
-        body { background: #ffffff; }
 
-        /* Hero */
-        .hero-women {
-            position: relative;
-            min-height: 58vh;
-            display: grid;
-            place-items: center;
-            padding: 80px 20px;
+        body {
+            font-family: "Manrope", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 15% 5%, rgba(251, 113, 133, 0.16) 0%, transparent 32%),
+                radial-gradient(circle at 92% 18%, rgba(251, 146, 60, 0.18) 0%, transparent 30%),
+                linear-gradient(180deg, #fff8f5 0%, #fffdf7 45%, #f8fafc 100%);
+        }
+
+        .hero-title {
+            font-family: "Playfair Display", serif;
+            letter-spacing: 0.2px;
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+        }
+
+        .hero-panel {
+            background:
+                linear-gradient(130deg, rgba(255, 255, 255, 0.74), rgba(255, 247, 237, 0.72)),
+                url('{% static "kids-card-page-background.jpg" %}') center/cover no-repeat;
+        }
+
+        .hero-panel::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='rgba(190,24,93,0.14)' stroke-width='2'%3E%3Cpath d='M12 78h62M146 36h58M128 178h72'/%3E%3Ccircle cx='56' cy='152' r='22'/%3E%3Ccircle cx='176' cy='108' r='16'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 240px 240px;
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+        }
+
+        .tabs-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(244, 63, 94, 0.4) transparent;
+        }
+
+        .tabs-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .tabs-scroll::-webkit-scrollbar-thumb {
+            background: rgba(244, 63, 94, 0.42);
+            border-radius: 999px;
+        }
+
+        .tab-btn {
+            border-radius: 999px;
+            border: 1px solid #fecdd3;
+            padding: 9px 16px;
+            white-space: nowrap;
+            font-weight: 700;
+            color: #9f1239;
+            background: #fff;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover,
+        .tab-btn.active {
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(135deg, var(--rose-1), var(--peach));
+            box-shadow: 0 10px 22px rgba(244, 63, 94, 0.28);
+            transform: translateY(-1px);
+        }
+
+        .product-card {
+            border-radius: 18px;
+            border: 1px solid #fee2e2;
+            background: #fff;
             overflow: hidden;
-            background: radial-gradient(1200px 400px at -10% -20%, rgba(236, 72, 153, .20), transparent 60%),
-                        radial-gradient(1200px 400px at 110% 120%, rgba(147, 51, 234, .18), transparent 60%),
-                        linear-gradient(135deg, #faf5ff 0%, #fff1f2 100%);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
-        .hero-women__inner { position: relative; z-index: 2; text-align: center; max-width: 900px; }
-        .hero-women__eyebrow {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 8px 14px; border-radius: 999px; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            font-weight: 600; letter-spacing: .3px; color: var(--brand-1);
-            background: #fff; border: 1px solid #ffe4ef; box-shadow: 0 6px 20px rgba(236,72,153,.15);
-        }
-        .hero-women__title {
-            font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 4.5vw, 3.6rem); line-height: 1.1; color: var(--ink-1);
-            margin: 18px 0 12px; letter-spacing: .3px;
-        }
-        .hero-women__subtitle {
-            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; font-size: clamp(.98rem, 1.2vw, 1.08rem);
-            color: var(--ink-3); max-width: 700px; margin: 0 auto 26px; line-height: 1.75;
-        }
-        .hero-women__cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-        .btn {
-            padding: 14px 22px; border-radius: 12px; border: 1px solid transparent; cursor: pointer;
-            font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; font-weight: 600; letter-spacing: .3px;
-            transition: all .25s ease; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
-        }
-        .btn-primary { background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); color: #fff; box-shadow: 0 10px 26px rgba(236,72,153,.28); }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(236,72,153,.40); }
-        .btn-secondary { background: #ffffff; border-color: #e5e7eb; color: var(--ink-2); }
-        .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(2, 6, 23, .08); }
 
-        /* Filter Bar */
-        .filter-section {
-            background: var(--surface);
-            border-radius: 16px;
-            padding: 20px;
-            margin: -40px auto 20px; /* lift under hero */
-            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-            border: 1px solid var(--ring);
-            max-width: 1200px;
-            position: sticky; top: 10px; z-index: 30;
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 30px rgba(15, 23, 42, 0.1);
         }
-        .filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; cursor: pointer; }
-        .filter-header h3 { font-family: Poppins, sans-serif; font-size: 1rem; color: var(--ink-1); margin: 0; }
-        .filter-toggle { font-size: 1.1rem; transition: transform .3s ease; }
-        .filter-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
-        .filter-group { display: flex; flex-direction: column; gap: 8px; }
-        .filter-group label { font-family: Poppins, sans-serif; font-weight: 600; font-size: .85rem; color: var(--ink-3); }
-        .filter-group select, .filter-group input { padding: 10px 12px; border: 2px solid var(--ring); border-radius: 8px; font-family: Inter, sans-serif; font-size: .95rem; }
-        .filter-group select:focus, .filter-group input:focus { outline: none; border-color: var(--brand-1); }
-        .price-inputs { display: flex; gap: 10px; align-items: center; }
-        .apply-filters-btn { background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); color: #fff; border: none; padding: 12px 20px; border-radius: 10px; font-family: Poppins; font-weight: 600; }
-        .clear-filters-btn { background: #f8fafc; color: var(--ink-3); border: 2px solid var(--ring); padding: 12px 20px; border-radius: 10px; font-family: Poppins; font-weight: 600; }
-        .filter-buttons { display: flex; gap: 10px; grid-column: 1 / -1; }
-        .size-options, .color-options { display: flex; flex-wrap: wrap; gap: 8px; }
-        .size-option { padding: 8px 14px; border: 2px solid var(--ring); border-radius: 999px; background: #fff; cursor: pointer; font-family: Poppins; font-weight: 600; font-size: .85rem; }
-        .size-option.selected { background: var(--ink-1); color: #fff; border-color: var(--ink-1); }
-        .color-option { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--ring); cursor: pointer; }
-        .color-option.selected { box-shadow: 0 0 0 2px var(--brand-1); border-color: var(--brand-1); }
 
-        /* Tabs */
-        .tabs { position: relative; margin: 20px auto; max-width: 1200px; border-radius: 16px; background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); box-shadow: 0 8px 24px rgba(147, 51, 234, .25); overflow: hidden; }
-        .tabs__scroller { display: flex; gap: 10px; overflow-x: auto; padding: 12px 56px; scroll-behavior: smooth; }
-        .tabs__scroller::-webkit-scrollbar { height: 6px; }
-        .tabs__scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,.6); border-radius: 3px; }
-        .tabs::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 48px; background: linear-gradient(90deg, rgba(236,72,153,1), rgba(236,72,153,0)); z-index: 5; pointer-events: none; }
-        .tabs::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 48px; background: linear-gradient(270deg, rgba(147,51,234,1), rgba(147,51,234,0)); z-index: 5; pointer-events: none; }
-        .tabs__arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: #fff; color: var(--brand-1); border: none; cursor: pointer; display: grid; place-items: center; z-index: 10; box-shadow: 0 8px 22px rgba(0,0,0,.18); }
-        .tabs__arrow--left { left: 10px; }
-        .tabs__arrow--right { right: 10px; }
-        .tabs__arrow[disabled] { opacity: .35; cursor: default; box-shadow: none; }
-        .tab { flex-shrink: 0; padding: 10px 18px; background: rgba(255,255,255,.18); border: 2px solid rgba(255,255,255,.35); color: #fff; border-radius: 999px; font-family: Poppins; font-weight: 700; font-size: .92rem; cursor: pointer; transition: all .2s ease; white-space: nowrap; }
-        .tab:hover { background: rgba(255,255,255,.35); }
-        .tab.active { background: #fff; color: var(--brand-1); border-color: transparent; box-shadow: 0 6px 16px rgba(255,255,255,.3); }
+        .section-anchor {
+            scroll-margin-top: 100px;
+        }
 
-        /* Catalog */
-        .catalog { max-width: 1200px; margin: 20px auto 80px; padding: 0 12px; }
-        .catalog__header { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
-        .catalog__title { font-family: Poppins, sans-serif; font-weight: 700; color: var(--ink-1); letter-spacing: .2px; font-size: 1.35rem; }
-        .results-count { font-family: Inter, sans-serif; color: var(--ink-3); font-size: .95rem; }
+        .section-shell {
+            background-image:
+                linear-gradient(140deg, rgba(244, 63, 94, 0.05), rgba(251, 146, 60, 0.07)),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='rgba(244,63,94,0.09)' stroke-width='1.5'%3E%3Ccircle cx='36' cy='36' r='16'/%3E%3Cpath d='M95 20h60M20 100h50M122 140h38'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: auto, 220px 220px;
+        }
 
-        /* Active Filters Chips */
-        .active-filters { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 18px; }
-        .active-filter-tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 999px; font-size: .85rem; color: var(--ink-3); }
-        .active-filter-tag button { all: unset; cursor: pointer; color: #ef4444; font-weight: 700; }
-
-        /* Responsive tweaks */
-        @media (max-width: 768px) {
-            .catalog__header { flex-direction: column; align-items: flex-start; gap: 6px; }
-            .filter-section { position: static; margin: 10px auto; }
+        .pill {
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #fff1f2;
+            color: #be123c;
+            border: 1px solid #fecdd3;
         }
     </style>
 </head>
 <body>
-
     {% include 'navbar.html' %}
 
-    <!-- HERO -->
-    <section class="hero-women">
-        <div class="hero-women__inner">
-            <span class="hero-women__eyebrow">New Season • Curated Styles</span>
-            <h1 class="hero-women__title">Elevate Your Everyday Wardrobe</h1>
-            <p class="hero-women__subtitle">Discover timeless silhouettes, modern essentials, and statement pieces crafted for comfort and confidence.</p>
-            <div class="hero-women__cta">
-                <a href="#catalog" class="btn btn-primary">Shop Collection</a>
-                <a href="#filters" class="btn btn-secondary">Filter & Sort</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- FILTERS -->
-    <div id="filters" class="filter-section">
-        <div class="filter-header" onclick="toggleFilters()">
-            <h3>Filters</h3>
-            <span class="filter-toggle" id="filterToggle">▼</span>
-        </div>
-        <div class="filter-content" id="filterContent">
-            <div class="filter-group">
-                <label>Category</label>
-                <select id="categoryFilter">
-                    <option value="all">All Categories</option>
-                    <option value="dresses">Dresses</option>
-                    <option value="tops">Tops</option>
-                    <option value="pants">Pants</option>
-                    <option value="skirts">Skirts</option>
-                    <option value="activewear">Activewear</option>
-                    <option value="onepiece">One-Piece</option>
-                    <option value="handbags">Handbags</option>
-                    <option value="shoes">Shoes</option>
-                    <option value="coats">Coats & Jackets</option>
-                    <option value="sweaters">Sweaters</option>
-                    <option value="jeans">Jeans</option>
-                    <option value="accessories">Accessories</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label>Price Range</label>
-                <div class="price-inputs">
-                    <input type="number" id="minPrice" placeholder="Min" min="0">
-                    <span>-</span>
-                    <input type="number" id="maxPrice" placeholder="Max" min="0">
+    <main class="mx-auto w-[94%] max-w-7xl pb-16">
+        <section class="relative overflow-hidden rounded-[30px] mt-4 md:mt-6 px-6 md:px-10 py-14 md:py-20 glass-panel hero-panel">
+            <div class="absolute -top-12 -left-8 w-56 h-56 bg-rose-200/45 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-10 right-0 w-64 h-64 bg-orange-200/50 rounded-full blur-2xl"></div>
+            <div class="relative z-10 text-center max-w-3xl mx-auto">
+                <span class="inline-flex items-center rounded-full border border-rose-200 bg-white px-4 py-1 text-sm font-semibold text-rose-700">Women's Collection 2026</span>
+                <h1 class="hero-title mt-5 text-4xl md:text-6xl font-bold text-slate-900">Style That Moves With Your Day</h1>
+                <p class="mt-5 text-slate-600 leading-7 md:text-lg">From soft essentials to statement pieces, discover a cleaner, faster shopping flow with smart filtering, sorting, and section navigation.</p>
+                <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+                    <a href="#controls" class="rounded-full bg-gradient-to-r from-rose-500 to-orange-400 px-6 py-3 text-white font-bold shadow-lg shadow-rose-300/40">Explore Filters</a>
+                    <a href="#catalog" class="rounded-full border border-rose-200 bg-white px-6 py-3 text-rose-700 font-bold">Jump To Products</a>
                 </div>
-            </div>
-            <div class="filter-group">
-                <label>Size</label>
-                <div class="size-options">
-                    <button type="button" class="size-option" data-size="XS">XS</button>
-                    <button type="button" class="size-option" data-size="S">S</button>
-                    <button type="button" class="size-option" data-size="M">M</button>
-                    <button type="button" class="size-option" data-size="L">L</button>
-                    <button type="button" class="size-option" data-size="XL">XL</button>
-                    <button type="button" class="size-option" data-size="XXL">XXL</button>
-                </div>
-            </div>
-            <div class="filter-group">
-                <label>Color</label>
-                <div class="color-options">
-                    <button type="button" class="color-option" style="background:#000" data-color="black" title="Black"></button>
-                    <button type="button" class="color-option" style="background:#fff" data-color="white" title="White"></button>
-                    <button type="button" class="color-option" style="background:#1e40af" data-color="blue" title="Blue"></button>
-                    <button type="button" class="color-option" style="background:#dc2626" data-color="red" title="Red"></button>
-                    <button type="button" class="color-option" style="background:#16a34a" data-color="green" title="Green"></button>
-                    <button type="button" class="color-option" style="background:#f59e0b" data-color="yellow" title="Yellow"></button>
-                    <button type="button" class="color-option" style="background:#7c3aed" data-color="purple" title="Purple"></button>
-                    <button type="button" class="color-option" style="background:#f97316" data-color="orange" title="Orange"></button>
-                    <button type="button" class="color-option" style="background:#ec4899" data-color="pink" title="Pink"></button>
-                    <button type="button" class="color-option" style="background:#78716c" data-color="brown" title="Brown"></button>
-                </div>
-            </div>
-            <div class="filter-group">
-                <label>Sort By</label>
-                <select id="sortFilter">
-                    <option value="default">Default</option>
-                    <option value="price_low">Price: Low to High</option>
-                    <option value="price_high">Price: High to Low</option>
-                    <option value="name_asc">Name: A to Z</option>
-                    <option value="name_desc">Name: Z to A</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label>Discount</label>
-                <select id="discountFilter">
-                    <option value="all">All Products</option>
-                    <option value="yes">On Sale Only</option>
-                    <option value="no">Regular Price</option>
-                </select>
-            </div>
-            <div class="filter-buttons">
-                <button class="apply-filters-btn" onclick="applyFilters()">Apply Filters</button>
-                <button class="clear-filters-btn" onclick="clearFilters()">Clear All</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- TABS -->
-    <div class="tabs" id="tabs">
-        <button class="tabs__arrow tabs__arrow--left" onclick="scrollTabs(-220)" aria-label="Scroll tabs left">◀</button>
-        <div class="tabs__scroller" id="tabsScroller" role="tablist">
-            <button class="tab active category-tab" data-target="all" role="tab">All</button>
-            <button class="tab category-tab" data-target="dresses" role="tab">Dresses</button>
-            <button class="tab category-tab" data-target="tops" role="tab">Tops</button>
-            <button class="tab category-tab" data-target="pants" role="tab">Pants</button>
-            <button class="tab category-tab" data-target="skirts" role="tab">Skirts</button>
-            <button class="tab category-tab" data-target="activewear" role="tab">Activewear</button>
-            <button class="tab category-tab" data-target="onepiece" role="tab">One-Piece</button>
-            <button class="tab category-tab" data-target="handbags" role="tab">Handbags</button>
-            <button class="tab category-tab" data-target="shoes" role="tab">Shoes</button>
-            <button class="tab category-tab" data-target="coats" role="tab">Coats & Jackets</button>
-            <button class="tab category-tab" data-target="sweaters" role="tab">Sweaters</button>
-            <button class="tab category-tab" data-target="jeans" role="tab">Jeans</button>
-            <button class="tab category-tab" data-target="accessories" role="tab">Accessories</button>
-        </div>
-        <button class="tabs__arrow tabs__arrow--right" onclick="scrollTabs(220)" aria-label="Scroll tabs right">▶</button>
-    </div>
-
-    <!-- CATALOG -->
-    <section id="catalog" class="catalog">
-        <div class="catalog__header">
-            <h2 class="catalog__title">Explore Women's Collection</h2>
-            <p class="results-count" id="resultsCount"></p>
-        </div>
-        <div class="active-filters" id="activeFilters"></div>
-        <section class="cloths-section">
-            <div class="cloths-grid" id="catalogGrid">
-                {% for cloth in women_cloths %}
-                <div class="cloth-item"
-                     data-category="{{ cloth.category }}"
-                     data-subcategory="{{ cloth.subcategory }}"
-                     data-price="{{ cloth.price1|default:0 }}"
-                     data-name="{{ cloth.name|lower }}">
-                    <div class="cloth-item__image">
-                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
-                    </div>
-                    <div class="cloth-item__content">
-                        <h3>{{ cloth.name }}</h3>
-                        <div class="price-container">
-                            <span class="price-current">Rs {{ cloth.price1 }}</span>
-                            <span class="price-old">Rs {{ cloth.price2 }}</span>
-                        </div>
-                        <span class="discount-badge">{{ cloth.discount_text }}</span>
-                        <button class="cloths-section__btn"
-                                data-add-to-cart
-                                data-item-type="cloth"
-                                data-item-id="{{ cloth.id }}">Add to Cart</button>
-                    </div>
-                </div>
-                {% endfor %}
             </div>
         </section>
-    </section>
+
+        <section id="controls" class="mt-6 md:mt-8 rounded-2xl glass-panel p-4 md:p-6">
+            <form method="get" action="{% url 'women_cloths' %}" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3">
+                <div class="xl:col-span-2">
+                    <label class="text-sm font-bold text-slate-600">Search</label>
+                    <input id="quickSearch" type="text" name="q" value="{{ search_query }}" placeholder="Search by product name" class="mt-1 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 outline-none focus:ring-2 focus:ring-rose-300">
+                </div>
+
+                <div>
+                    <label class="text-sm font-bold text-slate-600">Subcategory</label>
+                    <select name="subcategory" class="mt-1 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 outline-none focus:ring-2 focus:ring-rose-300">
+                        <option value="all" {% if selected_subcategory == 'all' %}selected{% endif %}>All</option>
+                        {% for value, label in filter_subcategories %}
+                        <option value="{{ value }}" {% if selected_subcategory == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-sm font-bold text-slate-600">Min Price</label>
+                    <input type="number" min="0" step="1" name="min_price" value="{{ selected_min_price }}" placeholder="0" class="mt-1 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 outline-none focus:ring-2 focus:ring-rose-300">
+                </div>
+
+                <div>
+                    <label class="text-sm font-bold text-slate-600">Max Price</label>
+                    <input type="number" min="0" step="1" name="max_price" value="{{ selected_max_price }}" placeholder="5000" class="mt-1 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 outline-none focus:ring-2 focus:ring-rose-300">
+                </div>
+
+                <div>
+                    <label class="text-sm font-bold text-slate-600">Sort</label>
+                    <select name="sort" onchange="this.form.submit()" class="mt-1 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 outline-none focus:ring-2 focus:ring-rose-300">
+                        <option value="featured" {% if selected_sort == 'featured' %}selected{% endif %}>Featured</option>
+                        <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price low-high</option>
+                        <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price high-low</option>
+                        <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name A-Z</option>
+                        <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Name Z-A</option>
+                        <option value="oldest" {% if selected_sort == 'oldest' %}selected{% endif %}>Oldest</option>
+                    </select>
+                </div>
+
+                <div class="xl:col-span-6 flex flex-wrap gap-2 pt-1">
+                    <button type="submit" class="rounded-xl bg-gradient-to-r from-rose-500 to-orange-400 px-5 py-2.5 text-white font-bold">Apply Filters</button>
+                    <a href="{% url 'women_cloths' %}" class="rounded-xl border border-rose-200 bg-white px-5 py-2.5 text-rose-700 font-bold">Reset</a>
+                </div>
+            </form>
+        </section>
+
+        <section id="catalog" class="mt-5 md:mt-6">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="pill">{{ women_cloths|length }} products</span>
+                    <span class="pill" id="liveCount">{{ women_cloths|length }} visible</span>
+                </div>
+                <p class="text-sm text-slate-500">Tap tabs to scroll to each section.</p>
+            </div>
+
+            <div class="tabs-scroll flex gap-2 overflow-x-auto pb-2" id="sectionTabs">
+                <button type="button" class="tab-btn active" data-scroll-target="top">Top</button>
+                {% for section in sections %}
+                <button type="button" class="tab-btn" data-scroll-target="{{ section.slug }}-section">{{ section.label }} ({{ section.items|length }})</button>
+                {% endfor %}
+            </div>
+
+            <div id="top" data-observe="top" class="section-anchor"></div>
+
+            {% if sections %}
+                {% for section in sections %}
+                <section id="{{ section.slug }}-section" data-observe="{{ section.slug }}-section" class="section-anchor section-shell mt-5 rounded-2xl border border-rose-100 bg-white/85 p-4 md:p-5">
+                    <div class="flex flex-wrap items-end justify-between gap-2 mb-4">
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">{{ section.label }}</h2>
+                        <span class="text-sm font-semibold text-slate-500">{{ section.items|length }} items</span>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {% for cloth in section.items %}
+                        <article class="product-card product-item" data-name="{{ cloth.name|lower }}" data-price="{{ cloth.numeric_price }}">
+                            <div class="aspect-[4/5] bg-rose-50 overflow-hidden relative group">
+                                <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <span class="bg-white text-slate-900 px-5 py-2.5 rounded-lg font-bold text-sm hover:scale-105 transition-transform">Quick View</span>
+                                </a>
+                            </div>
+                            <div class="p-4 grid gap-2">
+                                <h3 class="font-extrabold text-slate-900 leading-6"><a href="{% url 'product_detail' 'cloth' cloth.id %}" class="hover:text-rose-600 transition-colors" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
+                                <p class="text-xs uppercase tracking-wide font-semibold text-slate-500">{{ cloth.get_subcategory_display|default:'Featured Style' }}</p>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-lg font-extrabold text-slate-900">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
+                                    {% if cloth.price1 and cloth.price2 %}
+                                    <span class="text-sm text-slate-400 line-through">Rs {{ cloth.price1 }}</span>
+                                    {% endif %}
+                                    {% if cloth.discount_text %}
+                                    <span class="pill">{{ cloth.discount_text }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="grid grid-cols-[1fr_auto] gap-2 pt-1">
+                                    <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="rounded-lg border border-rose-200 bg-rose-50 py-2 text-center text-sm font-bold text-rose-700">View</a>
+                                    <button class="rounded-lg bg-gradient-to-r from-rose-500 to-orange-400 px-3 py-2 text-sm font-bold text-white" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add</button>
+                                </div>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endfor %}
+            {% else %}
+                <section class="mt-5 rounded-2xl border border-dashed border-rose-200 bg-white p-10 text-center">
+                    <h2 class="text-2xl font-extrabold text-slate-900">No products found</h2>
+                    <p class="mt-2 text-slate-500">Try changing your search or clearing filters.</p>
+                    <a href="{% url 'women_cloths' %}" class="inline-block mt-4 rounded-xl bg-gradient-to-r from-rose-500 to-orange-400 px-5 py-2.5 text-white font-bold">Reset Filters</a>
+                </section>
+            {% endif %}
+        </section>
+    </main>
 
     {% include 'footer.html' %}
 
     <script src="{% static 'cart_utils.js' %}"></script>
     <script>
-        // Size & color toggles
-        document.querySelectorAll('.size-option').forEach(btn => btn.addEventListener('click', () => btn.classList.toggle('selected')));
-        document.querySelectorAll('.color-option').forEach(btn => btn.addEventListener('click', () => btn.classList.toggle('selected')));
+        (function () {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('[data-observe]');
+            const searchInput = document.getElementById('quickSearch');
+            const products = document.querySelectorAll('.product-item');
+            const liveCount = document.getElementById('liveCount');
 
-        // Toggle filter section
-        function toggleFilters() {
-            const content = document.getElementById('filterContent');
-            const toggle = document.getElementById('filterToggle');
-            const isHidden = getComputedStyle(content).display === 'none';
-            content.style.display = isHidden ? 'grid' : 'none';
-            toggle.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(-90deg)';
-        }
-
-        // Tabs behavior
-        document.querySelectorAll('.category-tab').forEach(tab => {
-            tab.addEventListener('click', function () {
-                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                applyFilters();
-                document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
-            });
-        });
-
-        // Filtering / Sorting for the single catalog grid
-        function applyFilters() {
-            const activeTab = document.querySelector('.category-tab.active')?.getAttribute('data-target') || 'all';
-            const category = document.getElementById('categoryFilter').value;
-            const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
-            const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
-            const sortBy = document.getElementById('sortFilter').value;
-            const discount = document.getElementById('discountFilter').value;
-
-            const grid = document.getElementById('catalogGrid');
-            const products = Array.from(grid.querySelectorAll('.cloth-item'));
-
-            let visibleCount = 0;
-
-            products.forEach(product => {
-                const subcat = (product.getAttribute('data-subcategory') || '').toLowerCase();
-                const cat = (product.getAttribute('data-category') || '').toLowerCase();
-                const name = (product.getAttribute('data-name') || '').toLowerCase();
-                const price = parseFloat(product.getAttribute('data-price')) || 0;
-
-                let show = true;
-
-                // Tab filter (subcategory)
-                if (activeTab !== 'all') {
-                    if (!(subcat === activeTab || name.includes(activeTab))) {
-                        show = false;
-                    }
+            function updateVisibleCount() {
+                const visible = Array.from(products).filter((item) => item.style.display !== 'none').length;
+                if (liveCount) {
+                    liveCount.textContent = visible + ' visible';
                 }
+            }
 
-                // Category select filter (works with either major category or subcategory keywords)
-                if (category !== 'all') {
-                    if (!(subcat === category || cat === category || name.includes(category))) {
-                        show = false;
-                    }
-                }
+            if (searchInput) {
+                searchInput.addEventListener('input', function () {
+                    const q = this.value.trim().toLowerCase();
+                    products.forEach((item) => {
+                        const name = (item.getAttribute('data-name') || '').toLowerCase();
+                        item.style.display = !q || name.includes(q) ? '' : 'none';
+                    });
+                    updateVisibleCount();
+                });
+            }
 
-                // Price range
-                if (price < minPrice || price > maxPrice) {
-                    show = false;
-                }
+            tabs.forEach((tab) => {
+                tab.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-scroll-target');
+                    const target = document.getElementById(targetId);
+                    if (!target) return;
 
-                // Discount filter
-                if (discount === 'yes') {
-                    const badge = product.querySelector('.discount-badge');
-                    if (!badge || !badge.textContent.trim()) show = false;
-                } else if (discount === 'no') {
-                    const badge = product.querySelector('.discount-badge');
-                    if (badge && badge.textContent.trim()) show = false;
-                }
-
-                product.style.display = show ? '' : 'none';
-                if (show) visibleCount++;
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    tabs.forEach((btn) => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
             });
 
-            // Sort visible products
-            const visibleProducts = products.filter(p => p.style.display !== 'none');
-            visibleProducts.sort((a, b) => {
-                const priceA = parseFloat(a.getAttribute('data-price')) || 0;
-                const priceB = parseFloat(b.getAttribute('data-price')) || 0;
-                const nameA = a.getAttribute('data-name') || '';
-                const nameB = b.getAttribute('data-name') || '';
-                switch (sortBy) {
-                    case 'price_low': return priceA - priceB;
-                    case 'price_high': return priceB - priceA;
-                    case 'name_asc': return nameA.localeCompare(nameB);
-                    case 'name_desc': return nameB.localeCompare(nameA);
-                    default: return 0;
-                }
-            });
-            visibleProducts.forEach(p => grid.appendChild(p));
+            if (sections.length) {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (!entry.isIntersecting) return;
+                            const id = entry.target.getAttribute('data-observe');
+                            tabs.forEach((tab) => {
+                                tab.classList.toggle('active', tab.getAttribute('data-scroll-target') === id);
+                            });
+                        });
+                    },
+                    { threshold: 0.3 }
+                );
 
-            // Update results count and active filter chips
-            document.getElementById('resultsCount').textContent = visibleCount + ' products';
-            updateActiveFilters(category, minPrice, maxPrice, sortBy, discount, activeTab);
-        }
-
-        function clearFilters() {
-            document.getElementById('categoryFilter').value = 'all';
-            document.getElementById('minPrice').value = '';
-            document.getElementById('maxPrice').value = '';
-            document.getElementById('sortFilter').value = 'default';
-            document.getElementById('discountFilter').value = 'all';
-            document.querySelectorAll('.size-option.selected').forEach(btn => btn.classList.remove('selected'));
-            document.querySelectorAll('.color-option.selected').forEach(btn => btn.classList.remove('selected'));
-            document.querySelector('.category-tab[data-target="all"]').click();
-        }
-
-        function updateActiveFilters(category, minPrice, maxPrice, sortBy, discount, activeTab) {
-            const container = document.getElementById('activeFilters');
-            let html = '';
-            if (activeTab && activeTab !== 'all') html += `<span class="active-filter-tag">Tab: ${activeTab} <button onclick="removeFilter('tab')">×</button></span>`;
-            if (category !== 'all') html += `<span class="active-filter-tag">Category: ${category} <button onclick="removeFilter('category')">×</button></span>`;
-            if (minPrice > 0 || maxPrice < Infinity) html += `<span class="active-filter-tag">Price: Rs${minPrice} - Rs${maxPrice === Infinity ? '+' : maxPrice} <button onclick="removeFilter('price')">×</button></span>`;
-            if (sortBy !== 'default') html += `<span class="active-filter-tag">Sort: ${sortBy} <button onclick="removeFilter('sort')">×</button></span>`;
-            if (discount !== 'all') html += `<span class="active-filter-tag">Discount: ${discount === 'yes' ? 'On Sale' : 'Regular'} <button onclick="removeFilter('discount')">×</button></span>`;
-            container.innerHTML = html;
-        }
-
-        function removeFilter(type) {
-            switch (type) {
-                case 'tab':
-                    document.querySelector('.category-tab[data-target="all"]').click();
-                    break;
-                case 'category':
-                    document.getElementById('categoryFilter').value = 'all';
-                    applyFilters();
-                    break;
-                case 'price':
-                    document.getElementById('minPrice').value = '';
-                    document.getElementById('maxPrice').value = '';
-                    applyFilters();
-                    break;
-                case 'sort':
-                    document.getElementById('sortFilter').value = 'default';
-                    applyFilters();
-                    break;
-                case 'discount':
-                    document.getElementById('discountFilter').value = 'all';
-                    applyFilters();
-                    break;
+                sections.forEach((section) => observer.observe(section));
             }
-        }
 
-        // Tabs scroll logic
-        function updateTabArrows() {
-            const scroller = document.getElementById('tabsScroller');
-            const left = document.querySelector('.tabs__arrow--left');
-            const right = document.querySelector('.tabs__arrow--right');
-            if (!scroller) return;
-            const maxScroll = scroller.scrollWidth - scroller.clientWidth - 1;
-            left.disabled = scroller.scrollLeft <= 0;
-            right.disabled = scroller.scrollLeft >= maxScroll;
-        }
-        function scrollTabs(amount) {
-            const scroller = document.getElementById('tabsScroller');
-            if (scroller) {
-                scroller.scrollBy({ left: amount, behavior: 'smooth' });
-                setTimeout(updateTabArrows, 300);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Initial counts
-            const total = document.querySelectorAll('#catalogGrid .cloth-item').length;
-            document.getElementById('resultsCount').textContent = total + ' products';
-            // Scroll events
-            const scroller = document.getElementById('tabsScroller');
-            if (scroller) {
-                scroller.addEventListener('scroll', updateTabArrows, { passive: true });
-                scroller.addEventListener('wheel', function (e) {
-                    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-                        scroller.scrollLeft += e.deltaY;
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-            }
-            updateTabArrows();
-        });
+            updateVisibleCount();
+        })();
     </script>
 </body>
 </html>

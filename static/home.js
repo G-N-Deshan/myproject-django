@@ -1,273 +1,259 @@
-/**
- * WHY: Countdown timer for hot offers
- * Shows remaining time for each offer
- */
-function initOfferTimers() {
-    const timers = document.querySelectorAll('.offer-timer');
-    
-    timers.forEach(timer => {
-        const countdown = timer.querySelector('.countdown');
-        if (!countdown) return;
-        
-        // Get end time from data attribute
-        let endTime;
-        if (timer.dataset.endTime) {
-            endTime = new Date(timer.dataset.endTime).getTime();
-        } else {
-            // Default: 24 hours from now
-            endTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+/* ═══════════════════════════════════════════
+   G11 HOME PAGE — HOME.JS
+   All interactive features for the redesigned home page
+   ═══════════════════════════════════════════ */
+
+(function () {
+    'use strict';
+
+    /* ── 1. Canvas Particle System (Hero) ── */
+    function initParticles() {
+        const canvas = document.getElementById('heroParticles');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let W, H, particles = [], raf;
+
+        function resize() {
+            W = canvas.width = canvas.offsetWidth;
+            H = canvas.height = canvas.offsetHeight;
         }
-        
-        // Check if end time is valid
-        if (isNaN(endTime)) {
-            console.error('Invalid end time:', timer.dataset.endTime);
-            countdown.textContent = '24h 00m 00s';
-            endTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+        resize();
+        window.addEventListener('resize', resize);
+
+        function Particle() {
+            this.x = Math.random() * W;
+            this.y = Math.random() * H;
+            this.r = Math.random() * 2 + 0.5;
+            this.dx = (Math.random() - 0.5) * 0.4;
+            this.dy = (Math.random() - 0.5) * 0.4;
+            this.alpha = Math.random() * 0.5 + 0.2;
         }
-        
-        // Update countdown every second
-        const interval = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = endTime - now;
-            
-            if (distance < 0) {
-                countdown.textContent = 'EXPIRED';
-                clearInterval(interval);
-                timer.style.background = '#fecaca';
-                timer.style.borderColor = '#fca5a5';
-                return;
+
+        for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            particles.forEach(p => {
+                p.x += p.dx;
+                p.y += p.dy;
+                if (p.x < 0 || p.x > W) p.dx *= -1;
+                if (p.y < 0 || p.y > H) p.dy *= -1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(165,180,252,' + p.alpha + ')';
+                ctx.fill();
+            });
+
+            // Draw connecting lines between nearby particles
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = 'rgba(165,180,252,' + (0.15 * (1 - dist / 120)) + ')';
+                        ctx.stroke();
+                    }
+                }
             }
-            
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            // Format with leading zeros
-            const formatTime = (num) => String(num).padStart(2, '0');
-            
-            countdown.textContent = `${formatTime(days)}d ${formatTime(hours)}h ${formatTime(minutes)}m ${formatTime(seconds)}s`;
-        }, 1000);
-    });
-}
-
-/**
- * WHY: Smooth horizontal scrolling for arrivals slider
- * Better UX than default scroll
- */
-function initArrivalsSlider() {
-    const track = document.querySelector('.arrivals-track');
-    const prevBtn = document.querySelector('.prev-btn');
-    const nextBtn = document.querySelector('.next-btn');
-    
-    if (!track || !prevBtn || !nextBtn) {
-        console.log('Slider elements not found');
-        return;
-    }
-    
-    const scrollAmount = 360; // card width + gap
-    
-    prevBtn.addEventListener('click', () => {
-        track.scrollBy({
-            left: -scrollAmount,
-            behavior: 'smooth'
-        });
-    });
-    
-    nextBtn.addEventListener('click', () => {
-        track.scrollBy({
-            left: scrollAmount,
-            behavior: 'smooth'
-        });
-    });
-    
-    // Update button states based on scroll position
-    function updateButtons() {
-        const maxScroll = track.scrollWidth - track.clientWidth;
-        
-        if (track.scrollLeft <= 0) {
-            prevBtn.style.opacity = '0.3';
-            prevBtn.style.pointerEvents = 'none';
-        } else {
-            prevBtn.style.opacity = '1';
-            prevBtn.style.pointerEvents = 'auto';
+            raf = requestAnimationFrame(draw);
         }
-        
-        if (track.scrollLeft >= maxScroll - 5) {
-            nextBtn.style.opacity = '0.3';
-            nextBtn.style.pointerEvents = 'none';
-        } else {
-            nextBtn.style.opacity = '1';
-            nextBtn.style.pointerEvents = 'auto';
-        }
-    }
-    
-    track.addEventListener('scroll', updateButtons);
-    updateButtons();
-}
 
-/**
- * WHY: Wishlist heart button toggle
- * Gives instant feedback when adding to wishlist
- */
-function initWishlistButtons() {
-    const wishlistBtns = document.querySelectorAll('.wishlist-btn');
-    
-    wishlistBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            btn.classList.toggle('active');
-            
-            const heart = btn.querySelector('.heart-icon');
-            if (btn.classList.contains('active')) {
-                heart.textContent = '♥';
-                showToast('Added to wishlist ❤️');
-            } else {
-                heart.textContent = '♡';
-                showToast('Removed from wishlist');
+        // Only animate when hero is visible
+        const heroObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) { if (!raf) draw(); }
+                else { cancelAnimationFrame(raf); raf = null; }
+            });
+        }, { threshold: 0.1 });
+        heroObs.observe(canvas.parentElement);
+    }
+
+    /* ── 2. Hero Background Parallax ── */
+    function initHeroParallax() {
+        const bg = document.getElementById('heroBg');
+        if (!bg) return;
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const y = window.scrollY;
+                    if (y < window.innerHeight) {
+                        bg.style.transform = 'scale(1.1) translateY(' + (y * 0.25) + 'px)';
+                    }
+                    ticking = false;
+                });
+                ticking = true;
             }
         });
-    });
-}
+    }
 
-/**
- * WHY: Simple toast notification
- * Shows user feedback for actions
- */
-function showToast(message) {
-    const existing = document.querySelector('.toast-notification');
-    if (existing) existing.remove();
-    
-    const toast = document.createElement('div');
-    toast.className = 'toast-notification';
-    toast.textContent = message;
-    toast.style.cssText = `
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        background: rgba(15, 23, 42, 0.95);
-        color: #fff;
-        padding: 1rem 1.5rem;
-        border-radius: 10px;
-        font-weight: 600;
-        z-index: 9999;
-        animation: slideIn 0.3s ease;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    `;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => toast.remove(), 300);
-    }, 2500);
-}
+    /* ── 3. 3D Tilt Effect on Cards ── */
+    function initTiltCards() {
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            const inner = card.querySelector('.card-inner');
+            if (!inner) return;
 
-/**
- * WHY: Card click handler for navigation
- * Makes cards clickable to go to specific pages
- */
-function setupCardClickHandlers() {
-    const cards = document.querySelectorAll('.feature-card');
-    
-    cards.forEach(card => {
-        const cardName = (card.querySelector('h2')?.textContent || '').toLowerCase();
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const cx = rect.width / 2;
+                const cy = rect.height / 2;
+                const rotateX = ((y - cy) / cy) * -6;
+                const rotateY = ((x - cx) / cx) * 6;
+                inner.style.transform = 'rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
+                inner.style.boxShadow = '0 20px 50px rgba(0,0,0,0.15)';
+            });
 
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', function (e) {
-            if (e.target.closest('button, a')) return;
-
-            if (cardName.includes('cloth') || cardName.includes('fashion')) {
-                window.location.href = '/cloths/';
-            } else if (cardName.includes('toy')) {
-                window.location.href = '/toys/';
-            } else {
-                window.location.href = '/buy/';
-            }
+            card.addEventListener('mouseleave', () => {
+                inner.style.transform = 'rotateX(0) rotateY(0)';
+                inner.style.boxShadow = '';
+            });
         });
+    }
+
+    /* ── 4. Animated Number Counters ── */
+    function initCounters() {
+        const counters = document.querySelectorAll('.counter[data-target]');
+        if (!counters.length) return;
+
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const el = entry.target;
+                obs.unobserve(el);
+
+                const target = parseFloat(el.dataset.target);
+                const suffix = el.dataset.suffix || '';
+                const decimals = parseInt(el.dataset.decimals) || 0;
+                const duration = 2000;
+                const start = performance.now();
+
+                function step(now) {
+                    const elapsed = now - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    // Ease-out cubic
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    const current = target * ease;
+                    el.textContent = current.toFixed(decimals) + (progress >= 1 ? suffix : '');
+                    if (progress < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            });
+        }, { threshold: 0.5 });
+
+        counters.forEach(c => obs.observe(c));
+    }
+
+    /* ── 5. Magnetic Button Effect ── */
+    function initMagneticButtons() {
+        document.querySelectorAll('.mag-btn').forEach(btn => {
+            btn.addEventListener('mousemove', e => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = 'translate(' + (x * 0.15) + 'px,' + (y * 0.15) + 'px)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = '';
+            });
+        });
+    }
+
+    /* ── 6. Scroll Reveal (IntersectionObserver) ── */
+    function initScrollReveal() {
+        const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+        if (!revealEls.length) return;
+
+        // Immediately reveal anything already in or near the viewport
+        function revealIfVisible(el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight + 50 && rect.bottom > -50) {
+                el.classList.add('visible');
+                return true;
+            }
+            return false;
+        }
+
+        const pending = [];
+        revealEls.forEach(el => {
+            if (!revealIfVisible(el)) pending.push(el);
+        });
+
+        // Observe remaining elements
+        if (pending.length) {
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.01, rootMargin: '0px 0px 150px 0px' });
+
+            pending.forEach(el => obs.observe(el));
+        }
+
+        // Also re-check on scroll for any stragglers
+        let scrollTimer;
+        function onScroll() {
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => {
+                document.querySelectorAll('.reveal:not(.visible), .reveal-stagger:not(.visible)').forEach(revealIfVisible);
+            }, 100);
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        // Final safety net: reveal everything after 3 seconds
+        setTimeout(() => {
+            document.querySelectorAll('.reveal:not(.visible), .reveal-stagger:not(.visible)').forEach(el => {
+                el.classList.add('visible');
+            });
+            window.removeEventListener('scroll', onScroll);
+        }, 3000);
+    }
+
+    /* ── 7. Feature Card Click Navigation ── */
+    function initFeatureNav() {
+        document.querySelectorAll('#features .tilt-card').forEach(card => {
+            const inner = card.querySelector('.card-inner');
+            if (!inner) return;
+            const text = (inner.querySelector('h3')?.textContent || '').toLowerCase();
+            inner.style.cursor = 'pointer';
+            inner.addEventListener('click', e => {
+                if (e.target.closest('a, button')) return;
+                if (text.includes('cloth') || text.includes('fashion'))
+                    window.location.href = '/cloths/';
+                else if (text.includes('toy'))
+                    window.location.href = '/toys/';
+                else
+                    window.location.href = '/buy/';
+            });
+        });
+    }
+
+    /* ── 8. Auto-dismiss messages ── */
+    function initMessages() {
+        const box = document.getElementById('msgBox');
+        if (box) setTimeout(() => { box.style.display = 'none'; }, 5000);
+    }
+
+    /* ── Boot ── */
+    document.addEventListener('DOMContentLoaded', () => {
+        initParticles();
+        initHeroParallax();
+        initTiltCards();
+        initCounters();
+        initMagneticButtons();
+        initScrollReveal();
+        initFeatureNav();
+        initMessages();
     });
-}
-
-// Add animations
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from { transform: translateX(400px); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(400px); opacity: 0; }
-    }
-`;
-document.head.appendChild(style);
-
-/**
- * Initialize all features on page load
- */
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Initializing home page features...');
-    initOfferTimers();
-    initArrivalsSlider();
-    initWishlistButtons();
-    setupCardClickHandlers();
-    // bindHomeAddToCart(); // handled globally by cart_utils.js
-    console.log('✅ All home page features initialized!');
-});
-
-// function getCookie(name) {
-//     let cookieValue = null;
-//     if (document.cookie && document.cookie !== '') {
-//         const cookies = document.cookie.split(';');
-//         for (let i = 0; i < cookies.length; i++) {
-//             const cookie = cookies[i].trim();
-//             if (cookie.substring(0, name.length + 1) === (name + '=')) {
-//                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-//                 break;
-//             }
-//         }
-//     }
-//     return cookieValue;
-// }
-
-// function updateCartCountInUI(count) {
-//     document.querySelectorAll('.cart-count, .cart-badge, [data-cart-count]').forEach(el => {
-//         el.textContent = count;
-//     });
-// }
-
-// function bindHomeAddToCart() {
-//     const buttons = document.querySelectorAll('.add-to-cart-btn, .shop-now-btn, [data-add-to-cart]');
-//     buttons.forEach(btn => {
-//         btn.addEventListener('click', async (e) => {
-//             const itemType = btn.dataset.itemType;
-//             const itemId = btn.dataset.itemId;
-
-//             // If data attrs are missing, allow normal link/form behavior.
-//             if (!itemType || !itemId) return;
-
-//             e.preventDefault();
-//             e.stopPropagation();
-
-//             try {
-//                 const res = await fetch(`/cart/add/${itemType}/${itemId}/`, {
-//                     method: 'POST',
-//                     headers: {
-//                         'X-CSRFToken': getCookie('csrftoken'),
-//                         'X-Requested-With': 'XMLHttpRequest',
-//                         'Content-Type': 'application/json'
-//                     }
-//                 });
-//                 const data = await res.json();
-
-//                 if (data.success) {
-//                     updateCartCountInUI(data.cart_count);
-//                     showToast(data.message || 'Added to cart');
-//                 } else {
-//                     showToast(data.error || 'Could not add to cart');
-//                 }
+})();
 //             } catch (err) {
 //                 showToast('Could not add to cart');
 //             }

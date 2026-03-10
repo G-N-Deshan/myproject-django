@@ -56,8 +56,11 @@
             {%for offers in kids_offers%}
             <article class="offer-card">
                 <span class="offer-badge">{{offers.offers_badge}}</span>
-                <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}">
-                <h3>{{offers.title}}</h3>
+                <div class="offer-img-wrap">
+                    <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}">
+                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span>Quick View</span></a>
+                </div>
+                <h3><a href="{% url 'product_detail' 'offer' offers.id %}" style="color:inherit;text-decoration:none">{{offers.title}}</a></h3>
                 <p>{{offers.description}}</p>
                 <div class="offer-meta">
                     {% if offers.price1 %}
@@ -327,8 +330,11 @@
               {%for offers in men_offers%}
             <article class="offer-card">
                 <span class="offer-badge">{{offers.offers_badge}}</span>
-                <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}">
-                <h3>{{offers.title}}</h3>
+                <div class="offer-img-wrap">
+                    <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}">
+                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span>Quick View</span></a>
+                </div>
+                <h3><a href="{% url 'product_detail' 'offer' offers.id %}" style="color:inherit;text-decoration:none">{{offers.title}}</a></h3>
                 <p>{{offers.description}}</p>
                 <div class="offer-meta">
                     {% if offers.price1 %}
@@ -482,8 +488,11 @@
              {%for offers in women_offers%}
             <article class="offer-card">
                 <span class="offer-badge">{{offers.offers_badge}}</span>
-                <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}">
-                <h3>{{offers.title}}</h3>
+                <div class="offer-img-wrap">
+                    <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}">
+                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span>Quick View</span></a>
+                </div>
+                <h3><a href="{% url 'product_detail' 'offer' offers.id %}" style="color:inherit;text-decoration:none">{{offers.title}}</a></h3>
                 <p>{{offers.description}}</p>
                 <div class="offer-meta">
                     {% if offers.price1 %}
