@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{%static 'footer.css'%}">
     <link rel="stylesheet" href="{%static 'index.css'%}">
+    <link rel="stylesheet" href="{%static 'scroll-reveal.css'%}">
 
     <script>
         tailwind.config = {
@@ -126,7 +127,7 @@
     <!-- ╔══════════════════════════════════════╗
          ║        WELCOME / GREETING            ║
          ╚══════════════════════════════════════╝ -->
-    <section class="py-14 bg-white relative">
+    <section class="py-14 bg-white relative" data-reveal>
         <div class="container mx-auto px-6">
             <div class="max-w-3xl mx-auto text-center reveal">
                 {% if user.is_authenticated %}
@@ -146,7 +147,7 @@
     <!-- ╔══════════════════════════════════════╗
          ║          HOT  DEALS                  ║
          ╚══════════════════════════════════════╝ -->
-    <section class="py-14 bg-gradient-to-b from-slate-50 to-white" id="hotDeals">
+    <section class="py-14 bg-gradient-to-b from-slate-50 to-white" id="hotDeals" data-reveal>
         <div class="container mx-auto px-6">
             <div class="text-center mb-10 reveal">
                 <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-red-50 text-red-600 font-semibold rounded-full text-sm mb-5">
@@ -209,7 +210,7 @@
     <!-- ╔══════════════════════════════════════╗
          ║        NEW  ARRIVALS                 ║
          ╚══════════════════════════════════════╝ -->
-    <section class="py-14 bg-white" id="newArrivals">
+    <section class="py-14 bg-white" id="newArrivals" data-reveal>
         <div class="container mx-auto px-6">
             <div class="text-center mb-10 reveal">
                 <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 font-semibold rounded-full text-sm mb-5">
@@ -262,7 +263,7 @@
     <!-- ╔══════════════════════════════════════╗
          ║          WISHLIST SECTION            ║
          ╚══════════════════════════════════════╝ -->
-    <section class="py-14 bg-gradient-to-b from-slate-50 to-white" id="wishlistSection">
+    <section class="py-14 bg-gradient-to-b from-slate-50 to-white" id="wishlistSection" data-reveal>
         <div class="container mx-auto px-6">
             <div class="text-center mb-10 reveal">
                 <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-pink-50 text-pink-600 font-semibold rounded-full text-sm mb-5">
@@ -358,7 +359,7 @@
     <!-- ╔══════════════════════════════════════╗
          ║        WHY CHOOSE US                 ║
          ╚══════════════════════════════════════╝ -->
-    <section class="py-14 bg-white relative overflow-hidden" id="features">
+    <section class="py-14 bg-white relative overflow-hidden" id="features" data-reveal>
         <!-- Subtle background pattern -->
         <div class="absolute inset-0 opacity-[0.03]" style="background-image:url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0%200h60v60H0z%22%20fill%3D%22none%22%2F%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221.5%22%20fill%3D%22%236366f1%22%2F%3E%3C%2Fsvg%3E');"></div>
 
@@ -505,7 +506,7 @@
     <!-- ╔══════════════════════════════════════╗
          ║            CTA SECTION               ║
          ╚══════════════════════════════════════╝ -->
-    <section class="py-14 relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500" id="cta">
+    <section class="py-14 relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500" id="cta" data-reveal="scale">
         <!-- Moving grid -->
         <div class="absolute inset-0 opacity-10" style="background-image:url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0%200h60v60H0z%22%20fill%3D%22none%22%2F%3E%3Cpath%20d%3D%22M0%2060V0h60%22%20stroke%3D%22%23fff%22%20stroke-width%3D%220.5%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E');"></div>
         <!-- Glow orbs -->
@@ -600,5 +601,6 @@
 
     <script src="{% static 'cart_utils.js' %}"></script>
     <script src="{% static 'home.js' %}"></script>
+    <script src="{%static 'scroll-reveal.js'%}"></script>
 </body>
 </html>

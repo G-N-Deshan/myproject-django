@@ -1,18 +1,26 @@
-from urllib import request
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from .models import Card, Offers, NewArrivals, Cloths, Review, ContactMessage, Toy, WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview
+from .models import (Card, Offers, NewArrivals, Cloths, Review, ContactMessage, Toy,
+                     WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
+                     ProductImage, Inventory, Coupon, ProductVariant, OrderTracking)
 from .forms import ReviewForm, ContactForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
 import json
 from decimal import Decimal
 import uuid
 import re
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
+from django.db.models import Q, Avg, Count, Sum as models_sum, F
+from django.core.mail import send_mail
+from django.conf import settings as django_settings
+from django.template.loader import render_to_string
 
 
 # Helper function for cart management
@@ -186,6 +194,8 @@ def user_login(request):
                 pass
             
             next_url = request.POST.get('next', 'index')
+            if not url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
+                next_url = 'index'
             return redirect(next_url)
         else:
             messages.error(request, 'Invalid username or password')
@@ -216,6 +226,14 @@ def user_signup(request):
             messages.error(request, 'Email already registered')
             return render(request, 'signup.html')
         
+        # Validate password strength
+        try:
+            validate_password(password, user=User(username=username, email=email))
+        except ValidationError as e:
+            for error in e.messages:
+                messages.error(request, error)
+            return render(request, 'signup.html')
+        
         user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
         
@@ -226,6 +244,7 @@ def user_signup(request):
     return render(request, 'signup.html')
 
 
+@require_POST
 def user_logout(request):
     auth_logout(request)
     messages.success(request, 'You have been logged out successfully')
@@ -382,6 +401,27 @@ def product_detail(request, product_type, product_id):
     safety_info = getattr(product, 'safety_info', '') or ''
     dimensions = getattr(product, 'dimensions', '') or ''
 
+    # ── Gallery images ──
+    gallery_images = ProductImage.objects.filter(product_type=product_type, **{fk_field: product})
+
+    # ── Product variants (cloth only) ──
+    variants = []
+    if product_type == 'cloth':
+        variants = list(product.variants.all())
+
+    # ── Inventory status ──
+    inventory = None
+    try:
+        inventory = product.inventory
+    except Exception:
+        pass
+
+    # ── Ratings summary ──
+    rating_summary = reviews.aggregate(avg=Avg('rating'), count=Count('id'))
+    avg_rating = round(rating_summary['avg'], 1) if rating_summary['avg'] else 0
+    review_count = rating_summary['count']
+    rating_dist = {i: reviews.filter(rating=i).count() for i in range(5, 0, -1)}
+
     return render(request, 'product_detail.html', {
         'product': product,
         'product_type': product_type,
@@ -405,6 +445,9 @@ def product_detail(request, product_type, product_id):
         'sizes_available': sizes_available,
         'safety_info': safety_info,
         'dimensions': dimensions,
+        'gallery_images': gallery_images,
+        'variants': variants,
+        'inventory': inventory,
     })
 
 
@@ -480,6 +523,10 @@ def kids_cloths(request):
     kids_girls_cloths = [item for item in all_filtered_items if item.category == 'kids-girl']
     kids_cloths = [item for item in all_filtered_items if item.category == 'kids-men']
 
+    # Pagination
+    paginator = Paginator(all_filtered_items, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     cart_count = 0
     try:
         cart_count = get_or_create_cart(request).get_item_count()
@@ -493,7 +540,7 @@ def kids_cloths(request):
     return render(request, 'kids_cloths.html', {
         'kids_cloths': kids_cloths,
         'kids_girls_cloths': kids_girls_cloths,
-        'all_kids_cloths': all_filtered_items,
+        'all_kids_cloths': page_obj,
         'selected_gender': gender,
         'selected_subcategory': subcategory,
         'selected_sort': sort,
@@ -578,6 +625,7 @@ def women_cloths(request):
         'selected_max_price': request.GET.get('max_price', ''),
         'search_query': search,
         'cart_count': cart_count,
+        'is_paginated': len(products) > 12,
     })
 
 
@@ -733,12 +781,17 @@ def toys_page(request):
     featured_toys = Toy.objects.filter(is_bestseller=True)[:4]
     new_toys = Toy.objects.filter(is_new=True)[:4]
     
+    # Pagination
+    paginator = Paginator(toys, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     context = {
-        'toys': toys,
+        'toys': page_obj,
         'featured_toys': featured_toys,
         'new_toys': new_toys,
         'selected_category': category,
         'selected_age': age_range,
+        'is_paginated': paginator.num_pages > 1,
     }
     
     return render(request, 'toys.html', context)
@@ -766,8 +819,8 @@ def cart_page(request):
         'cart_items': items_data,
         'cart_count': cart.get_item_count(),
         'subtotal': cart.get_total(),
-        'tax': cart.get_total() * Decimal('0.1'),
-        'total': cart.get_total() * Decimal('1.1'),
+        'tax': float(cart.get_total()) * 0.1,
+        'total': float(cart.get_total()) * 1.1,
     }
     
     return render(request, 'cart.html', context)
@@ -840,8 +893,8 @@ def add_to_cart(request, item_type, item_id):
 
     except Exception as e:
         if request.method == 'POST' or _wants_json(request):
-            return JsonResponse({'success': False, 'error': str(e)}, status=500)
-        messages.error(request, f'Error: {str(e)}')
+            return JsonResponse({'success': False, 'error': 'Something went wrong. Please try again.'}, status=500)
+        messages.error(request, 'Something went wrong. Please try again.')
         return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 
@@ -1120,7 +1173,6 @@ def checkout(request):
         return redirect('cart_details')
     
     if request.method == 'POST':
-        # Validate required fields
         full_name = request.POST.get('full_name', '').strip()
         email = request.POST.get('email', '').strip()
         phone = request.POST.get('phone', '').strip()
@@ -1129,27 +1181,53 @@ def checkout(request):
         postal_code = request.POST.get('postal_code', '').strip()
         country = request.POST.get('country', '').strip()
         payment_method = request.POST.get('payment_method', 'cash_on_delivery')
+        coupon_code = request.POST.get('coupon_code', '').strip()
         
-        # Check all required fields are filled
         if not all([full_name, email, phone, address, city, postal_code, country]):
             messages.error(request, 'Please fill in all required fields')
+            subtotal = Decimal(str(cart.get_total()))
             return render(request, 'checkout.html', {
                 'cart': cart,
                 'cart_items': cart.items.all(),
-                'subtotal': float(Decimal(str(cart.get_total()))),
-                'tax': float(Decimal(str(cart.get_total())) * Decimal('0.10')),
+                'subtotal': float(subtotal),
+                'tax': float(subtotal * Decimal('0.10')),
                 'shipping': 10.00,
-                'total': float(Decimal(str(cart.get_total())) * Decimal('1.10') + Decimal('10.00'))
+                'total': float(subtotal * Decimal('1.10') + Decimal('10.00'))
             })
         
         try:
-            # Create order
+            # Inventory check
+            for cart_item in cart.items.all():
+                item = cart_item.get_item()
+                if item and hasattr(item, 'inventory'):
+                    inv = item.inventory
+                    if inv.stock < cart_item.quantity:
+                        item_name = getattr(item, 'name', None) or getattr(item, 'title', 'Item')
+                        messages.error(request, f'"{item_name}" only has {inv.stock} in stock.')
+                        return redirect('cart_details')
+
             order_number = f"ORD-{uuid.uuid4().hex[:8].upper()}"
-            
             subtotal = Decimal(str(cart.get_total()))
-            tax = subtotal * Decimal('0.10')
+            
+            # Apply coupon
+            discount = Decimal('0')
+            applied_coupon = ''
+            if coupon_code:
+                try:
+                    coupon = Coupon.objects.get(code__iexact=coupon_code)
+                    if coupon.is_valid() and subtotal >= coupon.min_order_amount:
+                        discount = Decimal(str(coupon.get_discount(subtotal)))
+                        applied_coupon = coupon.code
+                        coupon.used_count += 1
+                        coupon.save()
+                    else:
+                        messages.warning(request, 'Coupon is invalid or does not meet minimum order.')
+                except Coupon.DoesNotExist:
+                    messages.warning(request, 'Invalid coupon code.')
+            
+            tax = (subtotal - discount) * Decimal('0.10')
             shipping = Decimal('10.00')
-            total = subtotal + tax + shipping
+            total = subtotal - discount + tax + shipping
             
             order = Order.objects.create(
                 user=request.user,
@@ -1164,11 +1242,13 @@ def checkout(request):
                 subtotal=subtotal,
                 tax=tax,
                 shipping=shipping,
+                discount=discount,
+                coupon_code=applied_coupon,
                 total=total,
                 payment_method=payment_method
             )
             
-            # Create order items
+            # Create order items and reduce inventory
             for cart_item in cart.items.all():
                 item = cart_item.get_item()
                 item_name = item.name if hasattr(item, 'name') else item.title
@@ -1180,25 +1260,44 @@ def checkout(request):
                     price=Decimal(str(cart_item.get_price())),
                     subtotal=Decimal(str(cart_item.get_subtotal()))
                 )
+                # Reduce inventory
+                if item and hasattr(item, 'inventory'):
+                    inv = item.inventory
+                    inv.stock = max(0, inv.stock - cart_item.quantity)
+                    inv.save()
             
-            # Clear cart
+            # Create initial tracking entry
+            OrderTracking.objects.create(order=order, status='pending', note='Order placed successfully.')
+            
+            # Send order confirmation email
+            try:
+                send_mail(
+                    subject=f'Order Confirmed — {order_number}',
+                    message=f'Hi {full_name},\n\nYour order {order_number} has been placed successfully.\nTotal: Rs. {total:.2f}\n\nThank you for shopping with KidZone!',
+                    from_email=django_settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[email],
+                    fail_silently=True,
+                )
+            except Exception:
+                pass
+            
             cart.items.all().delete()
             
             messages.success(request, f'Order {order_number} placed successfully!')
             return redirect('order_success', order_number=order_number)
         
         except Exception as e:
-            messages.error(request, f'Error creating order: {str(e)}')
+            messages.error(request, 'Something went wrong placing your order. Please try again.')
+            subtotal = Decimal(str(cart.get_total()))
             return render(request, 'checkout.html', {
                 'cart': cart,
                 'cart_items': cart.items.all(),
-                'subtotal': float(Decimal(str(cart.get_total()))),
-                'tax': float(Decimal(str(cart.get_total())) * Decimal('0.10')),
+                'subtotal': float(subtotal),
+                'tax': float(subtotal * Decimal('0.10')),
                 'shipping': 10.00,
-                'total': float(Decimal(str(cart.get_total())) * Decimal('1.10') + Decimal('10.00'))
+                'total': float(subtotal * Decimal('1.10') + Decimal('10.00'))
             })
     
-    # GET request - show checkout form
     subtotal = Decimal(str(cart.get_total()))
     tax = subtotal * Decimal('0.10')
     shipping = Decimal('10.00')
@@ -1210,7 +1309,8 @@ def checkout(request):
         'subtotal': float(subtotal),
         'tax': float(tax),
         'shipping': float(shipping),
-        'total': float(total)
+        'total': float(total),
+        'coupons_available': Coupon.objects.filter(is_active=True).exists(),
     }
     
     return render(request, 'checkout.html', context)
@@ -1278,8 +1378,10 @@ def change_password(request):
                 return JsonResponse({'success': False, 'error': 'New passwords do not match'}, status=400)
             
             # Check password length
-            if len(new_password) < 6:
-                return JsonResponse({'success': False, 'error': 'Password must be at least 6 characters'}, status=400)
+            try:
+                validate_password(new_password, user=user)
+            except ValidationError as e:
+                return JsonResponse({'success': False, 'error': ' '.join(e.messages)}, status=400)
             
             # Set new password
             user.set_password(new_password)
@@ -1354,3 +1456,229 @@ def update_email(request):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
+
+
+# ══════════════════════════════════════════════════════
+# SEARCH FUNCTIONALITY
+# ══════════════════════════════════════════════════════
+
+def search(request):
+    query = request.GET.get('q', '').strip()
+    results = []
+
+    if query:
+        cloths = Cloths.objects.filter(
+            Q(name__icontains=query) | Q(desccription__icontains=query)
+        )
+        toys = Toy.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+        offers = Offers.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+        arrivals = NewArrivals.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+
+        for item in cloths:
+            avg = item.product_reviews.aggregate(avg=Avg('rating'))['avg']
+            results.append({
+                'name': item.name,
+                'price': item.price2 or item.price or item.price1,
+                'image': item.imageUrl.url if item.imageUrl else '',
+                'url': f'/product/cloth/{item.id}/',
+                'type': 'Clothing',
+                'rating': round(avg, 1) if avg else None,
+            })
+        for item in toys:
+            avg = item.product_reviews.aggregate(avg=Avg('rating'))['avg']
+            results.append({
+                'name': item.name,
+                'price': str(item.price),
+                'image': item.imageUrl.url if item.imageUrl else '',
+                'url': f'/product/toy/{item.id}/',
+                'type': 'Toy',
+                'rating': round(avg, 1) if avg else None,
+            })
+        for item in offers:
+            avg = item.product_reviews.aggregate(avg=Avg('rating'))['avg']
+            results.append({
+                'name': item.title,
+                'price': item.price1,
+                'image': item.imageUrl.url if item.imageUrl else '',
+                'url': f'/product/offer/{item.id}/',
+                'type': 'Offer',
+                'rating': round(avg, 1) if avg else None,
+            })
+        for item in arrivals:
+            avg = item.product_reviews.aggregate(avg=Avg('rating'))['avg']
+            results.append({
+                'name': item.title,
+                'price': item.price,
+                'image': item.imageUrl.url if item.imageUrl else '',
+                'url': f'/product/arrival/{item.id}/',
+                'type': 'New Arrival',
+                'rating': round(avg, 1) if avg else None,
+            })
+
+    paginator = Paginator(results, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        data = list(page_obj.object_list)
+        return JsonResponse({'results': data, 'has_next': page_obj.has_next(), 'total': paginator.count})
+
+    return render(request, 'search_results.html', {
+        'query': query,
+        'results': page_obj,
+        'total': paginator.count,
+    })
+
+
+# ══════════════════════════════════════════════════════
+# ORDER TRACKING
+# ══════════════════════════════════════════════════════
+
+@login_required(login_url='login')
+def order_tracking(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number, user=request.user)
+    tracking_updates = order.tracking_updates.all()
+
+    status_steps = ['pending', 'processing', 'shipped', 'delivered']
+    current_index = status_steps.index(order.status) if order.status in status_steps else -1
+
+    return render(request, 'order_tracking.html', {
+        'order': order,
+        'tracking_updates': tracking_updates,
+        'status_steps': status_steps,
+        'current_index': current_index,
+    })
+
+
+@login_required(login_url='login')
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user)
+    paginator = Paginator(orders, 10)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    return render(request, 'my_orders.html', {'orders': page_obj})
+
+
+# ══════════════════════════════════════════════════════
+# COUPON VALIDATION (AJAX)
+# ══════════════════════════════════════════════════════
+
+def validate_coupon(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            code = data.get('code', '').strip()
+            subtotal = Decimal(str(data.get('subtotal', 0)))
+
+            coupon = Coupon.objects.get(code__iexact=code)
+            if not coupon.is_valid():
+                return JsonResponse({'valid': False, 'error': 'This coupon has expired or is no longer active.'})
+            if subtotal < coupon.min_order_amount:
+                return JsonResponse({'valid': False, 'error': f'Minimum order amount is Rs. {coupon.min_order_amount}.'})
+
+            discount = coupon.get_discount(subtotal)
+            return JsonResponse({
+                'valid': True,
+                'discount': float(discount),
+                'type': coupon.discount_type,
+                'value': float(coupon.discount_value),
+            })
+        except Coupon.DoesNotExist:
+            return JsonResponse({'valid': False, 'error': 'Invalid coupon code.'})
+        except Exception:
+            return JsonResponse({'valid': False, 'error': 'Something went wrong.'})
+    return JsonResponse({'valid': False, 'error': 'Invalid request.'})
+
+
+# ══════════════════════════════════════════════════════
+# PRODUCT VARIANTS (AJAX)
+# ══════════════════════════════════════════════════════
+
+def get_product_variants(request, product_id):
+    variants = ProductVariant.objects.filter(cloth_id=product_id)
+    data = [{
+        'id': v.id,
+        'size': v.size,
+        'color': v.color,
+        'color_code': v.color_code,
+        'extra_price': float(v.extra_price),
+        'stock': v.stock,
+    } for v in variants]
+    return JsonResponse({'variants': data})
+
+
+# ══════════════════════════════════════════════════════
+# ADMIN DASHBOARD (Charts)
+# ══════════════════════════════════════════════════════
+
+@login_required(login_url='login')
+def admin_dashboard(request):
+    if not request.user.is_staff:
+        return redirect('index')
+
+    from django.db.models.functions import TruncMonth, TruncDate
+    from datetime import timedelta
+    from django.utils import timezone as tz
+
+    six_months_ago = tz.now() - timedelta(days=180)
+    monthly_revenue = list(
+        Order.objects.filter(created_at__gte=six_months_ago)
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(total=models_sum('total'), count=Count('id'))
+        .order_by('month')
+    )
+
+    status_counts = {
+        s['status']: s['count']
+        for s in Order.objects.values('status').annotate(count=Count('id'))
+    }
+
+    top_products = list(
+        OrderItem.objects.values('item_name')
+        .annotate(total_qty=models_sum('quantity'), total_revenue=models_sum('subtotal'))
+        .order_by('-total_qty')[:10]
+    )
+    for p in top_products:
+        if p.get('total_revenue') is not None:
+            p['total_revenue'] = float(p['total_revenue'])
+        if p.get('total_qty') is not None:
+            p['total_qty'] = int(p['total_qty'])
+
+    thirty_days_ago = tz.now() - timedelta(days=30)
+    daily_orders = list(
+        Order.objects.filter(created_at__gte=thirty_days_ago)
+        .annotate(date=TruncDate('created_at'))
+        .values('date')
+        .annotate(count=Count('id'), total=models_sum('total'))
+        .order_by('date')
+    )
+
+    low_stock = Inventory.objects.filter(stock__lte=F('low_stock_threshold'))
+
+    total_orders = Order.objects.count()
+    total_revenue = Order.objects.aggregate(total=models_sum('total'))['total'] or 0
+    total_users = User.objects.count()
+    pending_orders = Order.objects.filter(status='pending').count()
+
+    context = {
+        'monthly_labels': json.dumps([m['month'].strftime('%b %Y') for m in monthly_revenue]),
+        'monthly_revenue': json.dumps([float(m['total'] or 0) for m in monthly_revenue]),
+        'monthly_counts': json.dumps([m['count'] for m in monthly_revenue]),
+        'status_counts': json.dumps(status_counts),
+        'top_products_json': json.dumps(top_products),
+        'top_products': top_products,
+        'daily_labels': json.dumps([d['date'].strftime('%d %b') for d in daily_orders]),
+        'daily_totals': json.dumps([float(d['total'] or 0) for d in daily_orders]),
+        'daily_counts': json.dumps([d['count'] for d in daily_orders]),
+        'low_stock': low_stock,
+        'total_orders': total_orders,
+        'total_revenue': float(total_revenue),
+        'total_users': total_users,
+        'pending_orders': pending_orders,
+    }
+    return render(request, 'admin_dashboard.html', context)

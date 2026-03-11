@@ -2,7 +2,8 @@
 
 <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{% static 'footer.css'%}">
-   <link rel="stylesheet" href="{% static 'shop_offers.css'%}"> 
+   <link rel="stylesheet" href="{% static 'shop_offers.css'%}">
+   <link rel="stylesheet" href="{% static 'scroll-reveal.css'%}">
 <style>
     .na-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .na-s { position: absolute; opacity: .07; animation: naFloat 8s ease-in-out infinite; }
@@ -41,7 +42,7 @@
 
 <center><h1>New Arrivals Page</h1></center>
 
- <section class="arrivals">
+ <section class="arrivals" data-reveal="up">
         <div class="section-top">
             <div>
                 <p class="section-small">Just dropped</p>
@@ -147,7 +148,7 @@
 
 
 
-    <section class="arrivals">
+    <section class="arrivals" data-reveal="up">
         <div class="section-top">
             <div>
                 <p class="section-small">Just dropped</p>
@@ -260,7 +261,7 @@
 
 
 
-    <section class="arrivals">
+    <section class="arrivals" data-reveal="up">
         <div class="section-top">
             <div>
                 <p class="section-small">Just dropped</p>
@@ -371,3 +372,4 @@
 
 {% include 'footer.html'%}
 <script src="{% static 'cart_utils.js' %}"></script>
+<script src="{% static 'scroll-reveal.js'%}"></script>

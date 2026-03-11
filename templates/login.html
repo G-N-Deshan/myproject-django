@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'login.css' %}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
     <title>Login</title>
 </head>
 
@@ -36,7 +37,7 @@
     </div>
     {% endif %}
 
-<div class="login-section">
+<div class="login-section" data-reveal="scale">
         <form action="{% url 'login' %}" method="POST">
             {% csrf_token %}
             
@@ -56,6 +57,8 @@
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required placeholder="Enter your password">
+            <br>
+            <a href="{% url 'password_reset' %}" style="text-decoration:none;color:#6366f1;font-size:0.85rem">Forgot password?</a>
             <br><br>
 
             <button type="submit" name="login">Login</button>
@@ -70,6 +73,6 @@
         </form>
     </div>
 
-
+    <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>

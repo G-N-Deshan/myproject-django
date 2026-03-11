@@ -151,6 +151,7 @@
             75% { transform: translateY(-12px) rotate(3deg); }
         }
     </style>
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
 </head>
 <body class="bg-slate-50 min-h-screen">
 
@@ -184,7 +185,7 @@
     </nav>
 
     <!-- ════════ PRODUCT HERO ════════ -->
-    <section class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16" data-reveal="up">
 
         <!-- Image -->
         <div class="img-shell anim-slide-up" onclick="openZoom(this.querySelector('img').src)">
@@ -201,12 +202,24 @@
             <span class="absolute top-4 left-4 z-10 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.offers_badge }}</span>
             {% endif %}
             <img src="{{ product.imageUrl.url }}" alt="{{ product_name }}"
-                 class="w-full h-[480px] object-contain p-8">
+                 class="w-full h-[480px] object-contain p-8" id="mainProductImage">
             <div class="absolute bottom-4 right-4 bg-white/80 backdrop-blur rounded-lg px-3 py-1.5 text-xs text-slate-500 flex items-center gap-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
                 Click to zoom
             </div>
         </div>
+        {% if gallery_images %}
+        <div class="flex gap-2 mt-3 overflow-x-auto pb-2" style="grid-column:1">
+            <div class="w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 border-indigo-500 flex-shrink-0" onclick="switchImage('{{ product.imageUrl.url }}', this)">
+                <img src="{{ product.imageUrl.url }}" alt="Main" class="w-full h-full object-cover">
+            </div>
+            {% for gimg in gallery_images %}
+            <div class="w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 border-transparent hover:border-indigo-300 flex-shrink-0" onclick="switchImage('{{ gimg.image.url }}', this)">
+                <img src="{{ gimg.image.url }}" alt="{{ gimg.alt_text|default:product_name }}" class="w-full h-full object-cover">
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
         <!-- Info -->
         <div class="flex flex-col justify-between anim-slide-up-d1">
@@ -321,6 +334,55 @@
 
             <!-- Actions -->
             <div class="space-y-4 anim-slide-up-d2">
+                <!-- Inventory Status -->
+                {% if inventory %}
+                <div class="mb-2">
+                    {% if not inventory.is_in_stock %}
+                    <span class="inline-block bg-red-100 text-red-700 text-sm font-semibold px-3 py-1 rounded-full">Out of Stock</span>
+                    {% elif inventory.is_low_stock %}
+                    <span class="inline-block bg-amber-100 text-amber-700 text-sm font-semibold px-3 py-1 rounded-full">Only {{ inventory.stock }} left!</span>
+                    {% else %}
+                    <span class="inline-block bg-emerald-100 text-emerald-700 text-sm font-semibold px-3 py-1 rounded-full">In Stock</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Size / Color Variants -->
+                {% if variants %}
+                <div class="mb-4">
+                    {% with sizes=variants|dictsort:"size" %}
+                    {% if sizes.0.size %}
+                    <p class="text-sm font-medium text-slate-600 mb-2">Size</p>
+                    <div class="flex flex-wrap gap-2 mb-3" id="sizeOptions">
+                        {% for v in variants %}
+                        {% if v.size %}
+                        <button type="button" class="variant-size-btn px-3 py-1.5 border-2 border-slate-200 rounded-lg text-sm font-medium hover:border-indigo-500 hover:text-indigo-600 transition-all {% if v.stock == 0 %}opacity-40 cursor-not-allowed line-through{% endif %}"
+                                data-size="{{ v.size }}" data-extra="{{ v.extra_price }}" data-stock="{{ v.stock }}"
+                                onclick="selectVariant(this, 'size')">{{ v.size }}</button>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+
+                    {% with colors=variants|dictsort:"color" %}
+                    {% if colors.0.color %}
+                    <p class="text-sm font-medium text-slate-600 mb-2">Color</p>
+                    <div class="flex flex-wrap gap-2" id="colorOptions">
+                        {% for v in variants %}
+                        {% if v.color %}
+                        <button type="button" class="variant-color-btn w-8 h-8 rounded-full border-2 border-transparent hover:border-indigo-500 transition-all {% if v.stock == 0 %}opacity-40{% endif %}"
+                                style="background:{{ v.color_code|default:'#ccc' }}" title="{{ v.color }}"
+                                data-color="{{ v.color }}" data-extra="{{ v.extra_price }}" data-stock="{{ v.stock }}"
+                                onclick="selectVariant(this, 'color')"></button>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                {% endif %}
+
                 <!-- Quantity -->
                 <div class="flex items-center gap-4">
                     <span class="text-sm font-medium text-slate-600">Quantity</span>
@@ -601,7 +663,7 @@
 
     <!-- ════════ RELATED PRODUCTS ════════ -->
     {% if related_products %}
-    <section class="mb-16 reveal">
+    <section class="mb-16 reveal" data-reveal="up">
         <h2 class="font-['Playfair_Display'] text-2xl font-bold text-slate-900 mb-8">You Might Also Like</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             {% for rp in related_products %}
@@ -638,6 +700,20 @@ function openZoom(src) {
     const ov = document.getElementById('zoomOverlay');
     document.getElementById('zoomImg').src = src;
     ov.classList.add('active');
+}
+
+/* ── Gallery image switch ── */
+function switchImage(src, el) {
+    document.getElementById('mainProductImage').src = src;
+    el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('border-indigo-500'));
+    el.classList.add('border-indigo-500');
+}
+
+/* ── Variant selector ── */
+function selectVariant(btn, type) {
+    const group = type === 'size' ? '#sizeOptions' : '#colorOptions';
+    document.querySelectorAll(group + ' button').forEach(b => b.classList.remove('border-indigo-500', 'bg-indigo-50'));
+    btn.classList.add('border-indigo-500', 'bg-indigo-50');
 }
 
 /* ── Quantity ── */
@@ -706,5 +782,6 @@ if (window.location.hash === '#reviews-section') {
     setTimeout(() => document.getElementById('reviews-section').scrollIntoView({ behavior: 'smooth' }), 200);
 }
 </script>
+<script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>

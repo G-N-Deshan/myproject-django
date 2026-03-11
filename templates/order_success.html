@@ -160,6 +160,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -170,7 +171,7 @@
         <div class="os-s os-s--r"></div>
     </div>
     
-    <div class="success-container">
+    <div class="success-container" data-reveal="scale">
         <div class="success-icon">✓</div>
         <h1 class="success-title">Order Confirmed!</h1>
         <p class="success-message">Thank you for your purchase. Your order has been placed successfully.</p>
@@ -221,5 +222,6 @@
     </div>
     
     {% include 'footer.html' %}
+    <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>

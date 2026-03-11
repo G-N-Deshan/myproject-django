@@ -1,6 +1,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 import re
 
 class Card(models.Model):
@@ -215,7 +216,8 @@ class WishlistItem(models.Model):
         
     
     def __str__(self):
-        item_name = self.cloth.name if self.cloth else self.toy.name
+        item = self.get_item()
+        item_name = item.name if item else 'Unknown'
         return f"{self.user.username} - {item_name}"
     
     def get_item(self):
@@ -363,20 +365,20 @@ class Order(models.Model):
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
     tax = models.DecimalField(max_digits=10, decimal_places=2)
     shipping = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    coupon_code = models.CharField(max_length=30, blank=True, default='')
     total = models.DecimalField(max_digits=10, decimal_places=2)
     
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     payment_method = models.CharField(max_length=50, default='cash_on_delivery')
+    tracking_number = models.CharField(max_length=100, blank=True, default='')
+    estimated_delivery = models.DateField(blank=True, null=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return f"Order {self.order_number} - {self.user.username}"
-    
-    def get_status_display(self):
-        """Return human-readable status"""
-        return dict(self.STATUS_CHOICES).get(self.status, self.status)
     
     class Meta:
         ordering = ['-created_at']
@@ -422,4 +424,166 @@ class ProductReview(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.rating}/5"
+
+
+# ══════════════════════════════════════════════════════
+# PRODUCT IMAGE GALLERY
+# ══════════════════════════════════════════════════════
+
+class ProductImage(models.Model):
+    PRODUCT_TYPE_CHOICES = [
+        ('cloth', 'Cloth'),
+        ('toy', 'Toy'),
+        ('offer', 'Offer'),
+        ('arrival', 'Arrival'),
+    ]
+
+    product_type = models.CharField(max_length=10, choices=PRODUCT_TYPE_CHOICES)
+    cloth = models.ForeignKey('Cloths', on_delete=models.CASCADE, blank=True, null=True, related_name='gallery_images')
+    toy = models.ForeignKey('Toy', on_delete=models.CASCADE, blank=True, null=True, related_name='gallery_images')
+    offer = models.ForeignKey('Offers', on_delete=models.CASCADE, blank=True, null=True, related_name='gallery_images')
+    arrival = models.ForeignKey('NewArrivals', on_delete=models.CASCADE, blank=True, null=True, related_name='gallery_images')
+
+    image = models.ImageField(upload_to='product_gallery/')
+    alt_text = models.CharField(max_length=200, blank=True)
+    sort_order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['sort_order']
+        verbose_name = 'Product Image'
+        verbose_name_plural = 'Product Images'
+
+    def __str__(self):
+        return f"Image for {self.product_type} (order: {self.sort_order})"
+
+
+# ══════════════════════════════════════════════════════
+# INVENTORY MANAGEMENT
+# ══════════════════════════════════════════════════════
+
+class Inventory(models.Model):
+    PRODUCT_TYPE_CHOICES = [
+        ('cloth', 'Cloth'),
+        ('toy', 'Toy'),
+        ('offer', 'Offer'),
+        ('arrival', 'Arrival'),
+    ]
+
+    product_type = models.CharField(max_length=10, choices=PRODUCT_TYPE_CHOICES)
+    cloth = models.OneToOneField('Cloths', on_delete=models.CASCADE, blank=True, null=True, related_name='inventory')
+    toy = models.OneToOneField('Toy', on_delete=models.CASCADE, blank=True, null=True, related_name='inventory')
+    offer = models.OneToOneField('Offers', on_delete=models.CASCADE, blank=True, null=True, related_name='inventory')
+    arrival = models.OneToOneField('NewArrivals', on_delete=models.CASCADE, blank=True, null=True, related_name='inventory')
+
+    stock = models.PositiveIntegerField(default=0)
+    low_stock_threshold = models.PositiveIntegerField(default=5)
+    sku = models.CharField(max_length=50, unique=True, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Inventory'
+        verbose_name_plural = 'Inventory'
+
+    @property
+    def is_in_stock(self):
+        return self.stock > 0
+
+    @property
+    def is_low_stock(self):
+        return 0 < self.stock <= self.low_stock_threshold
+
+    def get_product(self):
+        return self.cloth or self.toy or self.offer or self.arrival
+
+    def __str__(self):
+        product = self.get_product()
+        name = getattr(product, 'name', None) or getattr(product, 'title', '?')
+        return f"{name} — {self.stock} in stock"
+
+
+# ══════════════════════════════════════════════════════
+# COUPON / DISCOUNT SYSTEM
+# ══════════════════════════════════════════════════════
+
+class Coupon(models.Model):
+    DISCOUNT_TYPES = [
+        ('percentage', 'Percentage'),
+        ('fixed', 'Fixed Amount'),
+    ]
+
+    code = models.CharField(max_length=30, unique=True)
+    discount_type = models.CharField(max_length=10, choices=DISCOUNT_TYPES)
+    discount_value = models.DecimalField(max_digits=10, decimal_places=2)
+    min_order_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    max_uses = models.PositiveIntegerField(default=0, help_text='0 = unlimited')
+    used_count = models.PositiveIntegerField(default=0)
+    valid_from = models.DateTimeField()
+    valid_until = models.DateTimeField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_valid(self):
+        now = timezone.now()
+        if not self.is_active:
+            return False
+        if now < self.valid_from or now > self.valid_until:
+            return False
+        if self.max_uses > 0 and self.used_count >= self.max_uses:
+            return False
+        return True
+
+    def get_discount(self, subtotal):
+        if self.discount_type == 'percentage':
+            return round(subtotal * self.discount_value / 100, 2)
+        return min(self.discount_value, subtotal)
+
+    def __str__(self):
+        return f"{self.code} — {self.discount_value}{'%' if self.discount_type == 'percentage' else ' Rs'}"
+
+    class Meta:
+        ordering = ['-created_at']
+
+
+# ══════════════════════════════════════════════════════
+# SIZE / COLOR VARIANTS
+# ══════════════════════════════════════════════════════
+
+class ProductVariant(models.Model):
+    cloth = models.ForeignKey('Cloths', on_delete=models.CASCADE, related_name='variants')
+    size = models.CharField(max_length=20, blank=True, help_text='e.g. S, M, L, XL')
+    color = models.CharField(max_length=50, blank=True, help_text='e.g. Red, Blue')
+    color_code = models.CharField(max_length=7, blank=True, help_text='e.g. #ff0000')
+    extra_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    stock = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ['cloth', 'size', 'color']
+        verbose_name = 'Product Variant'
+        verbose_name_plural = 'Product Variants'
+
+    def __str__(self):
+        parts = []
+        if self.size:
+            parts.append(self.size)
+        if self.color:
+            parts.append(self.color)
+        return f"{self.cloth.name} — {' / '.join(parts)}" if parts else self.cloth.name
+
+
+# ══════════════════════════════════════════════════════
+# ORDER TRACKING
+# ══════════════════════════════════════════════════════
+
+class OrderTracking(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='tracking_updates')
+    status = models.CharField(max_length=20, choices=Order.STATUS_CHOICES)
+    note = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Order Tracking Update'
+        verbose_name_plural = 'Order Tracking Updates'
+
+    def __str__(self):
+        return f"{self.order.order_number} → {self.get_status_display()} ({self.created_at:%Y-%m-%d %H:%M})"
 

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{% static 'footer.css' %}">
     <link rel="stylesheet" href="{% static 'components.css' %}">
     <link rel="stylesheet" href="{% static 'wishlist.css' %}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -59,7 +60,7 @@
         </div>
 
         <!-- Content Section -->
-        <section class="wishlist-content">
+        <section class="wishlist-content" data-reveal="up">
             
             <!-- Empty State -->
             {% if total_count == 0 %}
@@ -195,5 +196,6 @@
 
     <script src="{% static 'cart_utils.js' %}"></script>
     <script src="{% static 'wishlist.js' %}"></script>
+    <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>

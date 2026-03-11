@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -54,6 +55,39 @@ urlpatterns = [
     path('profile/notification-preferences/', views.notification_preferences, name='notification_preferences'),
     path('profile/update-email/', views.update_email, name='update_email'),
 
+    # Search
+    path('search/', views.search, name='search'),
+
+    # Order Tracking & My Orders
+    path('my-orders/', views.my_orders, name='my_orders'),
+    path('order-tracking/<str:order_number>/', views.order_tracking, name='order_tracking'),
+
+    # Coupon Validation (AJAX)
+    path('validate-coupon/', views.validate_coupon, name='validate_coupon'),
+
+    # Product Variants (AJAX)
+    path('product-variants/<int:product_id>/', views.get_product_variants, name='get_product_variants'),
+
+    # Admin Dashboard
+    path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
+
+    # Password Reset (Django built-in)
+    path('password-reset/', auth_views.PasswordResetView.as_view(
+        template_name='password_reset.html',
+        email_template_name='password_reset_email.html',
+        subject_template_name='password_reset_subject.txt',
+        success_url='/password-reset/done/',
+    ), name='password_reset'),
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(
+        template_name='password_reset_done.html',
+    ), name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+        template_name='password_reset_confirm.html',
+        success_url='/password-reset-complete/',
+    ), name='password_reset_confirm'),
+    path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
+        template_name='password_reset_complete.html',
+    ), name='password_reset_complete'),
 ]
 
 if settings.DEBUG:

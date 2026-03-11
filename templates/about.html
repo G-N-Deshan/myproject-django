@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{%static 'footer.css'%}">
     <link rel="stylesheet" href="{%static 'aboutus.css'%}">
+    <link rel="stylesheet" href="{%static 'scroll-reveal.css'%}">
 </head>
 <body>
     {%include 'navbar.html'%}
@@ -32,7 +33,7 @@
     </section>
 
     <!-- Mission Section -->
-    <section class="mission-section">
+    <section class="mission-section" data-reveal="up">
         <div class="mission-container">
             <div class="mission-content">
                 <span class="section-badge">Who We Are</span>
@@ -65,7 +66,7 @@
     </section>
 
     <!-- Values Section -->
-    <section class="values-section">
+    <section class="values-section" data-reveal="up" data-reveal-stagger>
         <h2 class="section-title">Our Core Values</h2>
         <p class="section-subtitle">What makes us different and why families trust us</p>
         <div class="values-grid">
@@ -103,7 +104,7 @@
     </section>
 
     <!-- Timeline Section -->
-    <section class="timeline-section">
+    <section class="timeline-section" data-reveal="left">
         <h2 class="section-title">Our Journey</h2>
         <p class="section-subtitle">A decade of growth, passion, and dedication</p>
         <div class="timeline">
@@ -151,7 +152,7 @@
     </section>
 
     <!-- Team Section -->
-    <section class="team-section">
+    <section class="team-section" data-reveal="up" data-reveal-stagger>
         <h2 class="section-title">Meet Our Team</h2>
         <p class="section-subtitle">Passionate professionals dedicated to your child's style</p>
         <div class="team-grid">
@@ -191,7 +192,7 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="cta-section">
+    <section class="cta-section" data-reveal="scale">
         <div class="cta-content">
             <h2>Ready to Explore Our Collection?</h2>
             <p>Discover stylish, comfortable clothing your kids will love to wear</p>
@@ -205,5 +206,6 @@
     {%include 'footer.html'%}
 
     <script src="{% static 'aboutus.js' %}"></script>
+    <script src="{%static 'scroll-reveal.js'%}"></script>
 </body>
 </html>

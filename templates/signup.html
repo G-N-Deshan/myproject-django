@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'signup.css' %}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
     <title>Sign Up</title>
 </head>
 <body>
@@ -34,7 +35,7 @@
     {% endif %}
 
 
-    <div class="signup-section">
+    <div class="signup-section" data-reveal="scale">
         <form action="{% url 'signup' %}" method="POST">
             {% csrf_token %}
            
@@ -79,5 +80,6 @@
         </form>
     </div>
 
+    <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>

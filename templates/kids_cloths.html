@@ -426,6 +426,7 @@
         .grid article:nth-child(3) { animation-delay: .12s; }
         .grid article:nth-child(4) { animation-delay: .18s; }
     </style>
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -447,7 +448,7 @@
             <button class="tab-btn" type="button" data-scroll-target="boys-section">Boys</button>
         </nav>
 
-        <section class="controls" id="filter-section">
+        <section class="controls" id="filter-section" data-reveal="up">
             <form method="get" action="{% url 'kids_cloths' %}" class="controls-grid">
                 <div class="field">
                     <label for="q">Search</label>
@@ -508,7 +509,7 @@
             <span class="result-chip">Girls: {{ kids_girls_cloths|length }} | Boys: {{ kids_cloths|length }}</span>
         </div>
 
-        <section class="section-card" id="girls-section" data-observe="girls-section">
+        <section class="section-card" id="girls-section" data-observe="girls-section" data-reveal="left">
             <div class="section-head">
                 <h2>Girls Collection</h2>
                 <p>{{ kids_girls_cloths|length }} items</p>
@@ -544,7 +545,7 @@
             {% endif %}
         </section>
 
-        <section class="section-card" id="boys-section" data-observe="boys-section">
+        <section class="section-card" id="boys-section" data-observe="boys-section" data-reveal="right">
             <div class="section-head">
                 <h2>Boys Collection</h2>
                 <p>{{ kids_cloths|length }} items</p>
@@ -627,5 +628,6 @@
             sections.forEach((section) => observer.observe(section));
         })();
     </script>
+    <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>

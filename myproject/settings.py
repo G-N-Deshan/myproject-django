@@ -59,7 +59,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR, 'templates'],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,6 +125,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 MEDIA_URL = '/media/'
@@ -136,15 +139,18 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = False  # Set True in production with HTTPS
 CSRF_COOKIE_HTTPONLY = False  # must be False for JS AJAX cart CRUD
 
+# Email Configuration (using console backend for development)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'KidZone <noreply@kidzone.com>'
+
+# Password Reset settings
+PASSWORD_RESET_TIMEOUT = 3600  # 1 hour
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'index'
+
 # Security headers
 SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_SECURITY_POLICY = {
-    "default-src": ("'self'",),
-    "script-src": ("'self'", "cdn.jsdelivr.net"),
-    "style-src": ("'self'", "'unsafe-inline'", "fonts.googleapis.com", "cdn.jsdelivr.net"),
-    "font-src": ("'self'", "fonts.gstatic.com"),
-    "img-src": ("'self'", "data:", "https:"),
-}
 
 # Logging configuration
 LOGGING = {

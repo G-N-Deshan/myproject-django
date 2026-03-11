@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{%static 'footer.css'%}">
     <link rel="stylesheet" href="{% static 'cloths-page.css'%}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css'%}">
 </head>
 <body>
 
@@ -31,7 +32,7 @@
             <h1 class="section-9__title">Cloths</h1>
             <p class="section-9__subtitle">Explore curated styles for every age and occasion.</p>
 
-            <div class="selection-section">
+            <div class="selection-section" data-reveal="up" data-reveal-stagger>
                 <div class="card mens-card">
                     <div class="card__content">
                         <h2>Mens</h2>
@@ -59,7 +60,7 @@
         </div>
     </div>
 
-    <section  class="section-8">
+    <section  class="section-8" data-reveal="up">
         <div class="section-8__content">
             <h2 class="section-8__title">Our Brands</h2>
             <p class="section-8__subtitle">Trusted labels we proudly carry.</p>
@@ -78,5 +79,6 @@
     </section>
 
  {%include 'footer.html'%}
+    <script src="{% static 'scroll-reveal.js'%}"></script>
 </body>
 </html>

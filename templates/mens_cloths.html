@@ -149,6 +149,7 @@
         .frost article:nth-child(3) { animation-delay: .12s; }
         .frost article:nth-child(4) { animation-delay: .18s; }
     </style>
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -172,7 +173,7 @@
             </div>
         </section>
 
-        <section id="filterPanel" class="mt-6 md:mt-8 frost p-4 md:p-6">
+        <section id="filterPanel" class="mt-6 md:mt-8 frost p-4 md:p-6" data-reveal="up">
             <form method="get" action="{% url 'mens_cloths' %}" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3">
                 <div class="xl:col-span-2">
                     <label class="text-sm font-bold text-slate-600">Search</label>
@@ -218,7 +219,7 @@
             </form>
         </section>
 
-        <section id="menCatalog" class="mt-5">
+        <section id="menCatalog" class="mt-5" data-reveal="up">
             <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <div class="flex items-center gap-2">
                     <span class="mini-badge">{{ mens_cloths|length }} products</span>
@@ -346,5 +347,6 @@
             updateVisibleCount();
         })();
     </script>
+    <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>

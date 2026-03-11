@@ -50,6 +50,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -62,7 +63,7 @@
     </div>
 
     <main class="mx-auto w-[94%] max-w-4xl py-16 md:py-20">
-        <section class="success-shell p-8 md:p-12 text-center">
+        <section class="success-shell p-8 md:p-12 text-center" data-reveal="scale">
             <div class="mx-auto w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 grid place-items-center text-4xl font-extrabold">&#10003;</div>
             <h1 class="title-font mt-6 text-4xl md:text-5xl font-bold text-slate-900">Message Sent Successfully</h1>
             <p class="mt-4 text-slate-600 text-lg">Thank you for reaching out. Our support team will get back to you within 24 hours.</p>
@@ -75,5 +76,6 @@
     </main>
 
     {% include 'footer.html' %}
+    <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>
