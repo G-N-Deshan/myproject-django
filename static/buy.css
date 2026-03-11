@@ -62,10 +62,28 @@ html::-webkit-scrollbar { display: none; }
 .hero-float {
     animation: heroFloat 6s ease-in-out infinite;
 }
+.by-spiral {
+    animation: bySpiral 10s linear infinite;
+    opacity: 0.2;
+}
+.by-breathe {
+    animation: byBreathe 5s ease-in-out infinite;
+    opacity: 0.15;
+}
 
 @keyframes heroFloat {
     0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(10deg); }
+    25% { transform: translateY(-15px) rotate(5deg); }
+    50% { transform: translateY(-28px) rotate(12deg); }
+    75% { transform: translateY(-10px) rotate(6deg); }
+}
+@keyframes bySpiral {
+    0% { transform: rotate(0deg) translateX(20px) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(20px) rotate(-360deg); }
+}
+@keyframes byBreathe {
+    0%, 100% { transform: scale(1); opacity: 0.1; }
+    50% { transform: scale(1.35); opacity: 0.25; }
 }
 
 /* Product card entrance */

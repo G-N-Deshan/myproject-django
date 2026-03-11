@@ -39,11 +39,26 @@
         .cs-s--c { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg,#10b981,#34d399); top: 12%; left: 6%; animation-duration: 7s; }
         .cs-s--sq { width: 70px; height: 70px; border-radius: 14px; background: linear-gradient(135deg,#6366f1,#818cf8); bottom: 18%; right: 7%; animation-delay: 2s; animation-duration: 9s; transform: rotate(45deg); }
         .cs-s--r { width: 85px; height: 85px; border-radius: 50%; border: 4px solid rgba(14,165,233,.12); top: 48%; right: 14%; animation-delay: 3.5s; animation-duration: 10s; }
+        .cs-s--confetti1 { width: 12px; height: 35px; border-radius: 4px; background: rgba(16,185,129,.18); top: 20%; left: 35%; animation: csConfetti 7s ease-in-out infinite; }
+        .cs-s--confetti2 { width: 10px; height: 28px; border-radius: 4px; background: rgba(99,102,241,.15); bottom: 25%; right: 30%; animation: csConfetti 9s ease-in-out infinite reverse; }
+        .cs-s--pop1 { width: 50px; height: 50px; border-radius: 50%; background: radial-gradient(circle, rgba(16,185,129,.15), transparent 70%); top: 65%; left: 10%; animation: csPop 5s ease-out infinite; }
+        .cs-s--pop2 { width: 35px; height: 35px; border-radius: 50%; background: radial-gradient(circle, rgba(14,165,233,.12), transparent 70%); top: 30%; right: 40%; animation: csPop 6s ease-out infinite 2s; }
+        .cs-s--dot { width: 25px; height: 25px; border-radius: 50%; background: rgba(251,191,36,.15); bottom: 40%; left: 50%; animation: csFloat 6s ease-in-out infinite 1s; }
         @keyframes csFloat {
             0%,100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-20px) rotate(4deg); }
-            50% { transform: translateY(-30px) rotate(-3deg); }
-            75% { transform: translateY(-12px) rotate(3deg); }
+            25% { transform: translateY(-24px) rotate(5deg); }
+            50% { transform: translateY(-35px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes csConfetti {
+            0%   { transform: translateY(0) rotate(0deg); opacity: .18; }
+            50%  { transform: translateY(-40px) rotate(180deg); opacity: .06; }
+            100% { transform: translateY(0) rotate(360deg); opacity: .18; }
+        }
+        @keyframes csPop {
+            0%   { transform: scale(0.6); opacity: .15; }
+            50%  { transform: scale(1.3); opacity: .04; }
+            100% { transform: scale(0.6); opacity: .15; }
         }
         @keyframes csSlideUp {
             from { opacity: 0; transform: translateY(28px); }
@@ -60,6 +75,11 @@
         <div class="cs-s cs-s--c"></div>
         <div class="cs-s cs-s--sq"></div>
         <div class="cs-s cs-s--r"></div>
+        <div class="cs-s cs-s--confetti1"></div>
+        <div class="cs-s cs-s--confetti2"></div>
+        <div class="cs-s cs-s--pop1"></div>
+        <div class="cs-s cs-s--pop2"></div>
+        <div class="cs-s cs-s--dot"></div>
     </div>
 
     <main class="mx-auto w-[94%] max-w-4xl py-16 md:py-20">

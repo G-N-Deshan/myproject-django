@@ -81,12 +81,52 @@
             text-decoration: none; font-weight: 500;
         }
         .back-link:hover { text-decoration: underline; }
+
+        /* Floating 3D shapes */
+        .ot-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .ot-s { position: absolute; opacity: .07; animation: otFloat 8s ease-in-out infinite; }
+        .ot-s--c  { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg,#818cf8,#c084fc); top: 8%; right: 5%; animation-duration: 7s; }
+        .ot-s--sq { width: 70px; height: 70px; border-radius: 14px; background: linear-gradient(135deg,#ec4899,#f472b6); bottom: 15%; left: 6%; animation-delay: 2s; animation-duration: 9s; transform: rotate(45deg); }
+        .ot-s--r  { width: 80px; height: 80px; border-radius: 50%; border: 4px solid rgba(99,102,241,.12); top: 45%; left: 12%; animation-delay: 3.5s; animation-duration: 10s; }
+        .ot-s--dot { width: 30px; height: 30px; border-radius: 50%; background: rgba(251,191,36,.12); bottom: 30%; left: 25%; animation-delay: 1s; animation-duration: 6s; animation-name: otFloat; }
+        .ot-s--path1 { width: 80px; height: 4px; border-radius: 20px; background: linear-gradient(90deg, rgba(99,102,241,.18), rgba(168,85,247,.1), transparent); top: 25%; right: 8%; animation: otPath 10s ease-in-out infinite; }
+        .ot-s--path2 { width: 60px; height: 4px; border-radius: 20px; background: linear-gradient(90deg, rgba(236,72,153,.14), rgba(244,114,182,.08), transparent); bottom: 20%; left: 40%; animation: otPath 12s ease-in-out infinite reverse; }
+        .ot-s--ping1 { width: 60px; height: 60px; border-radius: 50%; border: 3px solid rgba(16,185,129,.12); top: 60%; right: 20%; animation: otPing 4s ease-out infinite; }
+        .ot-s--ping2 { width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(99,102,241,.1); top: 10%; left: 50%; animation: otPing 5s ease-out infinite 1.5s; }
+        @keyframes otFloat {
+            0%,100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-22px) rotate(5deg); }
+            50% { transform: translateY(-34px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes otPath {
+            0%   { transform: translateX(0) scaleX(1); opacity: .18; }
+            50%  { transform: translateX(60px) scaleX(1.5); opacity: .05; }
+            100% { transform: translateX(0) scaleX(1); opacity: .18; }
+        }
+        @keyframes otPing {
+            0%   { transform: scale(0.8); opacity: .15; }
+            70%  { transform: scale(1.5); opacity: 0; }
+            100% { transform: scale(0.8); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 {% include 'navbar.html' %}
 
-<section class="tracking-hero">
+<!-- 3D Floating Shapes -->
+<div class="ot-shapes" aria-hidden="true">
+    <div class="ot-s ot-s--c"></div>
+    <div class="ot-s ot-s--sq"></div>
+    <div class="ot-s ot-s--r"></div>
+    <div class="ot-s ot-s--dot"></div>
+    <div class="ot-s ot-s--path1"></div>
+    <div class="ot-s ot-s--path2"></div>
+    <div class="ot-s ot-s--ping1"></div>
+    <div class="ot-s ot-s--ping2"></div>
+</div>
+
+<section class="tracking-hero" style="position:relative;z-index:1;">
     <h1>Order Tracking</h1>
     <p>{{ order.order_number }}</p>
 </section>

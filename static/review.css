@@ -54,17 +54,35 @@ html::-webkit-scrollbar { display: none; }
 /* 3D Floating Shape Animations */
 @keyframes floatSlow {
     0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-30px) rotate(-3deg); }
+    50% { transform: translateY(-35px) rotate(-4deg); }
 }
 @keyframes floatMid {
     0%, 100% { transform: translateY(0) rotate(45deg); }
-    50% { transform: translateY(-22px) rotate(48deg); }
+    50% { transform: translateY(-26px) rotate(50deg); }
 }
 @keyframes floatFast {
     0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-18px) rotate(5deg); }
+    50% { transform: translateY(-22px) rotate(6deg); }
+}
+@keyframes rvSway {
+    0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+    25% { transform: translateX(12px) translateY(-15px) rotate(5deg); }
+    50% { transform: translateX(-8px) translateY(-28px) rotate(-3deg); }
+    75% { transform: translateX(10px) translateY(-12px) rotate(4deg); }
+}
+@keyframes rvExpand {
+    0%, 100% { transform: scale(1); opacity: 0.1; }
+    50% { transform: scale(1.5); opacity: 0.25; }
+}
+@keyframes rvMorph {
+    0%, 100% { border-radius: 50%; transform: scale(1); }
+    33% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: scale(1.1); }
+    66% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; transform: scale(0.9); }
 }
 
 .animate-float-slow { animation: floatSlow 7s ease-in-out infinite; }
 .animate-float-mid { animation: floatMid 9s ease-in-out infinite; }
 .animate-float-fast { animation: floatFast 6s ease-in-out infinite; }
+.rv-sway { animation: rvSway 8s ease-in-out infinite; }
+.rv-expand { animation: rvExpand 5s ease-in-out infinite; }
+.rv-morph { animation: rvMorph 10s ease-in-out infinite; }

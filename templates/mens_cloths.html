@@ -135,9 +135,19 @@
         /* 3D Floating Shapes */
         @keyframes pgFloat {
             0%,100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-18px) rotate(4deg); }
-            50% { transform: translateY(-30px) rotate(-3deg); }
-            75% { transform: translateY(-12px) rotate(3deg); }
+            25% { transform: translateY(-22px) rotate(5deg); }
+            50% { transform: translateY(-36px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes mcDrift {
+            0%,100% { transform: translate(0,0) rotate(0deg); }
+            25% { transform: translate(12px,-18px) rotate(4deg); }
+            50% { transform: translate(-8px,-30px) rotate(-6deg); }
+            75% { transform: translate(6px,-14px) rotate(3deg); }
+        }
+        @keyframes mcSlide {
+            0%,100% { transform: translateX(0) scale(1); opacity:.08; }
+            50% { transform: translateX(20px) scale(1.15); opacity:.18; }
         }
         /* Card entrance animation */
         @keyframes cardUp {
@@ -162,6 +172,11 @@
             <div class="absolute top-[10%] left-[5%] w-24 h-24 rounded-full bg-white/10 pointer-events-none" style="animation:pgFloat 7s ease-in-out infinite"></div>
             <div class="absolute bottom-[15%] right-[8%] w-16 h-16 rounded-2xl bg-white/8 rotate-45 pointer-events-none" style="animation:pgFloat 9s 2s ease-in-out infinite"></div>
             <div class="absolute top-[30%] right-[20%] w-20 h-20 rounded-full border-4 border-white/8 pointer-events-none" style="animation:pgFloat 10s 3.5s ease-in-out infinite"></div>
+            <div class="absolute top-[50%] left-[3%] w-14 h-14 rounded-xl border-2 border-white/10 pointer-events-none" style="animation:mcDrift 8s ease-in-out infinite"></div>
+            <div class="absolute top-[15%] right-[4%] w-10 h-10 rounded-full bg-cyan-300/10 pointer-events-none" style="animation:mcDrift 10s 1.5s ease-in-out infinite"></div>
+            <div class="absolute bottom-[30%] left-[15%] w-12 h-12 rounded-full border-3 border-white/8 pointer-events-none" style="animation:mcSlide 6s ease-in-out infinite"></div>
+            <div class="absolute bottom-[8%] right-[25%] w-16 h-16 rounded-2xl bg-white/6 pointer-events-none" style="animation:mcSlide 7s 2s ease-in-out infinite"></div>
+            <div class="absolute top-[65%] right-[12%] w-8 h-8 rounded-full bg-indigo-300/10 pointer-events-none" style="animation:pgFloat 6s 1s ease-in-out infinite"></div>
             <div class="relative z-10 max-w-3xl">
                 <p class="inline-flex rounded-full bg-white/20 px-4 py-1 text-sm font-semibold">Men's Essentials</p>
                 <h1 class="title-font mt-5 text-4xl md:text-6xl font-extrabold leading-tight">Built For Daily Performance And Sharp Looks</h1>
@@ -249,7 +264,7 @@
                         {% for cloth in section.items %}
                         <article class="men-card men-product" data-name="{{ cloth.name|lower }}" data-price="{{ cloth.numeric_price }}">
                             <div class="aspect-[4/5] bg-sky-50 overflow-hidden relative group">
-                                <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
                                 <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <span class="bg-white text-slate-900 px-5 py-2.5 rounded-lg font-bold text-sm hover:scale-105 transition-transform">Quick View</span>
                                 </a>
@@ -257,6 +272,7 @@
                             <div class="p-4 grid gap-2">
                                 <h3 class="font-extrabold text-slate-900 leading-6"><a href="{% url 'product_detail' 'cloth' cloth.id %}" class="hover:text-blue-600 transition-colors" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
                                 <p class="text-xs uppercase tracking-wide font-semibold text-slate-500">{{ cloth.get_subcategory_display|default:'Featured Style' }}</p>
+                                {% with item_rating=cloth.avg_rating item_review_count=cloth.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                                 <div class="flex items-center gap-2 flex-wrap">
                                     <span class="text-lg font-extrabold text-slate-900">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
                                     {% if cloth.price1 and cloth.price2 %}
@@ -347,6 +363,12 @@
             updateVisibleCount();
         })();
     </script>
+
+    {% with page_obj=mens_cloths %}
+    {% include 'includes/pagination.html' %}
+    {% endwith %}
+
+    <script src="{% static 'global.js' %}"></script>
     <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>

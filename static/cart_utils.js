@@ -3,6 +3,14 @@
  * Used across all pages to manage cart state
  */
 
+// Inject spinner keyframes
+if (!document.getElementById('cartSpinStyle')) {
+    const s = document.createElement('style');
+    s.id = 'cartSpinStyle';
+    s.textContent = '@keyframes cartSpin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(s);
+}
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -28,7 +36,12 @@ if (window.__cartUtilsBootstrapped) {
 
         try {
             if (buttonElement?.dataset.loading === '1') return false;
-            if (buttonElement) buttonElement.dataset.loading = '1';
+            if (buttonElement) {
+                buttonElement.dataset.loading = '1';
+                buttonElement._origHTML = buttonElement.innerHTML;
+                buttonElement.innerHTML = '<span class="cart-spinner" style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:cartSpin .5s linear infinite;vertical-align:middle;margin-right:6px;"></span> Adding...';
+                buttonElement.disabled = true;
+            }
 
             const csrftoken = getCookie('csrftoken');
 
@@ -59,13 +72,13 @@ if (window.__cartUtilsBootstrapped) {
                 updateGlobalCartCount(data.cart_count);
 
                 if (buttonElement) {
-                    const originalText = buttonElement.textContent;
+                    const origHTML = buttonElement._origHTML || buttonElement.textContent;
                     const originalBg = buttonElement.style.background;
-                    buttonElement.textContent = '✓ Added!';
+                    buttonElement.innerHTML = '✓ Added!';
                     buttonElement.style.background = '#10b981';
 
                     setTimeout(() => {
-                        buttonElement.textContent = originalText;
+                        buttonElement.innerHTML = origHTML;
                         buttonElement.style.background = originalBg;
                     }, 1200);
                 }
@@ -82,7 +95,10 @@ if (window.__cartUtilsBootstrapped) {
             window.location.href = fallbackUrl;
             return false;
         } finally {
-            if (buttonElement) delete buttonElement.dataset.loading;
+            if (buttonElement) {
+                delete buttonElement.dataset.loading;
+                buttonElement.disabled = false;
+            }
         }
     }
 

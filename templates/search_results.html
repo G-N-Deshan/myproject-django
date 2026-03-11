@@ -73,12 +73,53 @@
         }
         .pagination .current { background: #6366f1; color: #fff; border-color: #6366f1; }
         .pagination a:hover { background: #ede9fe; }
+
+        /* Floating 3D shapes */
+        .sr-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .sr-s { position: absolute; opacity: .07; animation: srFloat 8s ease-in-out infinite; }
+        .sr-s--c  { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg,#818cf8,#c084fc); top: 8%; right: 5%; animation-duration: 7s; }
+        .sr-s--sq { width: 70px; height: 70px; border-radius: 14px; background: linear-gradient(135deg,#ec4899,#f472b6); bottom: 15%; left: 6%; animation-delay: 2s; animation-duration: 9s; transform: rotate(45deg); }
+        .sr-s--r  { width: 80px; height: 80px; border-radius: 50%; border: 4px solid rgba(99,102,241,.12); top: 45%; left: 12%; animation-delay: 3.5s; animation-duration: 10s; }
+        .sr-s--tr { width: 0; height: 0; border-left: 35px solid transparent; border-right: 35px solid transparent; border-bottom: 60px solid rgba(245,158,11,.07); bottom: 35%; right: 10%; animation-delay: 1.5s; animation-duration: 11s; }
+        .sr-s--radar1 { width: 80px; height: 80px; border-radius: 50%; border: 3px solid rgba(99,102,241,.12); top: 20%; left: 35%; animation: srRadar 5s linear infinite; }
+        .sr-s--radar2 { width: 55px; height: 55px; border-radius: 50%; border: 2px solid rgba(236,72,153,.1); bottom: 25%; right: 30%; animation: srRadar 7s linear infinite reverse; }
+        .sr-s--scan1 { width: 100px; height: 3px; background: linear-gradient(90deg, transparent, rgba(99,102,241,.2), transparent); top: 30%; left: 0; animation: srScan 8s ease-in-out infinite; }
+        .sr-s--scan2 { width: 80px; height: 3px; background: linear-gradient(90deg, transparent, rgba(251,191,36,.15), transparent); bottom: 45%; right: 0; animation: srScan 10s ease-in-out infinite 3s; }
+        @keyframes srFloat {
+            0%,100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-22px) rotate(5deg); }
+            50% { transform: translateY(-34px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes srRadar {
+            0% { transform: scale(0.6) rotate(0deg); opacity: .15; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: .04; }
+            100% { transform: scale(0.6) rotate(360deg); opacity: .15; }
+        }
+        @keyframes srScan {
+            0%   { transform: translateX(-100%); opacity: 0; }
+            10%  { opacity: .2; }
+            90%  { opacity: .2; }
+            100% { transform: translateX(calc(100vw + 100%)); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 {% include 'navbar.html' %}
 
-<section class="search-hero">
+<!-- 3D Floating Shapes -->
+<div class="sr-shapes" aria-hidden="true">
+    <div class="sr-s sr-s--c"></div>
+    <div class="sr-s sr-s--sq"></div>
+    <div class="sr-s sr-s--r"></div>
+    <div class="sr-s sr-s--tr"></div>
+    <div class="sr-s sr-s--radar1"></div>
+    <div class="sr-s sr-s--radar2"></div>
+    <div class="sr-s sr-s--scan1"></div>
+    <div class="sr-s sr-s--scan2"></div>
+</div>
+
+<section class="search-hero" style="position:relative;z-index:1;">
     <h1>Search Products</h1>
     <form class="search-bar" action="{% url 'search' %}" method="GET">
         <input type="text" name="q" placeholder="Search for toys, clothing, offers..." value="{{ query }}" autofocus>
@@ -98,7 +139,7 @@
         {% for item in results %}
         <a href="{{ item.url }}" class="result-card">
             {% if item.image %}
-            <img src="{{ item.image }}" alt="{{ item.name }}">
+            <img src="{{ item.image }}" alt="{{ item.name }}" loading="lazy">
             {% else %}
             <img src="" alt="{{ item.name }}" style="background:linear-gradient(135deg,#ede9fe,#e0e7ff)">
             {% endif %}

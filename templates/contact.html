@@ -14,6 +14,20 @@
     <link rel="stylesheet" href="{% static 'footer.css' %}">
     <link rel="stylesheet" href="{% static 'contact.css' %}">
     <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+    <style>
+        .ct-ripple { animation: ctRipple 6s ease-in-out infinite; opacity: 0.15; }
+        .ct-drift { animation: ctDrift 8s ease-in-out infinite; opacity: 0.12; }
+        @keyframes ctRipple {
+            0%, 100% { transform: scale(1); opacity: 0.1; }
+            50% { transform: scale(1.6); opacity: 0.25; }
+        }
+        @keyframes ctDrift {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            25% { transform: translateX(10px) translateY(-18px) rotate(5deg); }
+            50% { transform: translateX(-8px) translateY(-30px) rotate(-3deg); }
+            75% { transform: translateX(6px) translateY(-12px) rotate(4deg); }
+        }
+    </style>
     <script>
         tailwind.config = {
             theme: { extend: { fontFamily: { inter: ['Inter'], playfair: ['Playfair Display'] } } }
@@ -32,6 +46,11 @@
         <div class="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl animate-pulse"></div>
         <div class="absolute bottom-10 right-20 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse" style="animation-delay:1s"></div>
         <div class="absolute top-1/2 right-10 w-16 h-16 bg-white/10 rounded-full blur-xl animate-pulse" style="animation-delay:2s"></div>
+        <div class="ct-ripple absolute top-[20%] right-[12%] w-14 h-14 rounded-full border-2 border-white/15 pointer-events-none"></div>
+        <div class="ct-ripple absolute bottom-[25%] left-[8%] w-10 h-10 rounded-full border-2 border-white/10 pointer-events-none" style="animation-delay:1.5s"></div>
+        <div class="ct-drift absolute top-[60%] left-[3%] w-12 h-12 rounded-xl bg-white/8 border border-white/10 pointer-events-none"></div>
+        <div class="ct-drift absolute top-[15%] right-[5%] w-16 h-16 rounded-2xl border-2 border-white/10 pointer-events-none" style="animation-delay:2.5s"></div>
+        <div class="ct-ripple absolute bottom-[15%] right-[30%] w-8 h-8 rounded-full bg-white/8 pointer-events-none" style="animation-delay:3s"></div>
 
         <div class="container mx-auto px-6 relative z-10 text-center">
             <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/15 border border-white/20 text-white font-semibold rounded-full text-sm mb-6 backdrop-blur-sm">
@@ -447,6 +466,7 @@
         });
     })();
     </script>
+    <script src="{% static 'global.js' %}"></script>
     <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>

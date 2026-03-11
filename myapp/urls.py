@@ -61,6 +61,7 @@ urlpatterns = [
     # Order Tracking & My Orders
     path('my-orders/', views.my_orders, name='my_orders'),
     path('order-tracking/<str:order_number>/', views.order_tracking, name='order_tracking'),
+    path('reorder/<str:order_number>/', views.reorder, name='reorder'),
 
     # Coupon Validation (AJAX)
     path('validate-coupon/', views.validate_coupon, name='validate_coupon'),
@@ -70,6 +71,19 @@ urlpatterns = [
 
     # Admin Dashboard
     path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
+
+    # Payment (Stripe)
+    path('payment/', views.payment_page, name='payment_page'),
+    path('create-checkout-session/', views.create_checkout_session, name='create_checkout_session'),
+    path('payment-success/', views.payment_success, name='payment_success'),
+    path('payment-cancel/', views.payment_cancel, name='payment_cancel'),
+    path('stripe-webhook/', views.stripe_webhook, name='stripe_webhook'),
+
+    # Live Stock API
+    path('api/stock-status/', views.stock_status_api, name='stock_status_api'),
+
+    # REST API
+    path('api/products/', views.api_products, name='api_products'),
 
     # Password Reset (Django built-in)
     path('password-reset/', auth_views.PasswordResetView.as_view(

@@ -513,12 +513,52 @@ html::-webkit-scrollbar {
     animation-delay: 1.5s;
     animation-duration: 6s;
 }
+.shape--orbit1 {
+    width: 60px; height: 60px; border-radius: 50%;
+    border: 3px solid rgba(139, 92, 246, 0.35);
+    top: 45%; right: 8%;
+    animation: abOrbital 12s linear infinite;
+    opacity: 0.2;
+}
+.shape--orbit2 {
+    width: 45px; height: 45px; border-radius: 12px;
+    background: linear-gradient(135deg, #a78bfa, #c084fc);
+    top: 55%; left: 5%;
+    animation: abOrbital 10s linear infinite reverse;
+    opacity: 0.15;
+}
+.shape--diamond {
+    width: 50px; height: 50px; border-radius: 8px;
+    border: 2px solid rgba(236, 72, 153, 0.3);
+    top: 8%; right: 25%;
+    animation: abDiamond 9s ease-in-out infinite;
+    opacity: 0.18;
+}
+.shape--glow {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
+    bottom: 10%; right: 20%;
+    animation: abPulseGlow 5s ease-in-out infinite;
+    opacity: 0.25;
+}
 
 @keyframes shapeFloat {
     0%, 100% { transform: translateY(0) rotate(0deg); }
-    25% { transform: translateY(-18px) rotate(4deg); }
-    50% { transform: translateY(-30px) rotate(-3deg); }
-    75% { transform: translateY(-12px) rotate(3deg); }
+    25% { transform: translateY(-22px) rotate(6deg); }
+    50% { transform: translateY(-38px) rotate(-5deg); }
+    75% { transform: translateY(-14px) rotate(4deg); }
+}
+@keyframes abOrbital {
+    0% { transform: rotate(0deg) translateX(30px) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(30px) rotate(-360deg); }
+}
+@keyframes abDiamond {
+    0%, 100% { transform: rotate(45deg) scale(1); }
+    50% { transform: rotate(45deg) scale(1.2) translateY(-20px); }
+}
+@keyframes abPulseGlow {
+    0%, 100% { transform: scale(1); opacity: 0.15; }
+    50% { transform: scale(1.4); opacity: 0.3; }
 }
 
 /* Animations */

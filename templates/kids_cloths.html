@@ -413,9 +413,21 @@
         /* 3D Floating Shapes */
         @keyframes pgFloat {
             0%,100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-18px) rotate(4deg); }
-            50% { transform: translateY(-30px) rotate(-3deg); }
-            75% { transform: translateY(-12px) rotate(3deg); }
+            25% { transform: translateY(-22px) rotate(5deg); }
+            50% { transform: translateY(-36px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes kcBounce {
+            0%,100% { transform: translateY(0) scale(1); }
+            30% { transform: translateY(-30px) scale(1.1); }
+            50% { transform: translateY(0) scale(0.95); }
+            70% { transform: translateY(-15px) scale(1.05); }
+        }
+        @keyframes kcWobble {
+            0%,100% { transform: rotate(0deg) translateY(0); }
+            25% { transform: rotate(8deg) translateY(-12px); }
+            50% { transform: rotate(-6deg) translateY(-20px); }
+            75% { transform: rotate(4deg) translateY(-8px); }
         }
         @keyframes cardUp {
             from { opacity: 0; transform: translateY(24px); }
@@ -438,6 +450,11 @@
             <div class="absolute top-[10%] left-[6%] w-24 h-24 rounded-full bg-white/10 pointer-events-none" style="position:absolute;animation:pgFloat 7s ease-in-out infinite"></div>
             <div class="absolute bottom-[12%] right-[7%] w-16 h-16 rounded-2xl bg-white/8 rotate-45 pointer-events-none" style="position:absolute;animation:pgFloat 9s 2s ease-in-out infinite"></div>
             <div class="absolute top-[25%] right-[15%] w-20 h-20 rounded-full border-4 border-white/10 pointer-events-none" style="position:absolute;animation:pgFloat 10s 3.5s ease-in-out infinite"></div>
+            <div class="absolute top-[50%] left-[3%] w-14 h-14 rounded-xl bg-amber-300/10 pointer-events-none" style="position:absolute;animation:kcBounce 4s cubic-bezier(.36,.07,.19,.97) infinite"></div>
+            <div class="absolute top-[15%] right-[6%] w-10 h-10 rounded-full bg-pink-300/10 pointer-events-none" style="position:absolute;animation:kcBounce 5s 1s cubic-bezier(.36,.07,.19,.97) infinite"></div>
+            <div class="absolute bottom-[25%] left-[15%] w-12 h-12 rounded-2xl border-2 border-amber-300/12 pointer-events-none" style="position:absolute;animation:kcWobble 6s ease-in-out infinite"></div>
+            <div class="absolute bottom-[5%] right-[20%] w-16 h-16 rounded-full bg-white/6 pointer-events-none" style="position:absolute;animation:kcWobble 7s 2s ease-in-out infinite"></div>
+            <div class="absolute top-[60%] right-[8%] w-8 h-8 rounded-full bg-cyan-300/10 pointer-events-none" style="position:absolute;animation:kcBounce 3s 0.5s cubic-bezier(.36,.07,.19,.97) infinite"></div>
             <h1>Playful Kids Wardrobe</h1>
             <p>Fresh fits for school, park time, birthday plans, and everything in-between. Use filters and sorting to quickly find what families actually want.</p>
         </section>
@@ -519,7 +536,7 @@
                 {% for cloth in kids_girls_cloths %}
                 <article class="product">
                     <div class="img-wrap">
-                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" loading="lazy">
                         <div class="img-overlay">
                             <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="quick-view-link">Quick View</a>
                         </div>
@@ -527,6 +544,7 @@
                     <div class="body">
                         <h3 class="name"><a href="{% url 'product_detail' 'cloth' cloth.id %}" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
                         <span class="meta">{{ cloth.get_subcategory_display|default:'Everyday wear' }}</span>
+                        {% with item_rating=cloth.avg_rating item_review_count=cloth.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                         <div class="price-row">
                             <span class="price-now">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
                             {% if cloth.price1 and cloth.price2 %}<span class="price-old">Rs {{ cloth.price1 }}</span>{% endif %}
@@ -555,7 +573,7 @@
                 {% for cloth in kids_cloths %}
                 <article class="product">
                     <div class="img-wrap">
-                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" loading="lazy">
                         <div class="img-overlay">
                             <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="quick-view-link">Quick View</a>
                         </div>
@@ -563,6 +581,7 @@
                     <div class="body">
                         <h3 class="name"><a href="{% url 'product_detail' 'cloth' cloth.id %}" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
                         <span class="meta">{{ cloth.get_subcategory_display|default:'Everyday wear' }}</span>
+                        {% with item_rating=cloth.avg_rating item_review_count=cloth.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                         <div class="price-row">
                             <span class="price-now">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
                             {% if cloth.price1 and cloth.price2 %}<span class="price-old">Rs {{ cloth.price1 }}</span>{% endif %}
@@ -581,6 +600,10 @@
             {% endif %}
         </section>
     </div>
+
+    {% with page_obj=all_kids_cloths %}
+    {% include 'includes/pagination.html' %}
+    {% endwith %}
 
     {% include 'footer.html' %}
 
@@ -628,6 +651,7 @@
             sections.forEach((section) => observer.observe(section));
         })();
     </script>
+    <script src="{% static 'global.js' %}"></script>
     <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>

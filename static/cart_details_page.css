@@ -60,9 +60,49 @@ body {
 
 @keyframes pFloat {
     0%, 100% { transform: translateY(0) rotate(0deg); }
-    25% { transform: translateY(-18px) rotate(4deg); }
-    50% { transform: translateY(-30px) rotate(-3deg); }
-    75% { transform: translateY(-12px) rotate(3deg); }
+    25% { transform: translateY(-22px) rotate(5deg); }
+    50% { transform: translateY(-35px) rotate(-4deg); }
+    75% { transform: translateY(-14px) rotate(3deg); }
+}
+@keyframes cdPendulum {
+    0%, 100% { transform: rotate(0deg) translateY(0); }
+    25% { transform: rotate(12deg) translateY(-10px); }
+    50% { transform: rotate(0deg) translateY(-18px); }
+    75% { transform: rotate(-12deg) translateY(-10px); }
+}
+@keyframes cdSlide {
+    0%   { transform: translateX(0) scale(1); }
+    50%  { transform: translateX(40px) scale(1.1); }
+    100% { transform: translateX(0) scale(1); }
+}
+.pshape--pend1 {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1));
+    top: 20%; right: 8%;
+    animation: cdPendulum 7s ease-in-out infinite;
+}
+.pshape--pend2 {
+    width: 50px; height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(236,72,153,0.12), rgba(244,114,182,0.08));
+    bottom: 18%; left: 30%;
+    animation: cdPendulum 9s ease-in-out infinite 2s;
+    transform-origin: top center;
+}
+.pshape--slide1 {
+    width: 100px; height: 16px;
+    border-radius: 40px;
+    background: linear-gradient(90deg, rgba(251,191,36,0.15), transparent);
+    top: 55%; left: 5%;
+    animation: cdSlide 10s ease-in-out infinite;
+}
+.pshape--slide2 {
+    width: 60px; height: 12px;
+    border-radius: 30px;
+    background: linear-gradient(90deg, rgba(99,102,241,0.12), transparent);
+    top: 75%; right: 20%;
+    animation: cdSlide 12s ease-in-out infinite reverse;
 }
 
 /* Cart item entrance animation */

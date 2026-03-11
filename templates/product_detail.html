@@ -144,11 +144,23 @@
         .pd-shape--square { width: 80px; height: 80px; border-radius: 16px; background: linear-gradient(135deg,#ec4899,#f472b6); bottom: 12%; right: 6%; animation-delay: 2s; animation-duration: 9s; transform: rotate(45deg); }
         .pd-shape--ring { width: 90px; height: 90px; border-radius: 50%; border: 5px solid rgba(99,102,241,.1); top: 40%; right: 10%; animation-delay: 3.5s; animation-duration: 10s; }
         .pd-shape--dot { width: 35px; height: 35px; border-radius: 50%; background: rgba(251,191,36,.1); bottom: 25%; left: 12%; animation-delay: 1.5s; animation-duration: 6s; }
+        .pd-shape--flip1 { width: 70px; height: 70px; border-radius: 14px; background: linear-gradient(135deg, rgba(99,102,241,.12), rgba(168,85,247,.08)); top: 22%; right: 18%; animation: pdFlip 8s ease-in-out infinite; }
+        .pd-shape--flip2 { width: 50px; height: 50px; border-radius: 50%; border: 3px solid rgba(236,72,153,.12); bottom: 40%; left: 35%; animation: pdFlip 10s ease-in-out infinite 2s; }
+        .pd-shape--zoom1 { width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(circle, rgba(99,102,241,.1), transparent 70%); top: 60%; right: 5%; animation: pdZoom 6s ease-in-out infinite; }
+        .pd-shape--zoom2 { width: 40px; height: 40px; border-radius: 50%; background: radial-gradient(circle, rgba(251,191,36,.15), transparent 70%); top: 5%; left: 45%; animation: pdZoom 8s ease-in-out infinite 1.5s; }
         @keyframes pdFloat {
             0%,100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-18px) rotate(4deg); }
-            50% { transform: translateY(-30px) rotate(-3deg); }
-            75% { transform: translateY(-12px) rotate(3deg); }
+            25% { transform: translateY(-22px) rotate(5deg); }
+            50% { transform: translateY(-35px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes pdFlip {
+            0%, 100% { transform: perspective(200px) rotateY(0deg) scale(1); }
+            50% { transform: perspective(200px) rotateY(180deg) scale(1.15); }
+        }
+        @keyframes pdZoom {
+            0%, 100% { transform: scale(1); opacity: .1; }
+            50% { transform: scale(1.5); opacity: .04; }
         }
     </style>
     <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
@@ -163,6 +175,10 @@
     <div class="pd-shape pd-shape--square"></div>
     <div class="pd-shape pd-shape--ring"></div>
     <div class="pd-shape pd-shape--dot"></div>
+    <div class="pd-shape pd-shape--flip1"></div>
+    <div class="pd-shape pd-shape--flip2"></div>
+    <div class="pd-shape pd-shape--zoom1"></div>
+    <div class="pd-shape pd-shape--zoom2"></div>
 </div>
 
 <!-- Zoom overlay -->
@@ -215,7 +231,7 @@
             </div>
             {% for gimg in gallery_images %}
             <div class="w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 border-transparent hover:border-indigo-300 flex-shrink-0" onclick="switchImage('{{ gimg.image.url }}', this)">
-                <img src="{{ gimg.image.url }}" alt="{{ gimg.alt_text|default:product_name }}" class="w-full h-full object-cover">
+                <img src="{{ gimg.image.url }}" alt="{{ gimg.alt_text|default:product_name }}" class="w-full h-full object-cover" loading="lazy">
             </div>
             {% endfor %}
         </div>
@@ -334,15 +350,15 @@
 
             <!-- Actions -->
             <div class="space-y-4 anim-slide-up-d2">
-                <!-- Inventory Status -->
+                <!-- Inventory Status (live-updated) -->
                 {% if inventory %}
                 <div class="mb-2">
                     {% if not inventory.is_in_stock %}
-                    <span class="inline-block bg-red-100 text-red-700 text-sm font-semibold px-3 py-1 rounded-full">Out of Stock</span>
+                    <span data-stock-product="{{ product_type }}-{{ product.id }}" class="stock-badge stock-badge--out inline-block bg-red-100 text-red-700 text-sm font-semibold px-3 py-1 rounded-full">Out of Stock</span>
                     {% elif inventory.is_low_stock %}
-                    <span class="inline-block bg-amber-100 text-amber-700 text-sm font-semibold px-3 py-1 rounded-full">Only {{ inventory.stock }} left!</span>
+                    <span data-stock-product="{{ product_type }}-{{ product.id }}" class="stock-badge stock-badge--low inline-block bg-amber-100 text-amber-700 text-sm font-semibold px-3 py-1 rounded-full">Low Stock — Only {{ inventory.stock }} left</span>
                     {% else %}
-                    <span class="inline-block bg-emerald-100 text-emerald-700 text-sm font-semibold px-3 py-1 rounded-full">In Stock</span>
+                    <span data-stock-product="{{ product_type }}-{{ product.id }}" class="stock-badge stock-badge--in inline-block bg-emerald-100 text-emerald-700 text-sm font-semibold px-3 py-1 rounded-full">In Stock</span>
                     {% endif %}
                 </div>
                 {% endif %}
@@ -669,7 +685,7 @@
             {% for rp in related_products %}
             <a href="{% url 'product_detail' product_type rp.id %}" class="related-card group">
                 <div class="overflow-hidden">
-                    <img src="{{ rp.imageUrl.url }}" alt="{{ rp.title|default:rp.name }}">
+                    <img src="{{ rp.imageUrl.url }}" alt="{{ rp.title|default:rp.name }}" loading="lazy">
                 </div>
                 <div class="p-4">
                     <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-indigo-600 transition-colors line-clamp-2">{{ rp.title|default:rp.name }}</h3>
@@ -783,5 +799,19 @@ if (window.location.hash === '#reviews-section') {
 }
 </script>
 <script src="{% static 'scroll-reveal.js' %}"></script>
+<script src="{% static 'global.js' %}"></script>
+<script>
+// Track recently viewed product
+document.addEventListener('DOMContentLoaded', function() {
+    trackRecentlyViewed({
+        id: {{ product.id }},
+        type: '{{ product_type }}',
+        name: '{{ product_name|escapejs }}',
+        price: '{{ product_display_price }}',
+        image: '{{ product.imageUrl.url }}',
+        url: '/product/{{ product_type }}/{{ product.id }}/'
+    });
+});
+</script>
 </body>
 </html>

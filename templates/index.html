@@ -31,12 +31,17 @@
 </head>
 <body class="font-inter bg-[#fafafa] text-slate-800 overflow-x-hidden">
 
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-[9999] max-w-sm space-y-2 pointer-events-none"></div>
+
     {% if messages %}
-    <div id="msgBox" class="fixed top-5 right-5 z-[9999] max-w-sm space-y-2">
-        {% for message in messages %}
-        <p class="msg-toast {{ message.tags }} px-5 py-3 rounded-xl font-semibold text-sm shadow-lg">{{ message }}</p>
-        {% endfor %}
-    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+            showToast('{{ message|escapejs }}', '{{ message.tags }}');
+            {% endfor %}
+        });
+    </script>
     {% endif %}
 
     {% include 'navbar.html' %}
@@ -602,5 +607,6 @@
     <script src="{% static 'cart_utils.js' %}"></script>
     <script src="{% static 'home.js' %}"></script>
     <script src="{%static 'scroll-reveal.js'%}"></script>
+    <script src="{% static 'global.js' %}"></script>
 </body>
 </html>

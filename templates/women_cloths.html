@@ -129,9 +129,17 @@
         /* 3D Floating Shapes */
         @keyframes pgFloat {
             0%,100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-18px) rotate(4deg); }
-            50% { transform: translateY(-30px) rotate(-3deg); }
-            75% { transform: translateY(-12px) rotate(3deg); }
+            25% { transform: translateY(-22px) rotate(5deg); }
+            50% { transform: translateY(-36px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes wcSwirl {
+            0% { transform: rotate(0deg) translateX(18px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(18px) rotate(-360deg); }
+        }
+        @keyframes wcBloom {
+            0%,100% { transform: scale(1); border-radius:50%; opacity:.08; }
+            50% { transform: scale(1.3); border-radius:30% 70% 70% 30%/30% 30% 70% 70%; opacity:.2; }
         }
         @keyframes cardUp {
             from { opacity: 0; transform: translateY(24px); }
@@ -155,6 +163,11 @@
             <div class="absolute top-[10%] left-[6%] w-24 h-24 rounded-full bg-rose-400/10 pointer-events-none" style="animation:pgFloat 7s ease-in-out infinite"></div>
             <div class="absolute bottom-[12%] right-[7%] w-16 h-16 rounded-2xl bg-orange-300/10 rotate-45 pointer-events-none" style="animation:pgFloat 9s 2s ease-in-out infinite"></div>
             <div class="absolute top-[25%] right-[18%] w-20 h-20 rounded-full border-4 border-rose-300/10 pointer-events-none" style="animation:pgFloat 10s 3.5s ease-in-out infinite"></div>
+            <div class="absolute top-[50%] left-[4%] w-14 h-14 rounded-full border-2 border-rose-400/12 pointer-events-none" style="animation:wcSwirl 12s linear infinite"></div>
+            <div class="absolute top-[18%] right-[5%] w-10 h-10 rounded-full bg-pink-300/10 pointer-events-none" style="animation:wcSwirl 10s 2s linear infinite"></div>
+            <div class="absolute bottom-[25%] left-[12%] w-16 h-16 rounded-full bg-rose-200/10 pointer-events-none" style="animation:wcBloom 8s ease-in-out infinite"></div>
+            <div class="absolute bottom-[8%] left-[25%] w-12 h-12 rounded-xl border-2 border-orange-300/10 pointer-events-none" style="animation:wcBloom 6s 1.5s ease-in-out infinite"></div>
+            <div class="absolute top-[60%] right-[15%] w-8 h-8 rounded-full bg-rose-300/8 pointer-events-none" style="animation:pgFloat 6s 1s ease-in-out infinite"></div>
             <div class="relative z-10 text-center max-w-3xl mx-auto">
                 <span class="inline-flex items-center rounded-full border border-rose-200 bg-white px-4 py-1 text-sm font-semibold text-rose-700">Women's Collection 2026</span>
                 <h1 class="hero-title mt-5 text-4xl md:text-6xl font-bold text-slate-900">Style That Moves With Your Day</h1>
@@ -242,7 +255,7 @@
                         {% for cloth in section.items %}
                         <article class="product-card product-item" data-name="{{ cloth.name|lower }}" data-price="{{ cloth.numeric_price }}">
                             <div class="aspect-[4/5] bg-rose-50 overflow-hidden relative group">
-                                <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
                                 <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <span class="bg-white text-slate-900 px-5 py-2.5 rounded-lg font-bold text-sm hover:scale-105 transition-transform">Quick View</span>
                                 </a>
@@ -250,6 +263,7 @@
                             <div class="p-4 grid gap-2">
                                 <h3 class="font-extrabold text-slate-900 leading-6"><a href="{% url 'product_detail' 'cloth' cloth.id %}" class="hover:text-rose-600 transition-colors" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
                                 <p class="text-xs uppercase tracking-wide font-semibold text-slate-500">{{ cloth.get_subcategory_display|default:'Featured Style' }}</p>
+                                {% with item_rating=cloth.avg_rating item_review_count=cloth.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                                 <div class="flex items-center gap-2 flex-wrap">
                                     <span class="text-lg font-extrabold text-slate-900">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
                                     {% if cloth.price1 and cloth.price2 %}
@@ -340,6 +354,12 @@
             updateVisibleCount();
         })();
     </script>
+
+    {% with page_obj=women_cloths %}
+    {% include 'includes/pagination.html' %}
+    {% endwith %}
+
+    <script src="{% static 'global.js' %}"></script>
     <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
 </html>
