@@ -85,6 +85,9 @@ urlpatterns = [
     # REST API
     path('api/products/', views.api_products, name='api_products'),
 
+    # Real-time update polling
+    path('check-updates/', views.check_updates, name='check_updates'),
+
     # Password Reset (Django built-in)
     path('password-reset/', auth_views.PasswordResetView.as_view(
         template_name='password_reset.html',

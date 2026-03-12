@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from .models import (Card, Offers, NewArrivals, Cloths, Review, ContactMessage, Toy,
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
-                     ProductImage, Inventory, Coupon, ProductVariant, OrderTracking)
+                     ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
+                     SiteUpdate)
 from .forms import ReviewForm, ContactForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -2145,3 +2146,13 @@ def api_products(request):
         'has_next': page_obj.has_next(),
         'has_previous': page_obj.has_previous(),
     })
+
+
+# ── Real-time site update polling endpoint ────────────
+def check_updates(request):
+    try:
+        obj = SiteUpdate.objects.get(pk=1)
+        ts = obj.updated_at.isoformat()
+    except SiteUpdate.DoesNotExist:
+        ts = ''
+    return JsonResponse({'ts': ts})

@@ -587,3 +587,20 @@ class OrderTracking(models.Model):
     def __str__(self):
         return f"{self.order.order_number} → {self.get_status_display()} ({self.created_at:%Y-%m-%d %H:%M})"
 
+
+# ══════════════════════════════════════════════════════
+# SITE UPDATE TRACKER  (for real-time frontend refresh)
+# ══════════════════════════════════════════════════════
+
+class SiteUpdate(models.Model):
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Site Update Tracker'
+
+    @classmethod
+    def touch(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        obj.save()
+        return obj
+
