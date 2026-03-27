@@ -2083,7 +2083,7 @@ def stock_status_api(request):
 # ══════════════════════════════════════════════════════
 
 def api_products(request):
-    """Lightweight JSON API for products."""
+    """Lightweight JSON API for products with search support."""
     product_type = request.GET.get('type', 'all')
     q = request.GET.get('q', '').strip()
     page_num = request.GET.get('page', 1)
@@ -2133,6 +2133,36 @@ def api_products(request):
                 'category': item.category,
                 'stock': inv.stock if inv else None,
                 'url': f'/product/offer/{item.id}/',
+            })
+
+    if product_type in ('all', 'arrival'):
+        qs = NewArrivals.objects.all()
+        if q:
+            qs = qs.filter(Q(title__icontains=q) | Q(description__icontains=q))
+        for item in qs:
+            inv = getattr(item, 'inventory', None)
+            results.append({
+                'id': item.id, 'type': 'arrival', 'name': item.title,
+                'price': item.price,
+                'image': item.imageUrl.url if item.imageUrl else '',
+                'category': item.category,
+                'stock': inv.stock if inv else None,
+                'url': f'/product/arrival/{item.id}/',
+            })
+
+    if product_type in ('all', 'card'):
+        qs = Card.objects.all()
+        if q:
+            qs = qs.filter(Q(title__icontains=q) | Q(description__icontains=q))
+        for item in qs:
+            inv = getattr(item, 'inventory', None)
+            results.append({
+                'id': item.id, 'type': 'card', 'name': item.title,
+                'price': item.price,
+                'image': item.imageUrl.url if item.imageUrl else '',
+                'category': item.category,
+                'stock': inv.stock if inv else None,
+                'url': f'/product/card/{item.id}/',
             })
 
     paginator = Paginator(results, 12)

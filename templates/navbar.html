@@ -21,10 +21,22 @@
                 <button><a href="{% url 'contact_us' %}" class="nav-link nav-link--contact">Contact</a></button>
                 <button><a href="{% url 'about' %}" class="nav-link nav-link--about">About</a></button>
                 
-                <!-- Search -->
-                <form action="{% url 'search' %}" method="GET" class="nav-search-form" style="display:inline-flex;align-items:center;margin:0 0.5rem;position:relative">
-                    <input type="text" name="q" placeholder="Search..." class="nav-search-input" style="padding:0.35rem 2.2rem 0.35rem 0.75rem;border:2px solid rgba(255,255,255,0.3);border-radius:20px;background:rgba(255,255,255,0.1);color:#fff;font-size:0.85rem;width:150px;outline:none;transition:all 0.3s">
-                    <button type="submit" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:0.75rem;padding:0;line-height:1" title="Search">🔍</button>
+                <!-- Search with Live Results -->
+                <form action="{% url 'search' %}" method="GET" class="nav-search-form" style="display:inline-flex;align-items:center;margin:0 0.5rem;position:relative;width:auto">
+                    <div style="position:relative;width:100%">
+                        <input type="text" id="nav-search-input" name="q" placeholder="Search products..." autocomplete="off" class="nav-search-input" style="padding:0.5rem 2.2rem 0.5rem 1rem;border:2px solid #6366f1;border-radius:20px;background:#fff;color:#1e293b;font-size:0.9rem;width:180px;outline:none;transition:all 0.3s;box-shadow:0 2px 8px rgba(99,102,241,0.1)">
+                        <!-- Live Search Results Dropdown -->
+                        <div id="nav-search-results" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.15);margin-top:0.5rem;max-height:400px;overflow-y:auto;z-index:1000;min-width:280px">
+                            <div id="nav-search-spinner" style="display:none;padding:1rem;text-align:center;color:#666">
+                                <span>Searching...</span>
+                            </div>
+                            <div id="nav-search-items"></div>
+                            <div id="nav-search-empty" style="display:none;padding:1rem;text-align:center;color:#999">
+                                No results found
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:0.8rem;padding:0;line-height:1;transition:all 0.2s" title="Search">🔍</button>
                 </form>
 
                 <!-- Cart Icon - Only for authenticated users -->

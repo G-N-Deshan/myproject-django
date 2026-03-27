@@ -490,3 +490,856 @@ class ContextProcessorTests(TestCase):
         self.client.login(username='testuser', password='TestPass123!')
         response = self.client.get(reverse('admin_dashboard'))
         self.assertEqual(response.status_code, 302)
+
+
+class AuthenticationTests(TestCase):
+    """Comprehensive tests for authentication flow"""
+    
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='authuser', 
+            email='auth@test.com', 
+            password='SecurePass123!'
+        )
+    
+    def test_signup_with_valid_data(self):
+        """Test successful user signup with valid credentials"""
+        response = self.client.post(reverse('signup'), {
+            'username': 'validuser',
+            'email': 'valid@test.com',
+            'password': 'ValidPass123!',
+            'password2': 'ValidPass123!',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(User.objects.filter(username='validuser').exists())
+        new_user = User.objects.get(username='validuser')
+        self.assertEqual(new_user.email, 'valid@test.com')
+    
+    def test_signup_duplicate_username(self):
+        """Test signup fails with duplicate username"""
+        response = self.client.post(reverse('signup'), {
+            'username': 'authuser',  # existing username
+            'email': 'new@test.com',
+            'password': 'ValidPass123!',
+            'password2': 'ValidPass123!',
+        })
+        self.assertEqual(response.status_code, 200)
+        # Count should still be 1 (original user)
+        self.assertEqual(User.objects.filter(username='authuser').count(), 1)
+    
+    def test_signup_duplicate_email(self):
+        """Test signup fails with duplicate email"""
+        response = self.client.post(reverse('signup'), {
+            'username': 'newuser',
+            'email': 'auth@test.com',  # existing email
+            'password': 'ValidPass123!',
+            'password2': 'ValidPass123!',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(User.objects.filter(username='newuser').exists())
+    
+    def test_signup_weak_password(self):
+        """Test signup fails with weak password"""
+        response = self.client.post(reverse('signup'), {
+            'username': 'weakpass',
+            'email': 'weak@test.com',
+            'password': '123',  # too weak
+            'password2': '123',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(User.objects.filter(username='weakpass').exists())
+    
+    def test_signup_password_mismatch(self):
+        """Test signup fails when passwords don't match"""
+        response = self.client.post(reverse('signup'), {
+            'username': 'mismatch',
+            'email': 'mismatch@test.com',
+            'password': 'ValidPass123!',
+            'password2': 'DifferentPass123!',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(User.objects.filter(username='mismatch').exists())
+    
+    def test_login_with_valid_credentials(self):
+        """Test successful login with correct username/password"""
+        response = self.client.post(reverse('login'), {
+            'username': 'authuser',
+            'password': 'SecurePass123!',
+        })
+        self.assertEqual(response.status_code, 302)
+        # Check session contains user
+        self.assertIn('_auth_user_id', self.client.session)
+        self.assertEqual(int(self.client.session['_auth_user_id']), self.user.id)
+    
+    def test_login_invalid_username(self):
+        """Test login fails with non-existent username"""
+        response = self.client.post(reverse('login'), {
+            'username': 'nonexistent',
+            'password': 'SecurePass123!',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('_auth_user_id', self.client.session)
+    
+    def test_login_wrong_password(self):
+        """Test login fails with incorrect password"""
+        response = self.client.post(reverse('login'), {
+            'username': 'authuser',
+            'password': 'WrongPassword123!',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('_auth_user_id', self.client.session)
+    
+    def test_logout_clears_session(self):
+        """Test logout properly clears session"""
+        self.client.login(username='authuser', password='SecurePass123!')
+        self.assertIn('_auth_user_id', self.client.session)
+        
+        response = self.client.post(reverse('logout'))
+        self.assertEqual(response.status_code, 302)
+        self.assertNotIn('_auth_user_id', self.client.session)
+    
+    def test_login_redirects_to_buy_page(self):
+        """Test login redirects to buy page by default"""
+        response = self.client.post(
+            reverse('login'),
+            {'username': 'authuser', 'password': 'SecurePass123!'},
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
+    
+    def test_signup_redirects_to_index(self):
+        """Test signup redirects to index after success"""
+        response = self.client.post(
+            reverse('signup'), {
+                'username': 'newuser',
+                'email': 'new@test.com',
+                'password': 'ValidPass123!',
+                'password2': 'ValidPass123!',
+            },
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
+    
+    def test_profile_view_authenticated(self):
+        """Test authenticated user can access profile"""
+        self.client.login(username='authuser', password='SecurePass123!')
+        response = self.client.get(reverse('profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('orders', response.context)
+        self.assertIn('reviews', response.context)
+    
+    def test_profile_requires_authentication(self):
+        """Test unauthenticated user is redirected from profile"""
+        response = self.client.get(reverse('profile'))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/login/', response.url)
+    
+    def test_update_profile_success(self):
+        """Test updating user profile information"""
+        self.client.login(username='authuser', password='SecurePass123!')
+        response = self.client.post(
+            reverse('update_profile'),
+            data='{"first_name": "Auth", "last_name": "User"}',
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 200)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.first_name, 'Auth')
+        self.assertEqual(self.user.last_name, 'User')
+    
+    def test_change_password_success(self):
+        """Test password change with correct current password"""
+        self.client.login(username='authuser', password='SecurePass123!')
+        response = self.client.post(
+            reverse('change_password'),
+            data='{"current_password": "SecurePass123!", "new_password": "NewSecure456!", "confirm_password": "NewSecure456!"}',
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 200)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password('NewSecure456!'))
+    
+    def test_change_password_wrong_current(self):
+        """Test password change fails with wrong current password"""
+        self.client.login(username='authuser', password='SecurePass123!')
+        response = self.client.post(
+            reverse('change_password'),
+            data='{"current_password": "WrongPassword", "new_password": "NewSecure456!", "confirm_password": "NewSecure456!"}',
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 400)
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.check_password('NewSecure456!'))
+    
+    def test_change_password_mismatch(self):
+        """Test password change fails when new passwords don't match"""
+        self.client.login(username='authuser', password='SecurePass123!')
+        response = self.client.post(
+            reverse('change_password'),
+            data='{"current_password": "SecurePass123!", "new_password": "NewSecure456!", "confirm_password": "DifferentSecure456!"}',
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 400)
+    
+    def test_update_email(self):
+        """Test updating user email address"""
+        self.client.login(username='authuser', password='SecurePass123!')
+        response = self.client.post(
+            reverse('update_email'),
+            data='{"new_email": "newemail@test.com", "password": "SecurePass123!"}',
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 200)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.email, 'newemail@test.com')
+    
+    def test_update_email_duplicate(self):
+        """Test email update fails if email already exists"""
+        # Create another user
+        User.objects.create_user(
+            username='otheruser',
+            email='other@test.com',
+            password='OtherPass123!'
+        )
+        
+        self.client.login(username='authuser', password='SecurePass123!')
+        response = self.client.post(
+            reverse('update_email'),
+            data='{"new_email": "other@test.com", "password": "SecurePass123!"}',
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 400)
+    
+    def test_session_cart_transfer_on_login(self):
+        """Test session cart items are transferred to user cart on login"""
+        # Add item to session cart (guest user)
+        toy = Toy.objects.create(
+            name='Cart Test Toy', 
+            description='Test', 
+            category='educational',
+            age_range='3-5', 
+            price=Decimal('500'), 
+            imageUrl='toys/test.jpg'
+        )
+        
+        # Create session
+        session = self.client.session
+        session.create()
+        session_key = session.session_key
+        
+        # Create session cart
+        session_cart = Cart.objects.create(session_key=session_key)
+        CartItem.objects.create(cart=session_cart, item_type='toy', toy=toy, quantity=1)
+        
+        # Login (should transfer cart)
+        response = self.client.post(reverse('login'), {
+            'username': 'authuser',
+            'password': 'SecurePass123!',
+        })
+        
+        # Check user now has the cart item
+        user_cart = Cart.objects.get(user=self.user)
+        self.assertEqual(user_cart.items.count(), 1)
+
+
+class SearchAndFilterTests(TestCase):
+    """Comprehensive tests for search and filter functionality"""
+    
+    def setUp(self):
+        self.client = Client()
+        
+        # Create test products with different prices
+        self.cloth1 = Cloths.objects.create(
+            name='Budget T-Shirt', 
+            price='500', price1='500', price2='500',
+            desccription='Affordable basic t-shirt',
+            category='men',
+            subcategory='tops'
+        )
+        
+        self.cloth2 = Cloths.objects.create(
+            name='Premium Dress Shirt',
+            price='2500', price1='2500', price2='2500',
+            desccription='High-quality dress shirt',
+            category='men',
+            subcategory='formal'
+        )
+        
+        self.cloth3 = Cloths.objects.create(
+            name='Women Premium Top',
+            price='1800', price1='1800', price2='1800',
+            desccription='Elegant women top',
+            category='women',
+            subcategory='tops'
+        )
+        
+        self.cloth4 = Cloths.objects.create(
+            name='Kids T-Shirt Blue',
+            price='700', price1='700', price2='700',
+            desccription='Colorful kids shirt',
+            category='kids-men',
+            subcategory='tops'
+        )
+        
+        self.toy1 = Toy.objects.create(
+            name='Educational Robot',
+            description='Learn coding with this robot',
+            category='educational',
+            age_range='8-12',
+            price=Decimal('1500'),
+            imageUrl='toys/robot.jpg'
+        )
+        
+        self.toy2 = Toy.objects.create(
+            name='Action Figure Marvel',
+            description='Superhero action figure',
+            category='action',
+            age_range='5-10',
+            price=Decimal('800'),
+            imageUrl='toys/figure.jpg'
+        )
+        
+        self.offer1 = Offers.objects.create(
+            title='Summer Clearance Sale',
+            description='Big discounts on summer items',
+            price1=Decimal('999'),
+            price2=Decimal('499'),
+            category='discount',
+            imageUrl='offers/summer.jpg'
+        )
+
+    # ==================== SEARCH TESTS ====================
+    
+    def test_search_by_clothing_name(self):
+        """Test search finds clothing by name"""
+        response = self.client.get(reverse('search'), {'q': 'Budget'})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.cloth1, response.context['results'].object_list[0]['name'] if response.context['results'] else [])
+    
+    def test_search_empty_query(self):
+        """Test search with empty query returns no results"""
+        response = self.client.get(reverse('search'), {'q': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['total'], 0)
+    
+    def test_search_across_product_types(self):
+        """Test search works across multiple product types"""
+        # Should find both toys and clothes
+        response = self.client.get(reverse('search'), {'q': 'robot'})
+        self.assertEqual(response.status_code, 200)
+        results = response.context['results'].object_list
+        self.assertGreater(len(results), 0)
+    
+    def test_search_case_insensitive(self):
+        """Test search is case-insensitive"""
+        response1 = self.client.get(reverse('search'), {'q': 'BUDGET'})
+        response2 = self.client.get(reverse('search'), {'q': 'budget'})
+        self.assertEqual(response1.status_code, 200)
+        self.assertEqual(response2.status_code, 200)
+        # Both should return results
+        self.assertGreater(response1.context['total'], 0)
+    
+    def test_search_by_description(self):
+        """Test search finds products by description"""
+        response = self.client.get(reverse('search'), {'q': 'coding'})
+        self.assertEqual(response.status_code, 200)
+        self.assertGreater(response.context['total'], 0)
+    
+    def test_search_ajax_request(self):
+        """Test search returns JSON for AJAX requests"""
+        response = self.client.get(
+            reverse('search'),
+            {'q': 'shirt'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn('results', data)
+        self.assertIn('has_next', data)
+        self.assertIn('total', data)
+    
+    def test_search_pagination(self):
+        """Test search results are paginated"""
+        response = self.client.get(reverse('search'), {'q': 'shirt', 'page': 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('results', response.context)
+        self.assertTrue(hasattr(response.context['results'], 'paginator'))
+    
+    def test_search_returns_product_details(self):
+        """Test search returns proper product details"""
+        response = self.client.get(reverse('search'), {'q': 'Budget'})
+        results = response.context['results'].object_list
+        if results:
+            result = results[0]
+            self.assertIn('name', result)
+            self.assertIn('price', result)
+            self.assertIn('type', result)
+            self.assertIn('url', result)
+
+    # ==================== FILTER TESTS - PRICE ====================
+    
+    def test_filter_by_min_price(self):
+        """Test filtering products by minimum price"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'min_price': '1000'
+        })
+        self.assertEqual(response.status_code, 200)
+        products = response.context['mens_cloths'].object_list
+        # Only Premium Dress Shirt (2500) should be in results
+        prices = [p.price for p in products]
+        self.assertTrue(all(int(p) >= 1000 for p in prices if p))
+    
+    def test_filter_by_max_price(self):
+        """Test filtering products by maximum price"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'max_price': '1000'
+        })
+        self.assertEqual(response.status_code, 200)
+        products = response.context['mens_cloths'].object_list
+        # Products should be <= 1000
+        prices = [p.price for p in products]
+        self.assertTrue(all(int(p) <= 1000 for p in prices if p))
+    
+    def test_filter_by_price_range(self):
+        """Test filtering products by price range"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'min_price': '500',
+            'max_price': '2000'
+        })
+        self.assertEqual(response.status_code, 200)
+        products = response.context['mens_cloths'].object_list
+        # Products should be in range 500-2000
+        prices = [p.price for p in products]
+        self.assertTrue(all(500 <= int(p) <= 2000 for p in prices if p))
+    
+    def test_filter_price_with_invalid_input(self):
+        """Test price filter handles invalid input gracefully"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'min_price': 'invalid',
+            'max_price': 'notanumber'
+        })
+        # Should not crash and return all products
+        self.assertEqual(response.status_code, 200)
+    
+    def test_filter_women_cloths_by_price(self):
+        """Test price filtering on women's clothing"""
+        response = self.client.get(reverse('women_cloths'), {
+            'min_price': '1000',
+            'max_price': '2500'
+        })
+        self.assertEqual(response.status_code, 200)
+        # Women Premium Top (1800) should be in results
+        products = response.context['women_cloths'].object_list
+        self.assertGreater(len(products), 0)
+
+    # ==================== FILTER TESTS - CATEGORY ====================
+    
+    def test_filter_by_category_men(self):
+        """Test filtering products by men category"""
+        response = self.client.get(reverse('mens_cloths'))
+        self.assertEqual(response.status_code, 200)
+        products = response.context['mens_cloths'].object_list
+        # All should be men category
+        self.assertTrue(all(p.category == 'men' for p in products))
+    
+    def test_filter_by_category_women(self):
+        """Test filtering products by women category"""
+        response = self.client.get(reverse('women_cloths'))
+        self.assertEqual(response.status_code, 200)
+        products = response.context['women_cloths'].object_list
+        # All should be women category
+        self.assertTrue(all(p.category == 'women' for p in products))
+    
+    def test_filter_by_category_kids(self):
+        """Test filtering products by kids category"""
+        response = self.client.get(reverse('kids_cloths'))
+        self.assertEqual(response.status_code, 200)
+        products = response.context['all_kids_cloths'].object_list
+        # All should be kids category
+        self.assertTrue(all(p.category in ['kids-men', 'kids-girl'] for p in products))
+    
+    def test_filter_toys_by_category(self):
+        """Test filtering toys by category"""
+        response = self.client.get(reverse('toys_page'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('toys', response.context)
+
+    # ==================== FILTER TESTS - SUBCATEGORY ====================
+    
+    def test_filter_by_subcategory(self):
+        """Test filtering by subcategory"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'subcategory': 'tops'
+        })
+        self.assertEqual(response.status_code, 200)
+        # Should have Budget T-Shirt only
+        products = response.context['mens_cloths'].object_list
+        self.assertGreater(len(products), 0)
+    
+    def test_filter_subcategory_formal(self):
+        """Test filtering formal subcategory"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'subcategory': 'formal'
+        })
+        self.assertEqual(response.status_code, 200)
+        products = response.context['mens_cloths'].object_list
+        # Premium Dress Shirt should be in results
+        self.assertGreater(len(products), 0)
+
+    # ==================== FILTER TESTS - COMBINED ====================
+    
+    def test_filter_combined_category_and_price(self):
+        """Test filtering with both category and price"""
+        response = self.client.get(reverse('women_cloths'), {
+            'min_price': '1000',
+            'max_price': '2500'
+        })
+        self.assertEqual(response.status_code, 200)
+        products = response.context['women_cloths'].object_list
+        # Check all products are in range
+        prices = [p.price for p in products]
+        self.assertTrue(all(1000 <= int(p) <= 2500 for p in prices if p))
+    
+    def test_filter_combined_search_and_category(self):
+        """Test filtering with search query and category"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'q': 'shirt'
+        })
+        self.assertEqual(response.status_code, 200)
+        # Should find shirts in men category
+
+    # ==================== SORTING TESTS ====================
+    
+    def test_sort_by_price_ascending(self):
+        """Test sorting products by price ascending"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'sort': 'price_asc'
+        })
+        self.assertEqual(response.status_code, 200)
+        products = response.context['mens_cloths'].object_list
+        if len(products) > 1:
+            # Extract numeric prices
+            prices = [int(p.price) for p in products if p.price]
+            self.assertEqual(prices, sorted(prices))
+    
+    def test_sort_by_price_descending(self):
+        """Test sorting products by price descending"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'sort': 'price_desc'
+        })
+        self.assertEqual(response.status_code, 200)
+        products = response.context['mens_cloths'].object_list
+        if len(products) > 1:
+            prices = [int(p.price) for p in products if p.price]
+            self.assertEqual(prices, sorted(prices, reverse=True))
+    
+    def test_sort_by_name_ascending(self):
+        """Test sorting products by name ascending"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'sort': 'name_asc'
+        })
+        self.assertEqual(response.status_code, 200)
+        products = response.context['mens_cloths'].object_list
+        if len(products) > 1:
+            names = [p.name.lower() for p in products]
+            self.assertEqual(names, sorted(names))
+    
+    def test_sort_by_name_descending(self):
+        """Test sorting products by name descending"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'sort': 'name_desc'
+        })
+        self.assertEqual(response.status_code, 200)
+        products = response.context['mens_cloths'].object_list
+        if len(products) > 1:
+            names = [p.name.lower() for p in products]
+            self.assertEqual(names, sorted(names, reverse=True))
+    
+    def test_sort_newest(self):
+        """Test sorting by newest (reverse ID)"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'sort': 'newest'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('mens_cloths', response.context)
+    
+    def test_sort_oldest(self):
+        """Test sorting by oldest (ID)"""
+        response = self.client.get(reverse('mens_cloths'), {
+            'sort': 'oldest'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('mens_cloths', response.context)
+
+    # ==================== API FILTER TESTS ====================
+    
+    def test_api_products_by_type(self):
+        """Test API filtering by product type"""
+        response = self.client.get(reverse('api_products'), {
+            'type': 'cloth'
+        })
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn('products', data)
+        # Should only have cloth products
+        types = [p.get('type') for p in data['products']]
+        self.assertTrue(all(t == 'cloth' for t in types))
+    
+    def test_api_products_by_search_query(self):
+        """Test API filtering by search query"""
+        response = self.client.get(reverse('api_products'), {
+            'q': 'Budget'
+        })
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn('products', data)
+        self.assertGreater(data['total'], 0)
+    
+    def test_api_products_pagination(self):
+        """Test API products pagination"""
+        response = self.client.get(reverse('api_products'), {
+            'page': 1
+        })
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn('total', data)
+        self.assertIn('pages', data)
+        self.assertIn('current_page', data)
+        self.assertIn('has_next', data)
+    
+    def test_api_products_combined_filters(self):
+        """Test API with multiple filters"""
+        response = self.client.get(reverse('api_products'), {
+            'type': 'cloth',
+            'q': 'shirt'
+        })
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn('products', data)
+
+
+class NavbarSearchTests(TestCase):
+    """Tests for navbar live search functionality"""
+    
+    def setUp(self):
+        self.client = Client()
+        
+        # Create test products
+        self.cloth = Cloths.objects.create(
+            name='Navy Blue T-Shirt',
+            price='800', price1='800', price2='800',
+            desccription='Comfortable everyday t-shirt',
+            category='men',
+            subcategory='tops'
+        )
+        
+        self.toy = Toy.objects.create(
+            name='Robot Toy Educational',
+            description='Learn coding with robot',
+            category='educational',
+            age_range='8-12',
+            price=Decimal('1500'),
+            imageUrl='toys/robot.jpg'
+        )
+        
+        self.offer = Offers.objects.create(
+            title='Summer Sale Offer',
+            description='Big discount on summer items',
+            price1=Decimal('999'),
+            price2=Decimal('499'),
+            category='discount',
+            imageUrl='offers/summer.jpg'
+        )
+    
+    def test_api_products_returns_correct_format(self):
+        """Test API returns products in correct JSON format"""
+        response = self.client.get(reverse('api_products'))
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check required fields
+        self.assertIn('products', data)
+        self.assertIn('total', data)
+        self.assertIn('pages', data)
+        self.assertIn('current_page', data)
+        self.assertIn('has_next', data)
+        self.assertIn('has_previous', data)
+    
+    def test_api_products_search_cloth(self):
+        """Test API search finds clothing products"""
+        response = self.client.get(reverse('api_products'), {'q': 'Navy'})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        self.assertGreater(data['total'], 0)
+        products = data['products']
+        self.assertGreater(len(products), 0)
+        
+        # Check product structure
+        product = products[0]
+        self.assertIn('id', product)
+        self.assertIn('type', product)
+        self.assertIn('name', product)
+        self.assertIn('price', product)
+        self.assertIn('image', product)
+        self.assertIn('url', product)
+    
+    def test_api_products_search_toy(self):
+        """Test API search finds toy products"""
+        response = self.client.get(reverse('api_products'), {'q': 'Robot'})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        self.assertGreater(data['total'], 0)
+        # Should find the robot toy
+        product_names = [p['name'] for p in data['products']]
+        self.assertTrue(any('Robot' in name for name in product_names))
+    
+    def test_api_products_search_offer(self):
+        """Test API search finds offer products"""
+        response = self.client.get(reverse('api_products'), {'q': 'Summer'})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        self.assertGreater(data['total'], 0)
+        # Should find the summer sale offer
+        product_names = [p['name'] for p in data['products']]
+        self.assertTrue(any('Summer' in name for name in product_names))
+    
+    def test_api_products_filter_by_type(self):
+        """Test API filtering by product type"""
+        response = self.client.get(reverse('api_products'), {'type': 'cloth'})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # All products should be cloth type
+        for product in data['products']:
+            self.assertEqual(product['type'], 'cloth')
+    
+    def test_api_products_empty_search(self):
+        """Test API with empty search query returns all products"""
+        response = self.client.get(reverse('api_products'), {'q': ''})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Should return results
+        self.assertGreater(data['total'], 0)
+    
+    def test_api_products_no_results(self):
+        """Test API returns empty when no products match search"""
+        response = self.client.get(reverse('api_products'), {
+            'q': 'nonexistentproductxyz123'
+        })
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        self.assertEqual(data['total'], 0)
+        self.assertEqual(len(data['products']), 0)
+    
+    def test_api_products_pagination_limit(self):
+        """Test API pagination works correctly"""
+        # Create many products
+        for i in range(15):
+            Cloths.objects.create(
+                name=f'Test Shirt {i}',
+                price='500', price1='500', price2='500',
+                desccription=f'Test shirt {i}',
+                category='men'
+            )
+        
+        response = self.client.get(reverse('api_products'), {'page': 1})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Should be paginated
+        self.assertLessEqual(len(data['products']), 12)  # Default pagination is 12
+    
+    def test_api_products_case_insensitive_search(self):
+        """Test API search is case-insensitive"""
+        response1 = self.client.get(reverse('api_products'), {'q': 'NAVY'})
+        response2 = self.client.get(reverse('api_products'), {'q': 'navy'})
+        
+        data1 = response1.json()
+        data2 = response2.json()
+        
+        # Both should return same results
+        self.assertEqual(data1['total'], data2['total'])
+    
+    def test_api_products_partial_search(self):
+        """Test API search with partial product name"""
+        response = self.client.get(reverse('api_products'), {'q': 'Sh'})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Should find products starting with 'Sh'
+        self.assertGreater(data['total'], 0)
+    
+    def test_navbar_search_form_exists(self):
+        """Test navbar includes search form"""
+        response = self.client.get(reverse('index'))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        
+        # Check navbar search form exists
+        self.assertIn('nav-search-input', content)
+        self.assertIn('nav-search-results', content)
+    
+    def test_navbar_search_javascript_loaded(self):
+        """Test navbar search JavaScript is included"""
+        response = self.client.get(reverse('index'))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        
+        # Check JavaScript file is referenced
+        self.assertIn('navbar-search.js', content)
+    
+    def test_api_products_with_multiple_filters(self):
+        """Test API with combined search and type filter"""
+        response = self.client.get(reverse('api_products'), {
+            'type': 'cloth',
+            'q': 'Shirt'
+        })
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # All products should be cloth type
+        for product in data['products']:
+            self.assertEqual(product['type'], 'cloth')
+    
+    def test_api_products_json_response_format(self):
+        """Test API returns valid JSON format"""
+        response = self.client.get(reverse('api_products'))
+        self.assertEqual(response.status_code, 200)
+        
+        # Should be valid JSON
+        self.assertEqual(response['Content-Type'], 'application/json')
+        
+        # Should be parseable
+        data = response.json()
+        self.assertIsInstance(data, dict)
+    
+    def test_api_products_includes_product_url(self):
+        """Test API products include valid URLs"""
+        response = self.client.get(reverse('api_products'), {'q': 'Navy'})
+        data = response.json()
+        
+        if data['products']:
+            product = data['products'][0]
+            # URL should be present and valid
+            self.assertIn('url', product)
+            self.assertTrue(product['url'].startswith('/product/'))
+    
+    def test_search_navbar_accessibility(self):
+        """Test search navbar is accessible on all pages"""
+        pages = ['index', 'buy', 'about']
+        
+        for page in pages:
+            response = self.client.get(reverse(page))
+            self.assertEqual(response.status_code, 200)
+            content = response.content.decode()
+            
+            # Navbar search should be on every page
+            self.assertIn('nav-search-input', content)
