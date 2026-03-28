@@ -64,7 +64,7 @@ body{
     font-size: 1.2rem;
     font-weight: 300;
     margin-right: 3rem;
-    color: #000000;
+    color: var(--color-text-primary);
     text-decoration: none;
     letter-spacing: 0.2rem;
     background-color: transparent;
@@ -77,28 +77,28 @@ body{
 }
 
 .section-0 .navbar .nav-link:hover{
-    background-color: #eef2ff;
+    background-color: var(--color-primary-light);
     transform: scale(1.05);
 }
 
 .section-0 .navbar .nav-link--home:hover{
-    color: #6366f1;
+    color: var(--color-primary);
 }
 
 .section-0 .navbar .nav-link--vehicles:hover{
-    color: #6366f1;
+    color: var(--color-primary);
 }
 
 .section-0 .navbar .nav-link--reviews:hover{
-    color: #6366f1;
+    color: var(--color-primary);
 }
 
 .section-0 .navbar .nav-link--contact:hover{
-    color: #6366f1;
+    color: var(--color-primary);
 }
 
 .section-0 .navbar .nav-link--about:hover{
-    color: #6366f1;
+    color: var(--color-primary);
 }
 
 .section-0 .navbar .nav-link--home{
@@ -127,17 +127,17 @@ body{
 }
 
 .section-0 .navbar .nav-link.active{
-    color: #6366f1;
+    color: var(--color-primary);
     font-weight: 600;
 }
 
 /* Search Input Styling */
 .nav-search-input {
     padding: 0.5rem 2.2rem 0.5rem 1rem !important;
-    border: 2px solid #6366f1 !important;
+    border: 2px solid var(--color-primary) !important;
     border-radius: 20px !important;
-    background: #fff !important;
-    color: #1e293b !important;
+    background: var(--color-surface) !important;
+    color: var(--color-text-primary) !important;
     font-size: 0.9rem !important;
     width: 180px !important;
     outline: none !important;
@@ -146,12 +146,12 @@ body{
 }
 
 .nav-search-input::placeholder {
-    color: #64748b !important;
+    color: var(--color-text-secondary) !important;
 }
 
 .nav-search-input:focus {
     border-color: #8b5cf6 !important;
-    background: #fff !important;
+    background: var(--color-surface) !important;
     box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2) !important;
 }
 
@@ -161,7 +161,7 @@ body{
 }
 
 .section-0 .navbar .nav-link--login:hover{
-    color: #6366f1;
+    color: var(--color-primary);
 }
 
 .section-0 .navbar .nav-link--login{

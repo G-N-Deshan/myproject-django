@@ -6,7 +6,7 @@
 html { scroll-behavior: smooth; }
 html::-webkit-scrollbar { width: 5px; }
 html::-webkit-scrollbar-track { background: #0f172a; }
-html::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 99px; }
+html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 99px; }
 
 /* ── Full-page background ── */
 .lg-bg-wrapper {
@@ -46,7 +46,7 @@ html::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 99px; }
 .lg-shape-5 { width: 65px; height: 65px; border: 2px solid #e879f9; bottom: 35%; right: 28%; animation-delay: 3.5s; transform: rotate(-20deg); }
 .lg-shape-6 { width: 50px; height: 50px; border: 2px solid #f59e0b; top: 55%; left: 4%; animation-delay: 4.2s; border-radius: 50%; opacity: 0.08; }
 .lg-shape-7 { width: 40px; height: 40px; background: #e879f9; top: 12%; right: 6%; animation-delay: 1.8s; border-radius: 12px; opacity: 0.08; }
-.lg-shape-8 { width: 70px; height: 70px; border: 2px solid #6366f1; bottom: 10%; right: 15%; animation-delay: 5s; transform: rotate(30deg); }
+.lg-shape-8 { width: 70px; height: 70px; border: 2px solid var(--color-primary); bottom: 10%; right: 15%; animation-delay: 5s; transform: rotate(30deg); }
 
 @keyframes lgShapeFloat {
     0%, 100% { transform: translateY(0) rotate(var(--r, 15deg)); }
@@ -147,13 +147,13 @@ html::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 99px; }
 .lg-submit-btn {
     width: 100%;
     padding: 0.95rem 1.5rem;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, #8b5cf6 100%);
     border: none;
     border-radius: 0.75rem;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 700;
-    font-family: 'Inter', sans-serif;
+    color: var(--color-text-inverse);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-bold);
+    font-family: var(--font-primary);
     cursor: pointer;
     position: relative;
     overflow: hidden;

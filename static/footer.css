@@ -58,24 +58,24 @@ body{
 .brand-name{
     margin: 0;
     font-size: 1.8rem;
-    font-weight: 700;
-    color: #ffffff;
+    font-weight: var(--fw-bold);
+    color: var(--color-text-inverse);
     letter-spacing: 0.05em;
 }
 
 .brand-tagline{
     margin: 0.2rem 0 0;
-    color: #818cf8;
-    font-size: 0.95rem;
+    color: var(--color-primary-light);
+    font-size: var(--fs-sm);
     font-weight: 400;
 }
 
 .brand-description{
     margin: 1.2rem 0 1.5rem;
-    color: #94a3b8;
-    line-height: 1.7;
-    font-weight: 300;
-    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: var(--line-height-relaxed);
+    font-weight: var(--fw-light);
+    font-size: var(--fs-sm);
 }
 
 /* Contact Info */
@@ -90,13 +90,13 @@ body{
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    color: #cbd5e1;
-    font-size: 0.9rem;
-    transition: color 0.2s ease;
+    color: var(--color-text-light);
+    font-size: var(--fs-sm);
+    transition: color var(--transition-fast);
 }
 
 .contact-item:hover {
-    color: #818cf8;
+    color: var(--color-primary-light);
 }
 
 .contact-icon {
@@ -106,9 +106,9 @@ body{
 /* Social Section */
 .social-section h4 {
     margin: 0 0 0.8rem;
-    color: #ffffff;
-    font-size: 1rem;
-    font-weight: 600;
+    color: var(--color-text-inverse);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-semibold);
 }
 
 .social-links {
@@ -125,14 +125,14 @@ body{
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all var(--transition-norm);
     border: 1px solid transparent;
 }
 
 .social-link:hover {
-    background: #6366f1;
+    background: var(--color-primary);
     transform: translateY(-3px);
-    border-color: #6366f1;
+    border-color: var(--color-primary);
 }
 
 .social-link span {

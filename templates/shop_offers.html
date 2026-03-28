@@ -1,11 +1,18 @@
 {% load static %}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'navbar.css'%}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Offers - KidZone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{% static 'footer.css'%}">
     <link rel="stylesheet" href="{% static 'shop_offers.css'%}">
     <link rel="stylesheet" href="{% static 'scroll-reveal.css'%}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
     .hero {
     background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
@@ -26,7 +33,9 @@
 }
 
 </style>     
-{% include 'navbar.html'%}
+</head>
+<body>
+    {% include 'navbar.html'%}
 
 
 
@@ -55,7 +64,7 @@
 
 
 
-<section class="offers" id="kids-section" data-reveal="up">
+<section class="offers" id="kids-section">
         <div class="section-top">
             <div>
                 <p class="section-small">Limited-time</p>
@@ -73,7 +82,7 @@
                 <span class="offer-badge">{{offers.offers_badge}}</span>
                 <div class="offer-img-wrap">
                     <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}" loading="lazy">
-                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span>Quick View</span></a>
+                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span><i class="bi bi-eye"></i> Quick View</span></a>
                 </div>
                 <h3><a href="{% url 'product_detail' 'offer' offers.id %}" style="color:inherit;text-decoration:none">{{offers.title}}</a></h3>
                 <p>{{offers.description}}</p>
@@ -89,7 +98,7 @@
                     <span class="stock">{{offers.stock_text}}</span>
                     {% endif %} 
                 </div>
-                <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}">{{offers.button_text}}</a>
+                <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}"><i class="bi bi-bag-plus"></i> {{offers.button_text}}</a>
             </article>
 
             {% endfor %}
@@ -332,7 +341,7 @@
 
 
 
-    <section class="offers" id="mens-section" data-reveal="up">
+    <section class="offers" id="mens-section">
         <div class="section-top">
             <div>
                 <p class="section-small">Limited-time</p>
@@ -487,7 +496,7 @@
 
 
 
-    <section class="offers" id="womens-section" data-reveal="up">
+    <section class="offers" id="womens-section">
         <div class="section-top">
             <div>
                 <p class="section-small">Limited-time</p>
@@ -507,7 +516,7 @@
                 <span class="offer-badge">{{offers.offers_badge}}</span>
                 <div class="offer-img-wrap">
                     <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}" loading="lazy">
-                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span>Quick View</span></a>
+                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span><i class="bi bi-eye"></i> Quick View</span></a>
                 </div>
                 <h3><a href="{% url 'product_detail' 'offer' offers.id %}" style="color:inherit;text-decoration:none">{{offers.title}}</a></h3>
                 <p>{{offers.description}}</p>
@@ -523,7 +532,7 @@
                     <span class="stock">{{offers.stock_text}}</span>
                     {% endif %} 
                 </div>
-                <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}">{{offers.button_text}}</a>
+                <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}"><i class="bi bi-bag-plus"></i> {{offers.button_text}}</a>
             </article>
 
             {% endfor %}
@@ -657,26 +666,35 @@
 <script src="{% static 'cart_utils.js' %}"></script>
 <script src="{% static 'global.js' %}"></script>
 <script>
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const kids = document.getElementById('kids-section');
-    const mens = document.getElementById('mens-section');
-    const womens = document.getElementById('womens-section');
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const kids = document.getElementById('kids-section');
+        const mens = document.getElementById('mens-section');
+        const womens = document.getElementById('womens-section');
 
-    function showSection(type) {
-        kids.style.display = type === 'kids' ? 'block' : 'none';
-        mens.style.display = type === 'mens' ? 'block' : 'none';
-        womens.style.display = type === 'womens' ? 'block' : 'none';
-    }
+        if (!kids || !mens || !womens) {
+            console.error('Offer sections not found in DOM');
+            return;
+        }
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            showSection(btn.dataset.category);
-            window.scrollTo({ top: kids.offsetTop - 120, behavior: 'smooth' });
+        function showSection(type) {
+            kids.style.display = type === 'kids' ? 'block' : 'none';
+            mens.style.display = type === 'mens' ? 'block' : 'none';
+            womens.style.display = type === 'womens' ? 'block' : 'none';
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                showSection(btn.dataset.category);
+                window.scrollTo({ top: kids.offsetTop - 120, behavior: 'smooth' });
+            });
         });
-    });
 
-    showSection('kids');
+        showSection('kids');
+    });
 </script>
+</body>
+</html>
 

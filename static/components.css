@@ -12,10 +12,10 @@
 }
 
 .btn-primary {
-    background: #6366f1;
-    color: #fff;
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
 }
 
 .btn-primary:hover {
-    background: #4f46e5;
+    background: var(--color-primary-dark);
 }

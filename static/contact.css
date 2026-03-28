@@ -9,7 +9,7 @@ html::-webkit-scrollbar { display: none; }
 /* Error list styling */
 .errorlist {
     margin-top: 6px;
-    color: #dc2626;
+    color: var(--color-error);
     font-size: 13px;
     font-weight: 600;
     list-style: none;

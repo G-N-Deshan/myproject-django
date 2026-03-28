@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{%static 'footer.css'%}">
     <link rel="stylesheet" href="{%static 'toys.css'%}">
     <link rel="stylesheet" href="{%static 'scroll-reveal.css'%}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 
@@ -144,7 +145,7 @@
                 <div class="toy-image">
                     <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
                     <div class="toy-overlay">
-                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn">Quick View</a>
+                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn"><i class="bi bi-eye"></i> Quick View</a>
                     </div>
                 </div>
                 <div class="toy-content">
@@ -167,7 +168,7 @@
                         data-add-to-cart
                         data-item-type="toy"
                         data-item-id="{{ toy.id }}"
-                    >Add to Cart</a>
+                    ><i class="bi bi-bag-plus"></i> Add to Cart</a>
                 </div>
             </div>
             {% endfor %}
@@ -189,7 +190,7 @@
                 <div class="toy-image">
                     <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
                     <div class="toy-overlay">
-                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn">Quick View</a>
+                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn"><i class="bi bi-eye"></i> Quick View</a>
                     </div>
                 </div>
                 <div class="toy-content">
@@ -212,7 +213,7 @@
                         data-add-to-cart
                         data-item-type="toy"
                         data-item-id="{{ toy.id }}"
-                    >Add to Cart</a>
+                    ><i class="bi bi-bag-plus"></i> Add to Cart</a>
                 </div>
             </div>
             {% empty %}

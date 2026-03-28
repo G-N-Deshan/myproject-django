@@ -189,7 +189,7 @@ html::-webkit-scrollbar {
 }
 
 .age-btn.active {
-    background: #6366f1;
+    background: var(--color-primary);
     color: #ffffff;
     border-color: #6366f1;
 }

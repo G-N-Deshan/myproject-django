@@ -28,7 +28,7 @@ body { font-family: 'Inter', sans-serif; overflow-x: hidden; display: block; }
     animation: shapeFloat 8s ease-in-out infinite;
 }
 .shape-1 { width: 80px; height: 80px; border: 2px solid #a5b4fc; top: 12%; left: 8%; animation-delay: 0s; transform: rotate(15deg); }
-.shape-2 { width: 60px; height: 60px; background: #818cf8; top: 65%; right: 10%; animation-delay: 1.5s; border-radius: 50%; }
+.shape-2 { width: 60px; height: 60px; background: rgba(99, 102, 241, 0.3); top: 65%; right: 10%; animation-delay: 1.5s; border-radius: 50%; }
 .shape-3 { width: 50px; height: 50px; border: 2px solid #c4b5fd; top: 30%; right: 22%; animation-delay: 3s; transform: rotate(45deg); }
 .shape-4 { width: 40px; height: 40px; background: #a5b4fc; bottom: 18%; left: 15%; animation-delay: 2s; border-radius: 50%; }
 .shape-5 { width: 70px; height: 70px; border: 2px solid #e879f9; bottom: 35%; right: 35%; animation-delay: 4s; transform: rotate(-20deg); }

@@ -82,7 +82,62 @@
         }
         .back-link:hover { text-decoration: underline; }
 
-        /* Floating 3D shapes */
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .tracking-hero h1 { font-size: 1.5rem; }
+            .tracking-hero { padding: 2rem 1rem; }
+            .tracking-container { padding: 0 1rem; margin-top: -1.5rem; }
+            .tracking-card { padding: 1.5rem; border-radius: 0.75rem; }
+            .order-info {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+            /* Progress tracker adjustments */
+            .progress-tracker {
+                margin: 1.5rem 0;
+            }
+            .progress-tracker::before {
+                left: 5%; right: 5%;
+            }
+            .step { flex-basis: auto; }
+            .step-circle { width: 36px; height: 36px; font-size: 0.85rem; }
+            .step-label { font-size: 0.65rem; margin-top: 0.4rem; }
+            /* Timeline adjustments */
+            .timeline-item { gap: 0.8rem; padding: 0.6rem 0; }
+            .timeline-content .status { font-size: 0.95rem; }
+            .timeline-content .note { font-size: 0.85rem; }\n        }
+        @media (max-width: 576px) {
+            .tracking-hero { padding: 1.5rem 1rem; }
+            .tracking-hero h1 { font-size: 1.25rem; }
+            .tracking-hero p { font-size: 0.9rem; }
+            .tracking-container { padding: 0 0.5rem; margin-top: -1rem; }
+            .tracking-card { padding: 1rem; border-radius: 0.75rem; }
+            .order-info {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            .info-item label { font-size: 0.7rem; }
+            .info-item p { font-size: 0.9rem; }
+            /* Vertical progress tracker for mobile */
+            .progress-tracker {
+                flex-direction: column;
+                align-items: flex-start;
+                margin: 1.5rem 0;
+            }
+            .progress-tracker::before {
+                display: none;
+            }
+            .progress-tracker::after {
+                display: none;
+            }
+            .step {
+                flex-direction: row;
+                align-items: flex-start;
+                width: 100%;
+                margin-bottom: 1rem;
+                flex-basis: auto;
+            }
+            .step-circle {\n                width: 32px;\n                height: 32px;\n                min-width: 32px;\n                font-size: 0.8rem;\n                flex-shrink: 0;\n            }\n            .step-label {\n                font-size: 0.75rem;\n                margin-left: 0.8rem;\n                margin-top: 0.3rem;\n            }\n            .step::after {\n                content: '';\n                position: absolute;\n                left: 16px;\n                top: 100%;\n                width: 2px;\n                height: 1rem;\n                background: #e2e8f0;\n                margin-left: 0;\n            }\n            .step.completed::after { background: #6366f1; }\n            .step:last-child::after { display: none; }\n            /* Timeline adjustments */\n            .timeline { padding-top: 1rem; margin-top: 1rem; }\n            .timeline h3 { font-size: 1rem; }\n            .timeline-item { gap: 0.6rem; padding: 0.6rem 0; }\n            .timeline-dot { width: 10px; height: 10px; margin-top: 3px; }\n            .timeline-content .status { font-size: 0.9rem; }\n            .timeline-content .note { font-size: 0.8rem; }\n            .timeline-content .date { font-size: 0.75rem; }\n            .back-link { font-size: 0.9rem; padding: 0.5rem 0; display: inline-flex; align-items: center; min-height: 44px; }\n        }\n        @media (max-width: 480px) {\n            .tracking-hero h1 { font-size: 1.1rem; }\n            .tracking-container { margin-top: -0.8rem; }\n            .tracking-card { padding: 0.75rem; }\n            .order-info { gap: 0.6rem; }\n            .info-item label { font-size: 0.65rem; }\n            .info-item p { font-size: 0.85rem; }\n            .step-circle { width: 28px; height: 28px; font-size: 0.75rem; }\n            .step-label { font-size: 0.7rem; margin-left: 0.6rem; }\n            .step::after { height: 0.8rem; }\n        }\n\n        /* Floating 3D shapes */
         .ot-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
         .ot-s { position: absolute; opacity: .07; animation: otFloat 8s ease-in-out infinite; }
         .ot-s--c  { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg,#818cf8,#c084fc); top: 8%; right: 5%; animation-duration: 7s; }
@@ -193,6 +248,13 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
+        {% else %}
+        <div class="timeline">
+            <h3>Tracking History</h3>
+            <div style="color: #64748b; font-size: 0.95rem; padding: 1rem; text-align: center;">
+                🔔 No tracking updates yet. Your order will be updated soon.
+            </div>
         </div>
         {% endif %}
 

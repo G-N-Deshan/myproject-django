@@ -460,15 +460,15 @@
         </section>
 
         <nav class="sticky-tabs" aria-label="Kids section navigation">
-            <button class="tab-btn active" type="button" data-scroll-target="top-section">Top</button>
-            <button class="tab-btn" type="button" data-scroll-target="girls-section">Girls</button>
-            <button class="tab-btn" type="button" data-scroll-target="boys-section">Boys</button>
+            <button class="tab-btn active" type="button" data-scroll-target="top-section"><i class="bi bi-star-fill"></i> Top</button>
+            <button class="tab-btn" type="button" data-scroll-target="girls-section"><i class="bi bi-heart"></i> Girls</button>
+            <button class="tab-btn" type="button" data-scroll-target="boys-section"><i class="bi bi-star"></i> Boys</button>
         </nav>
 
         <section class="controls" id="filter-section" data-reveal="up">
             <form method="get" action="{% url 'kids_cloths' %}" class="controls-grid">
                 <div class="field">
-                    <label for="q">Search</label>
+                    <label for="q"><i class="bi bi-search"></i> Search</label>
                     <input id="q" type="text" name="q" value="{{ search_query }}" placeholder="Product name">
                 </div>
 
@@ -502,7 +502,7 @@
                 </div>
 
                 <div class="field">
-                    <label for="sort">Sort by</label>
+                    <label for="sort"><i class="bi bi-arrow-down-up"></i> Sort by</label>
                     <select id="sort" name="sort" onchange="this.form.submit()">
                         <option value="featured" {% if selected_sort == 'featured' %}selected{% endif %}>Featured</option>
                         <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Newest</option>
@@ -515,8 +515,8 @@
                 </div>
 
                 <div class="actions">
-                    <button type="submit" class="btn btn-apply">Apply filters</button>
-                    <a class="btn btn-clear" href="{% url 'kids_cloths' %}">Clear</a>
+                    <button type="submit" class="btn btn-apply"><i class="bi bi-funnel"></i> Apply</button>
+                    <a class="btn btn-clear" href="{% url 'kids_cloths' %}"><i class="bi bi-x-circle"></i> Clear</a>
                 </div>
             </form>
         </section>
@@ -538,7 +538,7 @@
                     <div class="img-wrap">
                         <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" loading="lazy">
                         <div class="img-overlay">
-                            <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="quick-view-link">Quick View</a>
+                            <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="quick-view-link"><i class="bi bi-eye"></i> Quick View</a>
                         </div>
                     </div>
                     <div class="body">
@@ -551,8 +551,8 @@
                         </div>
                         {% if cloth.discount_text %}<span class="badge">{{ cloth.discount_text }}</span>{% endif %}
                         <div class="card-actions">
-                            <a class="buy-link" href="{% url 'product_detail' 'cloth' cloth.id %}">View details</a>
-                            <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add cart</button>
+                            <a class="buy-link" href="{% url 'product_detail' 'cloth' cloth.id %}"><i class="bi bi-eye"></i> View</a>
+                            <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}"><i class="bi bi-bag-plus"></i></button>
                         </div>
                     </div>
                 </article>
@@ -575,7 +575,7 @@
                     <div class="img-wrap">
                         <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" loading="lazy">
                         <div class="img-overlay">
-                            <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="quick-view-link">Quick View</a>
+                            <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="quick-view-link"><i class="bi bi-eye"></i> Quick View</a>
                         </div>
                     </div>
                     <div class="body">
@@ -588,8 +588,8 @@
                         </div>
                         {% if cloth.discount_text %}<span class="badge">{{ cloth.discount_text }}</span>{% endif %}
                         <div class="card-actions">
-                            <a class="buy-link" href="{% url 'product_detail' 'cloth' cloth.id %}">View details</a>
-                            <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add cart</button>
+                            <a class="buy-link" href="{% url 'product_detail' 'cloth' cloth.id %}"><i class="bi bi-eye"></i> View</a>
+                            <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}"><i class="bi bi-bag-plus"></i></button>
                         </div>
                     </div>
                 </article>

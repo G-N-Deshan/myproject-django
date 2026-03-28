@@ -17,7 +17,7 @@ html::-webkit-scrollbar { display: none; }
     background: #e2e8f0;
 }
 .filter-chip.active {
-    background: linear-gradient(135deg, #6366f1, #818cf8);
+    background: var(--gradient-cool);
     color: #fff;
     border-color: transparent;
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
