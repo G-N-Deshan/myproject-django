@@ -122,9 +122,6 @@ def index(request):
 def about(request):
     return render(request, 'about.html')
 
-def contact(request):
-    return render(request, 'contact.html')
-
 
 def buy(request):
     offers = Offers.objects.annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews')).order_by('-id')
@@ -499,10 +496,7 @@ def product_detail(request, product_type, product_id):
 def cloths(request):
     return render(request, 'cloths.html')
 
-def toys(request):  
-    return render(request, 'toys.html')
 
-    
 def kids_cloths(request):
     def parse_price(raw_value):
         if raw_value is None:
