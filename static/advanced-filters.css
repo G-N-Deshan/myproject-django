@@ -1,0 +1,540 @@
+/**
+ * Advanced Filtering System - Styles
+ * Filter panel, price slider, checkboxes, badges
+ */
+
+/* =====================================================
+   FILTER PANEL MAIN CONTAINER
+   ===================================================== */
+
+#filter-panel {
+    transition: all 0.3s ease;
+}
+
+#filter-panel.show {
+    display: flex !important;
+}
+
+.filter-container {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Filter panel sidebar */
+.filter-sidebar {
+    width: 280px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e9ecef;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.filter-sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.filter-sidebar-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #212529;
+}
+
+#clear-all-filters-btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    background-color: transparent;
+    color: #6f42c1;
+    border: 1px solid #6f42c1;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#clear-all-filters-btn:hover {
+    background-color: #f0e7ff;
+    color: #5a32a3;
+}
+
+/* =====================================================
+   FILTER SECTION (Price, Materials, Sizes, Brands)
+   ===================================================== */
+
+.filter-section {
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.filter-section:last-child {
+    border-bottom: none;
+    margin-bottom: 1rem;
+    padding-bottom: 0;
+}
+
+.filter-section-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-section-title button {
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.filter-section-title button:hover {
+    color: #6f42c1;
+}
+
+/* =====================================================
+   PRICE SLIDER
+   ===================================================== */
+
+#price-slider-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.price-range-display {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    font-weight: 600;
+    color: #6366f1;
+}
+
+.price-range-display span {
+    font-size: 0.95rem;
+}
+
+.price-slider-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+/* Range slider input styling */
+input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, #6366f1 0%, #a855f7 100%);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #6366f1;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    border: 2px solid #ffffff;
+    transition: all 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: #5558e3;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    transform: scale(1.1);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #6366f1;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    border: 2px solid #ffffff;
+    transition: all 0.2s ease;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+    background: #5558e3;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    transform: scale(1.1);
+}
+
+/* =====================================================
+   FILTER CHECKBOXES (Material, Size, Brand)
+   ===================================================== */
+
+.filter-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.filter-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0.4rem;
+    border-radius: 6px;
+}
+
+.filter-checkbox-item:hover {
+    background-color: #f0e7ff;
+    padding-left: 0.6rem;
+}
+
+.filter-checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #6366f1;
+    flex-shrink: 0;
+}
+
+.filter-checkbox-item input[type="checkbox"]:checked {
+    accent-color: #5558e3;
+}
+
+.filter-checkbox-item label {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #495057;
+    cursor: pointer;
+    flex: 1;
+    user-select: none;
+}
+
+.filter-checkbox-item input[type="checkbox"]:checked + label {
+    color: #6366f1;
+    font-weight: 500;
+}
+
+.filter-count {
+    font-size: 0.8rem;
+    color: #999;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* =====================================================
+   ACTIVE FILTERS BADGES
+   ===================================================== */
+
+#active-filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+#active-filters-container.hidden {
+    display: none;
+}
+
+.filter-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    background-color: #f0e7ff;
+    color: #6366f1;
+    border: 1px solid #d4c5f9;
+    animation: slideInUp 0.3s ease;
+}
+
+.filter-badge-price {
+    background-color: #fef3c7;
+    color: #b45309;
+    border-color: #fcd34d;
+}
+
+.filter-badge-materials {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border-color: #93c5fd;
+}
+
+.filter-badge-sizes {
+    background-color: #f3e8ff;
+    color: #7c3aed;
+    border-color: #e9d5ff;
+}
+
+.filter-badge-brands {
+    background-color: #ddd6fe;
+    color: #5b21b6;
+    border-color: #c4b5fd;
+}
+
+.filter-badge-remove {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: -0.2rem 0;
+    cursor: pointer;
+    color: inherit;
+    font-size: 1rem;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.filter-badge-remove:hover {
+    opacity: 1;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =====================================================
+   NO RESULTS MESSAGE
+   ===================================================== */
+
+.no-results-message {
+    grid-column: 1 / -1;
+    padding: 3rem 2rem;
+    text-align: center;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    margin: 2rem 0;
+}
+
+.no-results-content {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.no-results-content i {
+    font-size: 3rem;
+    color: #cbd5e1;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.no-results-content p {
+    font-size: 1.1rem;
+    color: #64748b;
+    margin-bottom: 1.5rem;
+}
+
+.no-results-content .btn {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE DESIGN
+   ===================================================== */
+
+@media (max-width: 1024px) {
+    .filter-sidebar {
+        width: 240px;
+    }
+    
+    .filter-container {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-container {
+        flex-direction: column;
+    }
+    
+    .filter-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        max-height: 100vh;
+        z-index: 1000;
+        border-radius: 0;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .filter-sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .filter-sidebar-header {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 10;
+    }
+    
+    /* Filter panel backdrop on mobile */
+    .filter-panel::before {
+        display: none;
+    }
+    
+    .filter-panel.show::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-sidebar {
+        padding: 1rem;
+    }
+    
+    .filter-section {
+        margin-bottom: 1.2rem;
+        padding-bottom: 1rem;
+    }
+    
+    .filter-badge {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .filter-section-title button {
+        font-size: 0.75rem;
+    }
+}
+
+/* =====================================================
+   FILTER BUTTON (MOBILE TOGGLE)
+   ===================================================== */
+
+.filter-toggle-btn {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.filter-toggle-btn .badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ff4757;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .filter-toggle-btn {
+        display: flex;
+    }
+}
+
+.filter-toggle-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* =====================================================
+   ACCESSIBILITY & ANIMATIONS
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    input[type="range"]::-webkit-slider-thumb,
+    input[type="range"]::-moz-range-thumb,
+    .filter-badge,
+    .filter-item,
+    .filter-sidebar {
+        transition: none;
+    }
+}
+
+/* Focus states for keyboard navigation */
+button:focus-visible,
+input[type="checkbox"]:focus-visible,
+input[type="range"]:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+}
+
+/* =====================================================
+   SCROLLBAR STYLING (for filter sidebar)
+   ===================================================== */
+
+.filter-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.filter-sidebar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.filter-sidebar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.filter-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Firefox scrollbar */
+.filter-sidebar {
+    scrollbar-color: #cbd5e1 #f1f5f9;
+    scrollbar-width: thin;
+}

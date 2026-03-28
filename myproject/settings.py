@@ -184,7 +184,58 @@ REST_FRAMEWORK = {
     ],
 }
 
-# ── Security Headers (production) ─────────────────────
+# ── Caching ────────────────────────────────────────────
+# Enable caching for better performance
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 3600,  # 1 hour
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000
+        }
+    }
+}
+
+# Cache templates for faster rendering
+TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
+)
+
+# ── Compression & HTTP Headers ──────────────────────── 
+MIDDLEWARE.insert(2, 'django.middleware.gzip.GZipMiddleware')
+
+# Static files compression (handled by WhiteNoise)
+WHITENOISE_MIMETYPES = {
+    '.js': 'application/javascript',
+    '.css': 'text/css',
+    '.woff': 'font/woff',
+    '.woff2': 'font/woff2',
+    '.ttf': 'font/ttf',
+}
+
+# Cache busting with WhiteNoise
+WHITENOISE_ADD_HEADERS_TO = (
+    r'.*(\.js|\.css|\.woff|\.woff2|\.ttf|\.png|\.jpg|\.jpeg|\.gif|\.webp)$',
+)
+
+# ── HTTP Response Headers for Caching ────────────────
+HTTP_CACHE_HEADERS = {
+    'default': {
+        'Cache-Control': 'max-age=3600, public',  # 1 hour for dynamic content
+    },
+    'static': {
+        'Cache-Control': 'max-age=31536000, public, immutable',  # 1 year for static (versioned) assets
+    },
+    'media': {
+        'Cache-Control': 'max-age=86400, public',  # 24 hours for media files
+    },
+}
+
+# Security Headers
 SECURE_BROWSER_XSS_FILTER = True
 if not DEBUG:
     SECURE_SSL_REDIRECT = True

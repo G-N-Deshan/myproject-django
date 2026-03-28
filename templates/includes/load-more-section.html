@@ -1,0 +1,36 @@
+{% comment %}
+Load More Button & Infinite Scroll Components
+- Load More button: Desktop pagination via button click
+- Infinite scroll sentinel: Triggers infinite scroll on mobile
+- Loading indicator: Shows during product fetch
+- End of results message: Shows when no more products
+{% endcomment %}
+
+<!-- Load More Button Section -->
+<div class="load-more-section">
+    {% if is_paginated and page_obj.has_next %}
+    <button class="load-more-btn" type="button" aria-label="Load more products">
+        <span>↓ Load More Products</span>
+    </button>
+    {% endif %}
+</div>
+
+<!-- Infinite Scroll Sentinel (triggers auto-load on mobile) -->
+<div class="infinite-scroll-sentinel"></div>
+
+<!-- Loading Indicator (shown during fetch) -->
+<div class="infinite-scroll-indicator">
+    <div class="infinite-scroll-spinner"></div>
+    <p class="infinite-scroll-text">Loading more products...</p>
+</div>
+
+<!-- End of Results Message (shown when no more pages) -->
+<div class="load-more-end">
+    <p>You've reached the end of our collection</p>
+</div>
+
+<!-- Store pagination info for JavaScript -->
+<script>
+    window.paginationInfo = window.paginationInfo || {};
+    // This will be accessed by pagination-loader.js from the DOM data attributes
+</script>

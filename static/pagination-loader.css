@@ -1,0 +1,398 @@
+/**
+ * Pagination & Infinite Scroll Styles
+ * Load More button, loading indicators, responsive design
+ */
+
+/* ==================== LOAD MORE BUTTON ==================== */
+
+.load-more-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 16px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.load-more-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #6366f1 0%, #2563eb 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.load-more-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+    background: linear-gradient(135deg, #2563eb 0%, #6366f1 100%);
+}
+
+.load-more-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+
+.load-more-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #a5b4fc 0%, #93c5fd 100%);
+}
+
+/* Ripple effect on click */
+.load-more-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.load-more-btn:active::after {
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    from {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    to {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+    }
+}
+
+/* Loading spinner animation */
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==================== INFINITE SCROLL INDICATOR ==================== */
+
+.infinite-scroll-indicator {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 12px;
+    color: #6366f1;
+}
+
+.infinite-scroll-indicator.active {
+    display: flex;
+}
+
+.infinite-scroll-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(99, 102, 241, 0.2);
+    border-top-color: #6366f1;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.infinite-scroll-text {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* ==================== END MESSAGE ==================== */
+
+.load-more-end {
+    display: none;
+    text-align: center;
+    padding: 32px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.load-more-end.active {
+    display: block;
+}
+
+.load-more-end::before {
+    content: '✓';
+    display: block;
+    font-size: 32px;
+    color: #10b981;
+    margin-bottom: 12px;
+}
+
+/* ==================== SENTINEL (for intersection observer) ==================== */
+
+.infinite-scroll-sentinel {
+    height: 100px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ==================== LOADING SKELETON ==================== */
+
+.product-skeleton,
+.arrival-skeleton,
+.toy-skeleton {
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: loading-shimmer 2s infinite;
+}
+
+@keyframes loading-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ==================== MOBILE RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+    .load-more-section {
+        padding: 24px 12px;
+    }
+
+    .load-more-btn {
+        width: 100%;
+        padding: 14px 24px;
+        font-size: 15px;
+    }
+
+    .infinite-scroll-indicator {
+        padding: 32px 16px;
+    }
+
+    .infinite-scroll-spinner {
+        width: 20px;
+        height: 20px;
+        border-width: 2px;
+    }
+
+    .infinite-scroll-text {
+        font-size: 13px;
+    }
+
+    .load-more-end {
+        padding: 24px 16px;
+        font-size: 13px;
+    }
+
+    .load-more-end::before {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .load-more-section {
+        padding: 18px 8px;
+    }
+
+    .load-more-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+        gap: 6px;
+    }
+
+    .load-more-btn:has(.loading-spinner) {
+        width: 100%;
+    }
+
+    .infinite-scroll-indicator {
+        padding: 24px 12px;
+    }
+}
+
+/* ==================== DARK MODE SUPPORT ==================== */
+
+@media (prefers-color-scheme: dark) {
+    .load-more-btn {
+        background: linear-gradient(135deg, #4f46e5 0%, #1d4ed8 100%);
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+    }
+
+    .load-more-btn:hover:not(:disabled) {
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.6);
+    }
+
+    .infinite-scroll-indicator {
+        color: #818cf8;
+    }
+
+    .infinite-scroll-spinner {
+        border-color: rgba(129, 140, 248, 0.2);
+        border-top-color: #818cf8;
+    }
+
+    .load-more-end {
+        color: #64748b;
+    }
+
+    .product-skeleton,
+    .arrival-skeleton,
+    .toy-skeleton {
+        background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+    }
+}
+
+/* ==================== ANIMATION & TRANSITIONS ==================== */
+
+/* Fade in newly loaded products */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-loaded-new {
+    animation: fadeInUp 0.4s ease-out;
+}
+
+/* Stagger animation for multiple products */
+.product-loaded-new:nth-child(1) { animation-delay: 0ms; }
+.product-loaded-new:nth-child(2) { animation-delay: 50ms; }
+.product-loaded-new:nth-child(3) { animation-delay: 100ms; }
+.product-loaded-new:nth-child(4) { animation-delay: 150ms; }
+.product-loaded-new:nth-child(5) { animation-delay: 200ms; }
+.product-loaded-new:nth-child(6) { animation-delay: 250ms; }
+.product-loaded-new:nth-child(7) { animation-delay: 300ms; }
+.product-loaded-new:nth-child(8) { animation-delay: 350ms; }
+.product-loaded-new:nth-child(9) { animation-delay: 400ms; }
+.product-loaded-new:nth-child(10) { animation-delay: 450ms; }
+.product-loaded-new:nth-child(11) { animation-delay: 500ms; }
+.product-loaded-new:nth-child(12) { animation-delay: 550ms; }
+
+/* ==================== ACCESSIBILITY ==================== */
+
+.load-more-btn:focus {
+    outline: 3px solid #6366f1;
+    outline-offset: 2px;
+}
+
+.load-more-btn:focus:not(:focus-visible) {
+    outline: none;
+}
+
+.load-more-btn:focus-visible {
+    outline: 3px solid #6366f1;
+    outline-offset: 2px;
+}
+
+/* Reduce motion support */
+@media (prefers-reduced-motion: reduce) {
+    .load-more-btn,
+    .load-more-btn:hover,
+    .load-more-btn:active {
+        transition: none;
+        transform: none;
+    }
+
+    .loading-spinner,
+    .infinite-scroll-spinner {
+        animation: none;
+        opacity: 0.8;
+    }
+
+    .product-loaded-new {
+        animation: none;
+    }
+
+    @keyframes loading-shimmer {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: more) {
+    .load-more-btn {
+        border: 2px solid currentColor;
+    }
+
+    .infinite-scroll-spinner {
+        border-width: 4px;
+    }
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+
+.text-loading {
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    padding: 16px 0;
+}
+
+.error-message {
+    padding: 16px;
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-radius: 8px;
+    border-left: 4px solid #dc2626;
+    margin: 16px 0;
+}
+
+.success-message {
+    padding: 16px;
+    background-color: #dcfce7;
+    color: #166534;
+    border-radius: 8px;
+    border-left: 4px solid #16a34a;
+    margin: 16px 0;
+}
+
+/* Loading state for buttons */
+[data-add-to-cart]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+[data-add-to-cart]:disabled::after {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-left: 6px;
+}

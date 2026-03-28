@@ -1,0 +1,335 @@
+/* ═══════════════════════════════════════════════════════════════
+   STANDARDIZED BUTTON STYLES & TOUCH TARGETS
+   Ensures all buttons are 44px+ (accessible touch target size)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Base Button Styles */
+button, [role="button"], input[type="button"], input[type="submit"], a.btn {
+    /* Minimum touch target: 44x44px (iOS) / 48x48px (Android) */
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    border: none;
+    text-decoration: none;
+    font-family: inherit;
+    line-height: 1;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Remove default button styling that can make it too small */
+button::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/* ── PRIMARY BUTTON (Call-to-Action) ── */
+.btn-primary,
+button.primary,
+input[type="submit"] {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:hover,
+button.primary:hover,
+input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+}
+
+.btn-primary:active,
+button.primary:active,
+input[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:focus-visible,
+button.primary:focus-visible,
+input[type="submit"]:focus-visible {
+    outline: 3px solid rgba(99, 102, 241, 0.5);
+    outline-offset: 2px;
+}
+
+.btn-primary:disabled,
+button.primary:disabled,
+input[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ── SECONDARY BUTTON ── */
+.btn-secondary,
+button.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover,
+button.secondary:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: #6366f1;
+    color: #6366f1;
+}
+
+.btn-secondary:focus-visible,
+button.secondary:focus-visible {
+    outline: 3px solid rgba(99, 102, 241, 0.3);
+    outline-offset: 2px;
+}
+
+/* ── DANGER BUTTON (Delete, Remove) ── */
+.btn-danger,
+button.danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:hover,
+button.danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
+}
+
+.btn-danger:focus-visible,
+button.danger:focus-visible {
+    outline: 3px solid rgba(239, 68, 68, 0.5);
+    outline-offset: 2px;
+}
+
+/* ── SUCCESS BUTTON ── */
+.btn-success,
+button.success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+}
+
+.btn-success:hover,
+button.success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+}
+
+.btn-success:focus-visible,
+button.success:focus-visible {
+    outline: 3px solid rgba(16, 185, 129, 0.5);
+    outline-offset: 2px;
+}
+
+/* ── ICON BUTTON (Smaller) ── */
+.btn-icon,
+button.icon {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.btn-icon.outline,
+button.icon.outline {
+    background: transparent;
+    border: 2px solid #e2e8f0;
+    color: #1e293b;
+}
+
+.btn-icon.outline:hover,
+button.icon.outline:hover {
+    border-color: #6366f1;
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.05);
+}
+
+/* ── TEXT BUTTON (Link-like) ── */
+.btn-text,
+button.text {
+    background: transparent;
+    color: #6366f1;
+    box-shadow: none;
+    text-decoration: underline;
+    min-height: 36px;
+    min-width: 36px;
+}
+
+.btn-text:hover,
+button.text:hover {
+    color: #4f46e5;
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.btn-text:focus-visible,
+button.text:focus-visible {
+    outline: 3px solid rgba(99, 102, 241, 0.3);
+    outline-offset: 2px;
+}
+
+/* ── LOADING STATE ── */
+.btn:disabled,
+button:disabled,
+.btn.loading,
+button.loading {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn.loading::after,
+button.loading::after {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-left: 0.5rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── EXIT/CLOSE BUTTON ── */
+.btn-close,
+button.close {
+    min-width: 36px;
+    min-height: 36px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #64748b;
+    font-size: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-close:hover,
+button.close:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+/* ── RESPONSIVE: Ensure touch targets on mobile ── */
+@media (max-width: 768px) {
+    button, [role="button"], input[type="button"], input[type="submit"], a.btn {
+        min-height: 48px;
+        min-width: 48px;
+        padding: 0.85rem 1.5rem;
+    }
+
+    .btn-icon,
+    button.icon {
+        min-width: 48px;
+        min-height: 48px;
+        width: 48px;
+        height: 48px;
+    }
+
+    /* Ensure clickable areas are well-spaced on mobile */
+    button + button,
+    .btn + .btn,
+    a.btn + a.btn {
+        margin-left: 0.5rem;
+    }
+}
+
+/* ── FOCUS-VISIBLE for better accessibility ── */
+button:focus-visible,
+input[type="button"]:focus-visible,
+input[type="submit"]:focus-visible,
+.btn:focus-visible {
+    outline: 3px solid #6366f1;
+    outline-offset: 2px;
+}
+
+/* ── GROUP BUTTONS ── */
+.btn-group {
+    display: inline-flex;
+    gap: 0;
+}
+
+.btn-group .btn,
+.btn-group button {
+    border-radius: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.btn-group .btn:first-child,
+.btn-group button:first-child {
+    border-radius: 0.75rem 0 0 0.75rem;
+}
+
+.btn-group .btn:last-child,
+.btn-group button:last-child {
+    border-right: none;
+    border-radius: 0 0.75rem 0.75rem 0;
+}
+
+/* Ensure proper colors in dark mode */
+@media (prefers-color-scheme: dark) {
+    .btn-secondary,
+    button.secondary {
+        background: rgba(30, 41, 59, 0.5);
+        color: #e2e8f0;
+        border-color: #475569;
+    }
+
+    .btn-secondary:hover,
+    button.secondary:hover {
+        background: rgba(99, 102, 241, 0.15);
+        border-color: #6366f1;
+        color: #a5b4fc;
+    }
+
+    .btn-text,
+    button.text {
+        color: #a5b4fc;
+    }
+
+    .btn-text:hover,
+    button.text:hover {
+        color: #c4b5fd;
+        background: rgba(99, 102, 241, 0.1);
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+    button, [role="button"], input[type="button"], input[type="submit"], a.btn {
+        border: 2px solid currentColor;
+    }
+
+    .btn:focus-visible {
+        outline-width: 4px;
+    }
+}

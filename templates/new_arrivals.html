@@ -4,6 +4,9 @@
     <link rel="stylesheet" href="{% static 'footer.css'%}">
    <link rel="stylesheet" href="{% static 'shop_offers.css'%}">
    <link rel="stylesheet" href="{% static 'scroll-reveal.css'%}">
+   <link rel="stylesheet" href="{% static 'product-comparison.css' %}">
+   <link rel="stylesheet" href="{% static 'wishlist-enhanced.css' %}">
+   <link rel="stylesheet" href="{% static 'pagination-loader.css' %}">
 <style>
     .na-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .na-s { position: absolute; opacity: .12; animation: naFloat 8s ease-in-out infinite; }
@@ -49,7 +52,10 @@
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
      
-{% include 'navbar.html'%}
+</head>
+<body>
+    <div id="toastContainer" class="fixed top-5 right-5 z-[9999] max-w-sm space-y-2 pointer-events-none"></div>
+    {% include 'navbar.html'%}
 
 <!-- 3D Floating Shapes -->
 <div class="na-shapes" aria-hidden="true">
@@ -83,8 +89,11 @@
             <article class="arrival-card">
                 <div class="arrival-media">
                     <img src="{{ item.imageUrl.url }}" alt="{{item.title}}" loading="lazy">
-                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-overlay"><span><i class="bi bi-eye"></i> Quick View</span></a>
+                    <button class="quick-view-btn arrival-overlay" data-item-type="arrival" data-item-id="{{ item.id }}" style="background: none; border: none; color: inherit; cursor: pointer; padding: 0; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;"><span><i class="bi bi-eye"></i> Quick View</span></button>
                     <span class="arrival-badge">{{item.offers_badge}}</span>
+                    <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
+                        {% include "components/wishlist-heart-button.html" with item_type="arrival" item_id=item.id %}
+                    </div>
                 </div>
                 <h3><a href="{% url 'product_detail' 'arrival' item.id %}" style="color:inherit;text-decoration:none">{{item.title}}</a></h3>
                 <p>{{item.description}}</p>
@@ -191,8 +200,11 @@
             <article class="arrival-card">
                 <div class="arrival-media">
                     <img src="{{ item.imageUrl.url }}" alt="{{item.title}}" loading="lazy">
-                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-overlay"><span>Quick View</span></a>
+                    <button class="quick-view-btn arrival-overlay" data-item-type="arrival" data-item-id="{{ item.id }}" style="background: none; border: none; color: inherit; cursor: pointer; padding: 0; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;"><span><i class="bi bi-eye"></i> Quick View</span></button>
                     <span class="arrival-badge">{{item.offers_badge}}</span>
+                    <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
+                        {% include "components/wishlist-heart-button.html" with item_type="arrival" item_id=item.id %}
+                    </div>
                 </div>
                 <h3><a href="{% url 'product_detail' 'arrival' item.id %}" style="color:inherit;text-decoration:none">{{item.title}}</a></h3>
                 <p>{{item.description}}</p>
@@ -308,7 +320,11 @@
             <article class="arrival-card">
                 <div class="arrival-media">
                     <img src="{{ item.imageUrl.url }}" alt="{{item.title}}">
+                    <button class="quick-view-btn arrival-overlay" data-item-type="arrival" data-item-id="{{ item.id }}" style="background: none; border: none; color: inherit; cursor: pointer; padding: 0; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;"><span><i class="bi bi-eye"></i> Quick View</span></button>
                     <span class="arrival-badge">{{item.offers_badge}}</span>
+                    <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
+                        {% include "components/wishlist-heart-button.html" with item_type="arrival" item_id=item.id %}
+                    </div>
                 </div>
                 <h3>{{item.title}}</h3>
                 <p>{{item.description}}</p>
@@ -399,6 +415,10 @@
     {% endwith %}
 
 {% include 'footer.html'%}
-<script src="{% static 'cart_utils.js' %}"></script>
-<script src="{% static 'global.js' %}"></script>
-<script src="{% static 'scroll-reveal.js'%}"></script>
+<script src="{% static 'cart_utils.js' %}" defer></script>
+<script src="{% static 'global.js' %}" defer></script>
+<script src="{% static 'scroll-reveal.js'%}" defer></script>
+<script src="{% static 'quick-view.js' %}" defer></script>
+<script src="{% static 'product-comparison.js' %}" defer></script>
+<script src="{% static 'wishlist-enhanced.js' %}" defer></script>
+<script src="{% static 'pagination-loader.js' %}" defer></script>

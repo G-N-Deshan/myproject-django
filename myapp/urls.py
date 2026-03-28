@@ -105,6 +105,23 @@ urlpatterns = [
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
         template_name='password_reset_complete.html',
     ), name='password_reset_complete'),
+
+    # Quick-View Modal API
+    path('api/quick-view/<str:item_type>/<int:item_id>/', views.quick_view_product, name='quick_view_product'),
+
+    # Stock Indicators & Notifications API (Feature 5)
+    path('api/back-in-stock-alert/', views.toggle_back_in_stock_alert, name='toggle_back_in_stock_alert'),
+    path('api/create-reservation/', views.create_reservation, name='create_reservation'),
+
+    # Wishlist API Endpoints (Feature 4)
+    path('api/wishlist/add/', views.api_add_to_wishlist, name='api_add_to_wishlist'),
+    path('api/wishlist/remove/', views.api_remove_from_wishlist, name='api_remove_from_wishlist'),
+    path('api/wishlist/toggle-alert/', views.api_toggle_price_alert, name='api_toggle_price_alert'),
+    path('api/wishlist/sync-state/', views.api_sync_wishlist_state, name='api_sync_wishlist_state'),
+    path('api/wishlist/generate-share-link/', views.api_generate_share_link, name='api_generate_share_link'),
+
+    # Pagination & Infinite Scroll API (Feature 6)
+    path('api/load-products/<str:category_type>/', views.api_load_products, name='api_load_products'),
 ]
 
 if settings.DEBUG:

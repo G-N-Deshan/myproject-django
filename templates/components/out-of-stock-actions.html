@@ -1,0 +1,61 @@
+<!-- Out of Stock Reservation Component -->
+<!-- Usage: {% include "components/out-of-stock-actions.html" with product=cloths_item item_type="cloth" user=request.user %} -->
+
+{% load static %}
+
+<div class="out-of-stock-actions">
+    {% if product.stock_quantity <= 0 %}
+        <!-- Show reservation options when out of stock -->
+        <div class="reservation-options">
+            {% if user.is_authenticated %}
+                <button class="btn-reserve" onclick="openReservationModal('{{ item_type }}', {{ product.id }})">
+                    Reserve Now
+                </button>
+                <button class="btn btn-secondary" onclick="toggleBackInStockAlert('{{ item_type }}', {{ product.id }})">
+                    <i class="bi bi-bell"></i> Notify When Back
+                </button>
+            {% else %}
+                <p style="color: #64748b; font-size: 0.875rem; margin: 1rem 0;">
+                    <a href="{% url 'login' %}">Sign in</a> to reserve or get notifications
+                </p>
+                <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary">
+                    Sign In to Reserve
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    function openReservationModal(itemType, itemId) {
+        // This will be connected to a reservation modal
+        console.log(`Reserve ${itemType} item ${itemId}`);
+        // TODO: Implement reservation modal
+    }
+
+    function toggleBackInStockAlert(itemType, itemId) {
+        fetch('/api/back-in-stock-alert/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                item_type: itemType,
+                item_id: itemId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.added) {
+                showGlobalToast('✓ You\'ll be notified when this item is back in stock!', 'success');
+            } else {
+                showGlobalToast('Alert removed', 'success');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showGlobalToast('Error setting up notification', 'error');
+        });
+    }
+</script>

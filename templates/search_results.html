@@ -177,14 +177,21 @@
     {% elif query %}
     <div class="no-results">
         <span>🔍</span>
-        <h3>No products found</h3>
-        <p>Try different keywords or browse our categories</p>
+        <h3>No products found for "{{ query }}"</h3>
+        <p>We couldn't find anything matching your search. Try:</p>
+        <ul style="margin-top: 1rem; text-align: left; display: inline-block;">
+            <li style="margin: 0.5rem 0;"><strong>✓</strong> Checking your spelling</li>
+            <li style="margin: 0.5rem 0;"><strong>✓</strong> Using fewer or different keywords</li>
+            <li style="margin: 0.5rem 0;"><strong>✓</strong> Browsing by <a href="{% url 'kids_cloths' %}" style="color: #6366f1; text-decoration: underline;">category</a></li>
+        </ul>
+        <button onclick="document.querySelector('.search-bar input').focus()" style="margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: #6366f1; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Try Another Search</button>
     </div>
     {% else %}
     <div class="no-results">
         <span>🛍️</span>
         <h3>Start searching</h3>
         <p>Enter a keyword above to find products</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #94a3b8;">Browse popular: <a href="{% url 'kids_cloths' %}" style="color: #6366f1; text-decoration: underline;">Kids Clothes</a> • <a href="{% url 'womens_cloths' %}" style="color: #6366f1; text-decoration: underline;">Womens</a> • <a href="{% url 'mens_cloths' %}" style="color: #6366f1; text-decoration: underline;">Mens</a> • <a href="{% url 'toys_page' %}" style="color: #6366f1; text-decoration: underline;">Toys</a></p>
     </div>
     {% endif %}
 </div>

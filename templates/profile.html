@@ -320,7 +320,7 @@
 
     {% include 'footer.html' %}
     
-    <script src="{% static 'profile.js' %}"></script>
+    <script src="{% static 'profile.js' %}" defer></script>
     <script>
         // Initialize modals
         document.addEventListener('DOMContentLoaded', function() {
@@ -548,8 +548,8 @@
             }
         });
     </script>
-    <script src="{% static 'global.js' %}"></script>
-    <script src="{% static 'scroll-reveal.js' %}"></script>
+    <script src="{% static 'global.js' %}" defer></script>
+    <script src="{% static 'scroll-reveal.js' %}" defer></script>
 
 </body>
 </html>

@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="{%static 'footer.css'%}">
     <link rel="stylesheet" href="{%static 'toys.css'%}">
     <link rel="stylesheet" href="{%static 'scroll-reveal.css'%}">
+    <link rel="stylesheet" href="{% static 'product-comparison.css' %}">
+    <link rel="stylesheet" href="{% static 'wishlist-enhanced.css' %}">
+    <link rel="stylesheet" href="{% static 'pagination-loader.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
@@ -102,9 +105,13 @@
                 <div class="toy-image">
                     <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
                     <div class="toy-overlay">
-                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn">Quick View</a>
+                        <button class="quick-view-btn" data-item-type="toy" data-item-id="{{ toy.id }}" style="background: none; border: none; color: inherit; cursor: pointer; font-size: inherit; padding: 0;">Quick View</button>
+                        <div style="position: absolute; top: 12px; right: 12px;">
+                            {% include "components/wishlist-heart-button.html" with item_type="toy" item_id=toy.id %}
+                        </div>
                     </div>
                 </div>
+                {% include "components/stock-indicator.html" with product=toy item_type="toy" %}
                 <div class="toy-content">
                     <span class="toy-category">{{ toy.get_category_display }}</span>
                     <h3><a href="{% url 'product_detail' 'toy' toy.id %}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
@@ -126,6 +133,7 @@
                         data-item-type="toy"
                         data-item-id="{{ toy.id }}"
                     >Add to Cart</a>
+                    {% include "components/compare-button.html" with item_type="toy" item_id=toy.id %}
                 </div>
             </div>
             {% endfor %}
@@ -145,9 +153,13 @@
                 <div class="toy-image">
                     <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
                     <div class="toy-overlay">
-                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn"><i class="bi bi-eye"></i> Quick View</a>
+                        <button class="quick-view-btn" data-item-type="toy" data-item-id="{{ toy.id }}" style="background: none; border: none; color: inherit; cursor: pointer; font-size: inherit; padding: 0;"><i class="bi bi-eye"></i> Quick View</button>
+                        <div style="position: absolute; top: 12px; right: 12px;">
+                            {% include "components/wishlist-heart-button.html" with item_type="toy" item_id=toy.id %}
+                        </div>
                     </div>
                 </div>
+                {% include "components/stock-indicator.html" with product=toy item_type="toy" %}
                 <div class="toy-content">
                     <span class="toy-category">{{ toy.get_category_display }}</span>
                     <h3><a href="{% url 'product_detail' 'toy' toy.id %}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
@@ -168,8 +180,7 @@
                         data-add-to-cart
                         data-item-type="toy"
                         data-item-id="{{ toy.id }}"
-                    ><i class="bi bi-bag-plus"></i> Add to Cart</a>
-                </div>
+                    ><i class="bi bi-bag-plus"></i> Add to Cart</a>                    {% include "components/compare-button.html" with item_type="toy" item_id=toy.id %}                </div>
             </div>
             {% endfor %}
         </div>
@@ -190,9 +201,13 @@
                 <div class="toy-image">
                     <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
                     <div class="toy-overlay">
-                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn"><i class="bi bi-eye"></i> Quick View</a>
+                        <button class="quick-view-btn" data-item-type="toy" data-item-id="{{ toy.id }}" style="background: none; border: none; color: inherit; cursor: pointer; font-size: inherit; padding: 0;"><i class="bi bi-eye"></i> Quick View</button>
+                        <div style="position: absolute; top: 12px; right: 12px;">
+                            {% include "components/wishlist-heart-button.html" with item_type="toy" item_id=toy.id %}
+                        </div>
                     </div>
                 </div>
+                {% include "components/stock-indicator.html" with product=toy item_type="toy" %}
                 <div class="toy-content">
                     <span class="toy-category">{{ toy.get_category_display }}</span>
                     <h3><a href="{% url 'product_detail' 'toy' toy.id %}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
@@ -214,6 +229,7 @@
                         data-item-type="toy"
                         data-item-id="{{ toy.id }}"
                     ><i class="bi bi-bag-plus"></i> Add to Cart</a>
+                    {% include "components/compare-button.html" with item_type="toy" item_id=toy.id %}
                 </div>
             </div>
             {% empty %}
@@ -226,7 +242,7 @@
     </section>
 
     {% with page_obj=toys %}
-    {% include 'includes/pagination.html' %}
+    {% include 'includes/load-more-section.html' %}
     {% endwith %}
 
     <!-- Benefits Section -->
@@ -257,9 +273,13 @@
 
     {%include 'footer.html'%}
 
-    <script src="{% static 'cart_utils.js' %}"></script>
-    <script src="{% static 'toys.js' %}"></script>
-    <script src="{% static 'global.js' %}"></script>
-    <script src="{%static 'scroll-reveal.js'%}"></script>
+    <script src="{% static 'cart_utils.js' %}" defer></script>
+    <script src="{% static 'toys.js' %}" defer></script>
+    <script src="{% static 'global.js' %}" defer></script>
+    <script src="{%static 'scroll-reveal.js'%}" defer></script>
+    <script src="{% static 'quick-view.js' %}" defer></script>
+    <script src="{% static 'product-comparison.js' %}" defer></script>
+    <script src="{% static 'wishlist-enhanced.js' %}" defer></script>
+    <script src="{% static 'pagination-loader.js' %}" defer></script>
 </body>
 </html>

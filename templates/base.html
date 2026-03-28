@@ -17,12 +17,18 @@
     <!-- Global Design System -->
     <link rel="stylesheet" href="{% static 'global-colors.css' %}">
     <link rel="stylesheet" href="{% static 'global-typography.css' %}">
-
+    <link rel="stylesheet" href="{% static 'design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'buttons.css' %}">
     <link rel="stylesheet" href="{% static 'navbar.css' %}">
     <link rel="stylesheet" href="{% static 'footer.css' %}">
     <link rel="stylesheet" href="{% static 'components.css' %}">
     <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
-
+    <link rel="stylesheet" href="{% static 'quick-view.css' %}">
+    <link rel="stylesheet" href="{% static 'stock-indicators.css' %}">
+    <link rel="stylesheet" href="{% static 'product-comparison.css' %}">
+    <link rel="stylesheet" href="{% static 'advanced-filters.css' %}">
+    <link rel="stylesheet" href="{% static 'wishlist-enhanced.css' %}">
+    <link rel="stylesheet" href="{% static 'pagination-loader.css' %}">
     <script>
         tailwind.config = {
             theme: {
@@ -40,22 +46,16 @@
 <body class="font-inter bg-[#fafafa] text-slate-800 overflow-x-hidden">
 
     <!-- ── Toast Notifications ── -->
-    <div id="toastContainer" class="fixed top-5 right-5 z-[9999] max-w-sm space-y-2 pointer-events-none"></div>
-
-    {% if messages %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            {% for message in messages %}
-            showToast('{{ message|escapejs }}', '{{ message.tags }}');
+    <div id="toastContainer" class="fixed top-5 right-5 z-[9999] max-w-sm space-y-2 pointer-events-none" role="region" aria-live="polite" aria-label="Toast notifications"></div>
             {% endfor %}
         });
     </script>
     {% endif %}
 
     <!-- ── Loading Overlay ── -->
-    <div id="loadingOverlay" class="fixed inset-0 z-[10000] bg-white/80 backdrop-blur-sm flex items-center justify-center hidden">
+    <div id="loadingOverlay" class="fixed inset-0 z-[10000] bg-white/80 backdrop-blur-sm flex items-center justify-center hidden" role="status" aria-label="Loading" aria-live="polite">
         <div class="flex flex-col items-center gap-3">
-            <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+            <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" aria-hidden="true"></div>
             <span class="text-sm font-medium text-slate-600">Loading...</span>
         </div>
     </div>
@@ -63,7 +63,7 @@
     {% include 'navbar.html' %}
 
     <!-- 3D Floating Shapes -->
-    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true" role="presentation">
         <div style="position:absolute;width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#818cf8,#c084fc);top:8%;right:5%;opacity:.08;animation:baseFloat 7s ease-in-out infinite"></div>
         <div style="position:absolute;width:70px;height:70px;border-radius:14px;background:linear-gradient(135deg,#ec4899,#f472b6);bottom:15%;left:6%;opacity:.08;animation:baseFloat 9s ease-in-out infinite 2s;transform:rotate(45deg)"></div>
         <div style="position:absolute;width:80px;height:80px;border-radius:50%;border:4px solid rgba(99,102,241,.1);top:45%;left:12%;opacity:.08;animation:baseFloat 10s ease-in-out infinite 3.5s"></div>
@@ -92,10 +92,10 @@
     </style>
 
     <!-- ── Quick-View Modal ── -->
-    <div id="quickViewModal" class="fixed inset-0 z-[8000] hidden">
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeQuickView()"></div>
+    <div id="quickViewModal" class="fixed inset-0 z-[8000] hidden" role="dialog" aria-modal="true" aria-labelledby="qvName">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeQuickView()" role="button" aria-label="Close quick view"></div>
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl max-w-2xl w-[95%] max-h-[90vh] overflow-y-auto p-6">
-            <button onclick="closeQuickView()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-red-100 flex items-center justify-center text-slate-500 hover:text-red-500 transition">&times;</button>
+            <button onclick="closeQuickView()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-red-100 flex items-center justify-center text-slate-500 hover:text-red-500 transition" aria-label="Close">&times;</button>
             <div id="quickViewContent" class="flex flex-col md:flex-row gap-6">
                 <div class="md:w-1/2">
                     <img id="qvImage" src="" alt="" class="w-full rounded-xl object-cover aspect-square" loading="lazy">
@@ -126,11 +126,21 @@
 
     {% include 'footer.html' %}
 
-    <!-- ── Global Scripts ── -->
-    <script src="{% static 'cart_utils.js' %}"></script>
-    <script src="{% static 'global.js' %}"></script>
-    <script src="{% static 'navbar-search.js' %}"></script>
-    <script src="{% static 'scroll-reveal.js' %}"></script>
+    <!-- ── Global Scripts (Critical) ── -->
+    <script src="{% static 'cart_utils.js' %}" defer></script>
+    <script src="{% static 'global.js' %}" defer></script>
+    <script src="{% static 'navbar-search.js' %}" defer></script>
+    <!-- Scroll reveal is non-critical, load after page render -->
+    <script src="{% static 'scroll-reveal.js' %}" defer></script>
+    <script src="{% static 'quick-view.js' %}" defer></script>
+    <script src="{% static 'product-comparison.js' %}" defer></script>
+    <script src="{% static 'advanced-filters.js' %}" defer></script>
+    <script src="{% static 'wishlist-enhanced.js' %}" defer></script>
+    <script src="{% static 'pagination-loader.js' %}" defer></script>
+    
+    <!-- Quick View Modal -->
+    {% include 'modals/product-quick-view.html' %}
+    
     {% block extra_js %}{% endblock %}
 </body>
 </html>

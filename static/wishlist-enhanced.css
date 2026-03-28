@@ -1,0 +1,647 @@
+/**
+ * Wishlist & Price Alert System - Styles
+ * Heart buttons, modals, share functionality
+ */
+
+/* =====================================================
+   HEART BUTTON (WISHLIST TOGGLE)
+   ===================================================== */
+
+.wishlist-heart-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    color: #cbd5e1;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.wishlist-heart-btn:hover:not(.in-wishlist) {
+    color: #f87171;
+    transform: scale(1.1);
+}
+
+.wishlist-heart-btn.in-wishlist {
+    color: #ec4899;
+    animation: heartBeat 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.wishlist-heart-btn.in-wishlist:hover {
+    color: #be185d;
+    transform: scale(1.15);
+}
+
+.wishlist-heart-btn i {
+    display: block;
+}
+
+/* Heart beat animation */
+@keyframes heartBeat {
+    0% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.3);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Product card heart button positioning */
+.product-card .wishlist-heart-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.product-card .wishlist-heart-btn:hover {
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.product-card .wishlist-heart-btn.in-wishlist {
+    background-color: #fff0f6;
+}
+
+/* =====================================================
+   SHARE WISHLIST MODAL
+   ===================================================== */
+
+.wishlist-share-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: fadeIn 0.3s ease;
+}
+
+.wishlist-share-modal.active {
+    display: flex;
+}
+
+.wishlist-share-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+}
+
+.wishlist-share-modal-content {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideInUp 0.3s ease;
+}
+
+.wishlist-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #64748b;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.wishlist-modal-close:hover {
+    color: #1e293b;
+}
+
+.wishlist-share-modal-content h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+}
+
+.wishlist-share-modal-content > p {
+    color: #64748b;
+    margin: 0 0 2rem 0;
+}
+
+/* =====================================================
+   SHARE SECTIONS
+   ===================================================== */
+
+.wishlist-share-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.wishlist-share-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0;
+}
+
+.wishlist-share-section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #334155;
+    margin: 0 0 1rem 0;
+}
+
+/* =====================================================
+   SHARE LINK INPUT
+   ===================================================== */
+
+.wishlist-share-input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.wishlist-share-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: 'Monaco', 'Courier New', monospace;
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.wishlist-share-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.wishlist-share-input[readonly] {
+    cursor: default;
+}
+
+.wishlist-share-input-group .btn {
+    padding: 0.75rem 1.25rem;
+    white-space: nowrap;
+}
+
+.wishlist-share-input-group .btn[data-copy-share-link].copied {
+    background-color: #10b981;
+    border-color: #10b981;
+}
+
+.wishlist-share-hint {
+    display: block;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-top: 0.5rem;
+}
+
+/* =====================================================
+   SOCIAL SHARE BUTTONS
+   ===================================================== */
+
+.wishlist-social-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.wishlist-social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    color: #475569;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.wishlist-social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.wishlist-social-btn i {
+    font-size: 1.2rem;
+}
+
+/* Social button colors */
+.wishlist-social-facebook {
+    color: #1877f2;
+    border-color: #1877f2;
+}
+
+.wishlist-social-facebook:hover {
+    background-color: #e7f3ff;
+}
+
+.wishlist-social-twitter {
+    color: #1da1f2;
+    border-color: #1da1f2;
+}
+
+.wishlist-social-twitter:hover {
+    background-color: #e0f7ff;
+}
+
+.wishlist-social-whatsapp {
+    color: #25d366;
+    border-color: #25d366;
+}
+
+.wishlist-social-whatsapp:hover {
+    background-color: #e6ffed;
+}
+
+.wishlist-social-email {
+    color: #ea4335;
+    border-color: #ea4335;
+}
+
+.wishlist-social-email:hover {
+    background-color: #ffebe6;
+}
+
+/* =====================================================
+   SHARE SETTINGS
+   ===================================================== */
+
+.wishlist-share-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.wishlist-checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.wishlist-checkbox-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #6366f1;
+    flex-shrink: 0;
+}
+
+.wishlist-checkbox-option span {
+    font-size: 0.95rem;
+    color: #475569;
+}
+
+.wishlist-checkbox-option input[type="checkbox"]:checked + span {
+    color: #1e293b;
+    font-weight: 500;
+}
+
+/* =====================================================
+   LINK EXPIRATION SELECT
+   ===================================================== */
+
+.wishlist-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background-color: #f8fafc;
+    color: #475569;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.wishlist-select:hover {
+    border-color: #cbd5e1;
+}
+
+.wishlist-select:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* =====================================================
+   MODAL ACTIONS
+   ===================================================== */
+
+.wishlist-share-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.wishlist-share-actions .btn {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+}
+
+/* =====================================================
+   PRICE ALERT TOGGLE
+   ===================================================== */
+
+.price-alert-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background-color: #fef3c7;
+    border: 1px solid #fcd34d;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.price-alert-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    margin: 0;
+    flex: 1;
+}
+
+.price-alert-toggle input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #b45309;
+}
+
+.price-alert-toggle-label {
+    font-size: 0.9rem;
+    color: #92400e;
+    font-weight: 500;
+}
+
+.price-alert-toggle-description {
+    display: block;
+    font-size: 0.8rem;
+    color: #9a7f2f;
+    margin-top: 0.25rem;
+}
+
+/* =====================================================
+   TOAST NOTIFICATIONS
+   ===================================================== */
+
+.toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 400px;
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    animation: slideInRight 0.3s ease;
+    pointer-events: all;
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.toast i {
+    font-size: 1.2rem;
+}
+
+.toast-success {
+    border-left: 4px solid #10b981;
+}
+
+.toast-success i {
+    color: #10b981;
+}
+
+.toast-error {
+    border-left: 4px solid #ef4444;
+}
+
+.toast-error i {
+    color: #ef4444;
+}
+
+.toast-warning {
+    border-left: 4px solid #f59e0b;
+}
+
+.toast-warning i {
+    color: #f59e0b;
+}
+
+.toast-info {
+    border-left: 4px solid #3b82f6;
+}
+
+.toast-info i {
+    color: #3b82f6;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.toast-close:hover {
+    color: #64748b;
+}
+
+.toast.removing {
+    animation: slideOutRight 0.3s ease forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN
+   ===================================================== */
+
+@media (max-width: 768px) {
+    .wishlist-share-modal-content {
+        padding: 1.5rem;
+        border-radius: 12px;
+    }
+    
+    .wishlist-share-modal-content h2 {
+        font-size: 1.25rem;
+    }
+    
+    .wishlist-social-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .wishlist-share-actions {
+        flex-direction: column-reverse;
+        gap: 0.75rem;
+    }
+    
+    .wishlist-share-actions .btn {
+        width: 100%;
+    }
+    
+    .toast-container {
+        left: 1rem;
+        right: 1rem;
+        max-width: none;
+    }
+    
+    .toast {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .wishlist-share-modal {
+        padding: 0;
+    }
+    
+    .wishlist-share-modal-content {
+        border-radius: 0;
+        max-height: 100vh;
+    }
+    
+    .wishlist-share-input-group {
+        flex-direction: column;
+    }
+    
+    .wishlist-social-btn {
+        padding: 0.65rem 0.75rem;
+        font-size: 0.8rem;
+    }
+    
+    .wishlist-social-btn i {
+        font-size: 1rem;
+    }
+}
+
+/* =====================================================
+   ACCESSIBILITY & ANIMATIONS
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .wishlist-heart-btn,
+    .wishlist-social-btn,
+    .wishlist-share-modal,
+    .toast {
+        animation: none;
+        transition: none;
+    }
+    
+    @keyframes heartBeat {
+        0%, 100% { transform: scale(1); }
+    }
+}
+
+/* Focus states for keyboard navigation */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+}

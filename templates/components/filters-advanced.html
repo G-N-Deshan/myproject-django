@@ -1,0 +1,194 @@
+{% load static %}
+
+<div class="filter-container">
+    <!-- Filter Sidebar -->
+    <div class="filter-sidebar" id="filter-panel">
+        <div class="filter-sidebar-header">
+            <h3>Filters</h3>
+            <button id="clear-all-filters-btn" title="Clear all filters">Clear All</button>
+        </div>
+        
+        <!-- Price Range Filter -->
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <span>Price Range</span>
+                <button data-clear-group="price" title="Clear price filter">Clear</button>
+            </div>
+            <div id="price-slider-container">
+                <div class="price-range-display">
+                    <span>Min: $<span data-price-min>0</span></span>
+                    <span>Max: $<span data-price-max>5000</span></span>
+                </div>
+                <div class="price-slider-wrapper">
+                    <label for="price-min-slider" style="font-size: 0.8rem; color: #666;">Minimum Price</label>
+                    <input type="range" id="price-min-slider" min="0" max="5000" value="0" step="10">
+                </div>
+                <div class="price-slider-wrapper">
+                    <label for="price-max-slider" style="font-size: 0.8rem; color: #666;">Maximum Price</label>
+                    <input type="range" id="price-max-slider" min="0" max="5000" value="5000" step="10">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Material Filter (for clothing) -->
+        {% if show_materials and available_materials %}
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <span>Material</span>
+                <button data-clear-group="materials" title="Clear material filter">Clear</button>
+            </div>
+            <div class="filter-checkbox-group">
+                {% for material in available_materials %}
+                <div class="filter-checkbox-item">
+                    <input type="checkbox" 
+                           id="material-{{ forloop.counter }}" 
+                           data-filter-group="materials" 
+                           data-filter-value="{{ material }}">
+                    <label for="material-{{ forloop.counter }}">{{ material }}</label>
+                    <span class="filter-count" style="font-size: 0.75rem;">
+                        ({{ material_counts|default:'' }})
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Size Filter (for clothing) -->
+        {% if show_sizes and available_sizes %}
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <span>Size</span>
+                <button data-clear-group="sizes" title="Clear size filter">Clear</button>
+            </div>
+            <div class="filter-checkbox-group">
+                {% for size in available_sizes %}
+                <div class="filter-checkbox-item">
+                    <input type="checkbox" 
+                           id="size-{{ forloop.counter }}" 
+                           data-filter-group="sizes" 
+                           data-filter-value="{{ size }}">
+                    <label for="size-{{ forloop.counter }}">{{ size }}</label>
+                    <span class="filter-count" style="font-size: 0.75rem;">
+                        ({{ size_counts|default:'' }})
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Brand Filter -->
+        {% if show_brands and available_brands %}
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <span>Brand</span>
+                <button data-clear-group="brands" title="Clear brand filter">Clear</button>
+            </div>
+            <div class="filter-checkbox-group">
+                {% for brand in available_brands %}
+                <div class="filter-checkbox-item">
+                    <input type="checkbox" 
+                           id="brand-{{ forloop.counter }}" 
+                           data-filter-group="brands" 
+                           data-filter-value="{{ brand }}">
+                    <label for="brand-{{ forloop.counter }}">{{ brand }}</label>
+                    <span class="filter-count" style="font-size: 0.75rem;">
+                        ({{ brand_counts|default:'' }})
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Category Filter (for toys) -->
+        {% if show_categories and available_categories %}
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <span>Category</span>
+                <button data-clear-group="category" title="Clear category filter">Clear</button>
+            </div>
+            <div class="filter-checkbox-group">
+                {% for category in available_categories %}
+                <div class="filter-checkbox-item">
+                    <input type="checkbox" 
+                           id="category-{{ category }}" 
+                           data-filter-group="categories" 
+                           data-filter-value="{{ category }}">
+                    <label for="category-{{ category }}">{{ category|title }}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Age Range Filter (for toys) -->
+        {% if show_age_ranges and available_age_ranges %}
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <span>Age Range</span>
+                <button data-clear-group="age_ranges" title="Clear age range filter">Clear</button>
+            </div>
+            <div class="filter-checkbox-group">
+                {% for age_range in available_age_ranges %}
+                <div class="filter-checkbox-item">
+                    <input type="checkbox" 
+                           id="age-{{ forloop.counter }}" 
+                           data-filter-group="age_ranges" 
+                           data-filter-value="{{ age_range }}">
+                    <label for="age-{{ forloop.counter }}">{{ age_range }}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Main Content Area -->
+    <div style="flex: 1;">
+        <!-- Active Filters Display -->
+        <div id="active-filters-container" class="hidden"></div>
+        
+        <!-- Products Grid -->
+        {% block product_grid %}{% endblock %}
+    </div>
+</div>
+
+<!-- Mobile Filter Toggle Button (shown below on mobile) -->
+<style>
+    .filter-toggle-btn {
+        display: none;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .filter-toggle-btn {
+            display: flex;
+        }
+    }
+</style>
+
+<script>
+// Mobile filter panel toggle
+document.addEventListener('DOMContentLoaded', () => {
+    const filterToggleBtn = document.querySelector('.filter-toggle-btn');
+    const filterPanel = document.getElementById('filter-panel');
+    
+    if (filterToggleBtn && filterPanel) {
+        filterToggleBtn.addEventListener('click', () => {
+            filterPanel.classList.toggle('show');
+        });
+        
+        // Close panel when clicking outside on mobile
+        if (window.innerWidth <= 768) {
+            document.addEventListener('click', (e) => {
+                if (!filterPanel.contains(e.target) && !filterToggleBtn.contains(e.target)) {
+                    filterPanel.classList.remove('show');
+                }
+            });
+        }
+    }
+});
+</script>

@@ -4,13 +4,14 @@ from django.http import HttpResponse, JsonResponse
 from .models import (Card, Offers, NewArrivals, Cloths, Review, ContactMessage, Toy,
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
-                     SiteUpdate)
+                     SiteUpdate, BackInStockNotification, OutOfStockReservation,
+                     WishlistShare, PriceAlert)
 from .forms import ReviewForm, ContactForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 import json
 from decimal import Decimal
@@ -25,6 +26,8 @@ from django.db.models import Q, Avg, Count, Sum as models_sum, F
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
 from django.template.loader import render_to_string
+from datetime import timedelta
+from django.utils import timezone
 
 
 # Helper function for cart management
@@ -578,6 +581,24 @@ def kids_cloths(request):
     subcategory_options = [
         option for option in Cloths.SUBCATEGORY_CHOICES if option[0]
     ]
+    
+    # Extract filter options for advanced filtering
+    base_queryset = Cloths.objects.filter(category__in=['kids-men', 'kids-girl'])
+    all_materials = set()
+    all_sizes = set()
+    all_brands = set()
+    
+    for product in base_queryset:
+        if product.material:
+            all_materials.update([m.strip() for m in product.material.split(',') if m.strip()])
+        if product.sizes_available:
+            all_sizes.update([s.strip() for s in product.sizes_available.split(',') if s.strip()])
+        if product.brand:
+            all_brands.add(product.brand)
+    
+    available_materials = sorted(list(all_materials))
+    available_sizes = sorted(list(all_sizes))
+    available_brands = sorted(list(all_brands))
 
     return render(request, 'kids_cloths.html', {
         'kids_cloths': kids_cloths,
@@ -592,6 +613,12 @@ def kids_cloths(request):
         'search_query': search,
         'subcategory_options': subcategory_options,
         'cart_count': cart_count,
+        'show_materials': True,
+        'show_sizes': True,
+        'show_brands': True,
+        'available_materials': available_materials,
+        'available_sizes': available_sizes,
+        'available_brands': available_brands,
     })
 
 def women_cloths(request):
@@ -651,6 +678,23 @@ def women_cloths(request):
         option for option in Cloths.SUBCATEGORY_CHOICES
         if option[0] and option[0] in subcategory_values
     ]
+    
+    # Extract filter options for advanced filtering
+    all_materials = set()
+    all_sizes = set()
+    all_brands = set()
+    
+    for product in base_queryset:
+        if product.material:
+            all_materials.update([m.strip() for m in product.material.split(',') if m.strip()])
+        if product.sizes_available:
+            all_sizes.update([s.strip() for s in product.sizes_available.split(',') if s.strip()])
+        if product.brand:
+            all_brands.add(product.brand)
+    
+    available_materials = sorted(list(all_materials))
+    available_sizes = sorted(list(all_sizes))
+    available_brands = sorted(list(all_brands))
 
     cart_count = 0
     try:
@@ -673,6 +717,12 @@ def women_cloths(request):
         'search_query': search,
         'cart_count': cart_count,
         'is_paginated': paginator.num_pages > 1,
+        'show_materials': True,
+        'show_sizes': True,
+        'show_brands': True,
+        'available_materials': available_materials,
+        'available_sizes': available_sizes,
+        'available_brands': available_brands,
     })
 
 
@@ -733,6 +783,23 @@ def mens_cloths(request):
         option for option in Cloths.SUBCATEGORY_CHOICES
         if option[0] and option[0] in subcategory_values
     ]
+    
+    # Extract filter options for advanced filtering
+    all_materials = set()
+    all_sizes = set()
+    all_brands = set()
+    
+    for product in base_queryset:
+        if product.material:
+            all_materials.update([m.strip() for m in product.material.split(',') if m.strip()])
+        if product.sizes_available:
+            all_sizes.update([s.strip() for s in product.sizes_available.split(',') if s.strip()])
+        if product.brand:
+            all_brands.add(product.brand)
+    
+    available_materials = sorted(list(all_materials))
+    available_sizes = sorted(list(all_sizes))
+    available_brands = sorted(list(all_brands))
 
     cart_count = 0
     try:
@@ -755,6 +822,12 @@ def mens_cloths(request):
         'search_query': search,
         'cart_count': cart_count,
         'is_paginated': paginator.num_pages > 1,
+        'show_materials': True,
+        'show_sizes': True,
+        'show_brands': True,
+        'available_materials': available_materials,
+        'available_sizes': available_sizes,
+        'available_brands': available_brands,
     })
 
 def reviews(request):
@@ -833,6 +906,26 @@ def toys_page(request):
     featured_toys = Toy.objects.filter(is_bestseller=True).annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews'))[:4]
     new_toys = Toy.objects.filter(is_new=True).annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews'))[:4]
     
+    # Extract filter options for advanced filtering
+    all_toys = Toy.objects.all()
+    all_materials = set()
+    all_brands = set()
+    all_categories = set()
+    all_age_ranges = set()
+    
+    for toy in all_toys:
+        if toy.material:
+            all_materials.update([m.strip() for m in toy.material.split(',') if m.strip()])
+        if toy.brand:
+            all_brands.add(toy.brand)
+        all_categories.add(toy.get_category_display() if toy.category else '')
+        all_age_ranges.add(toy.get_age_range_display() if toy.age_range else '')
+    
+    available_materials = sorted(list(all_materials))
+    available_brands = sorted(list(all_brands))
+    available_categories = sorted(list(all_categories))
+    available_age_ranges = sorted(list(all_age_ranges))
+    
     # Pagination
     paginator = Paginator(toys, 12)
     page_obj = paginator.get_page(request.GET.get('page'))
@@ -844,6 +937,14 @@ def toys_page(request):
         'selected_category': category,
         'selected_age': age_range,
         'is_paginated': paginator.num_pages > 1,
+        'show_materials': True,
+        'show_brands': True,
+        'show_categories': True,
+        'show_age_ranges': True,
+        'available_materials': available_materials,
+        'available_brands': available_brands,
+        'available_categories': available_categories,
+        'available_age_ranges': available_age_ranges,
     }
     
     return render(request, 'toys.html', context)
@@ -2186,3 +2287,595 @@ def check_updates(request):
     except SiteUpdate.DoesNotExist:
         ts = ''
     return JsonResponse({'ts': ts})
+
+
+# QUICK-VIEW MODAL API
+def quick_view_product(request, item_type, item_id):
+    """
+    API endpoint for Quick-View modal.
+    Returns product details in JSON format.
+    """
+    try:
+        product_data = {}
+        product = None
+
+        if item_type == 'cloth':
+            product = get_object_or_404(Cloths, id=item_id)
+            product_data = {
+                'id': product.id,
+                'item_type': 'cloth',
+                'name': product.name,
+                'price': float(product.price),
+                'original_price': float(product.price1) if product.price1 else float(product.price),
+                'image': product.imageUrl.url if product.imageUrl else '/static/placeholder.png',
+                'images': [product.imageUrl.url] if product.imageUrl else [],
+                'description': product.desccription[:200] if product.desccription else '',
+                'long_description': product.long_description or '',
+                'sizes': [s.strip() for s in product.sizes_available.split(',')] if product.sizes_available else [],
+                'material': product.material or '',
+                'care_instructions': product.care_instructions or '',
+                'features': product.features or '',
+                'category': product.category,
+                'detail_url': f'/product/cloth/{product.id}/',
+                'badge': 'New Arrival' if NewArrivals.objects.filter(cloth_id=product.id).exists() else '',
+                'is_wishlisted': WishlistItem.objects.filter(user=request.user, cloth=product).exists() if request.user.is_authenticated else False,
+                'stock_quantity': getattr(product, 'stock_quantity', 100),
+                'stock_status': 'In Stock' if getattr(product, 'stock_quantity', 100) > 0 else 'Out of Stock',
+                'rating': float(product.avg_rating) if hasattr(product, 'avg_rating') else 0,
+                'review_count': product.review_count if hasattr(product, 'review_count') else 0,
+            }
+
+        elif item_type == 'toy':
+            product = get_object_or_404(Toy, id=item_id)
+            discount = ((float(product.original_price) - float(product.price)) / float(product.original_price) * 100) if product.original_price and product.original_price > product.price else 0
+            
+            product_data = {
+                'id': product.id,
+                'item_type': 'toy',
+                'name': product.name,
+                'price': float(product.price),
+                'original_price': float(product.original_price) if product.original_price else float(product.price),
+                'discount_percentage': int(discount),
+                'image': product.imageUrl.url if product.imageUrl else '/static/placeholder.png',
+                'images': [product.imageUrl.url] if product.imageUrl else [],
+                'description': product.description[:200] if hasattr(product, 'description') and product.description else '',
+                'long_description': product.long_description or '',
+                'category': product.category,
+                'age_range': product.age_range or '',
+                'dimensions': product.dimensions or '',
+                'material': product.material or '',
+                'features': product.features or '',
+                'detail_url': f'/product/toy/{product.id}/',
+                'badge': 'Best Seller' if product.is_bestseller else ('New' if product.is_new else ''),
+                'is_wishlisted': WishlistItem.objects.filter(user=request.user, toy=product).exists() if request.user.is_authenticated else False,
+                'stock_quantity': getattr(product, 'stock_quantity', 50),
+                'stock_status': 'In Stock' if getattr(product, 'stock_quantity', 50) > 0 else 'Out of Stock',
+                'rating': float(product.rating) if product.rating else 0,
+                'review_count': product.review_count if hasattr(product, 'review_count') else 0,
+            }
+        
+        elif item_type == 'offer':
+            product = get_object_or_404(Offers, id=item_id)
+            product_data = {
+                'id': product.id,
+                'item_type': 'offer',
+                'name': product.title,
+                'price': float(product.price2) if product.price2 else 0,
+                'original_price': float(product.price1) if product.price1 else float(product.price2) if product.price2 else 0,
+                'image': product.imageUrl.url if product.imageUrl else '/static/placeholder.png',
+                'images': [product.imageUrl.url] if product.imageUrl else [],
+                'description': product.description[:200] if product.description else '',
+                'long_description': product.long_description or '',
+                'category': product.category,
+                'material': product.material or '',
+                'features': product.features or '',
+                'detail_url': f'/product/offer/{product.id}/',
+                'badge': product.offers_badge or 'Sale',
+                'stock_quantity': getattr(product, 'stock_quantity', 50),
+                'stock_status': 'In Stock' if getattr(product, 'stock_quantity', 50) > 0 else 'Out of Stock',
+                'rating': 0,
+                'review_count': 0,
+            }
+        
+        elif item_type == 'arrival':
+            product = get_object_or_404(NewArrivals, id=item_id)
+            product_data = {
+                'id': product.id,
+                'item_type': 'arrival',
+                'name': product.title,
+                'price': float(product.price) if product.price else 0,
+                'original_price': float(product.price) if product.price else 0,
+                'image': product.imageUrl.url if product.imageUrl else '/static/placeholder.png',
+                'images': [product.imageUrl.url] if product.imageUrl else [],
+                'description': product.description[:200] if product.description else '',
+                'long_description': product.long_description or '',
+                'category': product.category,
+                'material': product.material or '',
+                'features': product.features or '',
+                'detail_url': f'/product/arrival/{product.id}/',
+                'badge': product.offers_badge or 'New',
+                'stock_quantity': getattr(product, 'stock_quantity', 50),
+                'stock_status': 'In Stock' if getattr(product, 'stock_quantity', 50) > 0 else 'Out of Stock',
+                'rating': 0,
+                'review_count': 0,
+            }
+        
+        # Calculate discount percentage if not already done
+        if 'discount_percentage' not in product_data:
+            original = product_data.get('original_price', product_data.get('price'))
+            current = product_data.get('price')
+            if original and current and original > current:
+                product_data['discount_percentage'] = int(((original - current) / original) * 100)
+            else:
+                product_data['discount_percentage'] = 0
+
+        return JsonResponse(product_data)
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+
+# ════════════════════════════════════════════════════════════════
+# LIVE STOCK INDICATORS API (Feature 5)
+# ════════════════════════════════════════════════════════════════
+
+@login_required
+@require_POST
+def toggle_back_in_stock_alert(request):
+    """
+    Toggle back-in-stock notification for a product
+    POST /api/back-in-stock-alert/
+    """
+    try:
+        data = json.loads(request.body)
+        item_type = data.get('item_type')
+        item_id = data.get('item_id')
+
+        if item_type == 'cloth':
+            product = get_object_or_404(Cloths, id=item_id)
+            notification, created = BackInStockNotification.objects.get_or_create(
+                user=request.user,
+                item_type='cloth',
+                cloth=product,
+                defaults={'is_active': True}
+            )
+            if not created:
+                notification.is_active = not notification.is_active
+                notification.save()
+
+        elif item_type == 'toy':
+            product = get_object_or_404(Toy, id=item_id)
+            notification, created = BackInStockNotification.objects.get_or_create(
+                user=request.user,
+                item_type='toy',
+                toy=product,
+                defaults={'is_active': True}
+            )
+            if not created:
+                notification.is_active = not notification.is_active
+                notification.save()
+
+        return JsonResponse({
+            'added': True if (created or notification.is_active) else False,
+            'message': 'Notification enabled' if (created or notification.is_active) else 'Notification disabled'
+        })
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+
+@login_required
+@require_POST
+def create_reservation(request):
+    """
+    Create an out-of-stock reservation for a user
+    POST /api/create-reservation/
+    """
+    try:
+        data = json.loads(request.body)
+        item_type = data.get('item_type')
+        item_id = data.get('item_id')
+        size = data.get('size', '')
+        color = data.get('color', '')
+        quantity = int(data.get('quantity', 1))
+
+        if item_type == 'cloth':
+            product = get_object_or_404(Cloths, id=item_id)
+            reservation = OutOfStockReservation.objects.create(
+                user=request.user,
+                email=request.user.email,
+                item_type='cloth',
+                cloth=product,
+                quantity=quantity,
+                size=size,
+                color=color,
+                expires_at=timezone.now() + timedelta(days=30)
+            )
+
+        elif item_type == 'toy':
+            product = get_object_or_404(Toy, id=item_id)
+            reservation = OutOfStockReservation.objects.create(
+                user=request.user,
+                email=request.user.email,
+                item_type='toy',
+                toy=product,
+                quantity=quantity,
+                color=color,
+                expires_at=timezone.now() + timedelta(days=30)
+            )
+
+        return JsonResponse({
+            'success': True,
+            'message': f'✓ Reserved {product.name}! We\'ll notify you when it\'s back in stock.',
+            'reservation_id': reservation.id
+        })
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+
+# ==================== WISHLIST API ENDPOINTS ====================
+
+@login_required
+@require_POST
+def api_add_to_wishlist(request):
+    """
+    Add an item to user's wishlist
+    POST /api/wishlist/add/
+    Body: {item_type, item_id}
+    """
+    try:
+        data = json.loads(request.body)
+        item_type = data.get('item_type')
+        item_id = data.get('item_id')
+
+        if item_type == 'cloth':
+            product = get_object_or_404(Cloths, id=item_id)
+            wishlist_item, created = WishlistItem.objects.get_or_create(
+                user=request.user,
+                item_type='cloth',
+                cloth=product,
+                defaults={'original_price': product.price}
+            )
+        elif item_type == 'toy':
+            product = get_object_or_404(Toy, id=item_id)
+            wishlist_item, created = WishlistItem.objects.get_or_create(
+                user=request.user,
+                item_type='toy',
+                toy=product,
+                defaults={'original_price': product.price}
+            )
+        elif item_type == 'offer':
+            product = get_object_or_404(Offers, id=item_id)
+            wishlist_item, created = WishlistItem.objects.get_or_create(
+                user=request.user,
+                item_type='offer',
+                offer=product,
+                defaults={'original_price': product.price2 or product.price1}
+            )
+        elif item_type == 'arrival':
+            product = get_object_or_404(NewArrivals, id=item_id)
+            wishlist_item, created = WishlistItem.objects.get_or_create(
+                user=request.user,
+                item_type='arrival',
+                arrival=product,
+                defaults={'original_price': product.price}
+            )
+        else:
+            return JsonResponse({'success': False, 'message': 'Invalid item type'}, status=400)
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Added to wishlist' if created else 'Already in wishlist',
+            'in_wishlist': True
+        })
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+
+@login_required
+@require_POST
+def api_remove_from_wishlist(request):
+    """
+    Remove an item from user's wishlist
+    POST /api/wishlist/remove/
+    Body: {item_type, item_id}
+    """
+    try:
+        data = json.loads(request.body)
+        item_type = data.get('item_type')
+        item_id = data.get('item_id')
+
+        wishlist_item = WishlistItem.objects.filter(
+            user=request.user,
+            item_type=item_type
+        )
+
+        if item_type == 'cloth':
+            wishlist_item = wishlist_item.filter(cloth_id=item_id)
+        elif item_type == 'toy':
+            wishlist_item = wishlist_item.filter(toy_id=item_id)
+        elif item_type == 'offer':
+            wishlist_item = wishlist_item.filter(offer_id=item_id)
+        elif item_type == 'arrival':
+            wishlist_item = wishlist_item.filter(arrival_id=item_id)
+        else:
+            return JsonResponse({'success': False, 'message': 'Invalid item type'}, status=400)
+
+        deleted_count, _ = wishlist_item.delete()
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Removed from wishlist',
+            'in_wishlist': False
+        })
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+
+@login_required
+@require_POST
+def api_toggle_price_alert(request):
+    """
+    Toggle price alert for a wishlist item
+    POST /api/wishlist/toggle-alert/
+    Body: {item_type, item_id, enabled}
+    """
+    try:
+        data = json.loads(request.body)
+        item_type = data.get('item_type')
+        item_id = data.get('item_id')
+        enabled = data.get('enabled', True)
+
+        wishlist_item = WishlistItem.objects.filter(
+            user=request.user,
+            item_type=item_type
+        )
+
+        if item_type == 'cloth':
+            wishlist_item = wishlist_item.filter(cloth_id=item_id)
+        elif item_type == 'toy':
+            wishlist_item = wishlist_item.filter(toy_id=item_id)
+        elif item_type == 'offer':
+            wishlist_item = wishlist_item.filter(offer_id=item_id)
+        elif item_type == 'arrival':
+            wishlist_item = wishlist_item.filter(arrival_id=item_id)
+        else:
+            return JsonResponse({'success': False, 'message': 'Invalid item type'}, status=400)
+
+        wishlist_item = wishlist_item.first()
+        if not wishlist_item:
+            return JsonResponse({'success': False, 'message': 'Item not in wishlist'}, status=404)
+
+        wishlist_item.price_alert_enabled = enabled
+        wishlist_item.save()
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Price alert enabled' if enabled else 'Price alert disabled',
+            'price_alert_enabled': enabled
+        })
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+
+@login_required
+@require_http_methods(["GET"])
+def api_sync_wishlist_state(request):
+    """
+    Get user's wishlist state (all items with their alert status)
+    GET /api/wishlist/sync-state/
+    """
+    try:
+        wishlist_items = WishlistItem.objects.filter(user=request.user)
+        
+        items = []
+        for item in wishlist_items:
+            items.append({
+                'item_type': item.item_type,
+                'item_id': item.cloth_id or item.toy_id or item.offer_id or item.arrival_id,
+                'price_alert_enabled': item.price_alert_enabled,
+                'is_shared': item.is_shared
+            })
+
+        return JsonResponse({
+            'success': True,
+            'items': items
+        })
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+
+@login_required
+@require_POST
+def api_generate_share_link(request):
+    """
+    Generate a shareable wishlist link
+    POST /api/wishlist/generate-share-link/
+    Body: {share_settings}
+    """
+    try:
+        data = json.loads(request.body)
+        
+        # Create share token
+        share_token = f"{request.user.id}-{timezone.now().timestamp()}"
+        import hashlib
+        share_token = hashlib.sha256(share_token.encode()).hexdigest()[:16]
+        
+        share_url = f"/wishlist/shared/{share_token}/"
+        
+        # Create WishlistShare record
+        wishlist_share = WishlistShare.objects.create(
+            owner=request.user,
+            share_token=share_token,
+            share_url=share_url,
+            allow_comments=data.get('allow_comments', False),
+            allow_suggestions=data.get('allow_suggestions', False),
+            show_prices=data.get('show_prices', True),
+            show_dates=data.get('show_dates', False),
+            expires_at=timezone.now() + timedelta(days=30)
+        )
+        
+        full_url = request.build_absolute_uri(share_url)
+        
+        return JsonResponse({
+            'success': True,
+            'share_url': full_url,
+            'share_token': share_token,
+            'message': 'Share link generated successfully'
+        })
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+
+# ==================== PAGINATION API ENDPOINTS ====================
+
+def parse_query_float(value):
+    """Safely parse float from query string"""
+    if not value:
+        return None
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        return None
+
+def parse_catalog_price(price):
+    """Parse price value for comparison"""
+    if isinstance(price, (int, float)):
+        return float(price)
+    if isinstance(price, str):
+        try:
+            return float(price.replace('Rs', '').replace(',', '').strip())
+        except:
+            return 0
+    return 0
+
+@require_http_methods(["GET"])
+def api_load_products(request, category_type):
+    """
+    API endpoint to fetch paginated products as JSON
+    GET /api/load-products/<category_type>/?page=2&q=search&subcategory=tshirts&...
+    """
+    try:
+        # Get filter parameters
+        page_num = request.GET.get('page', 1)
+        search = request.GET.get('q', '').strip()
+        subcategory = request.GET.get('subcategory', 'all')
+        sort = request.GET.get('sort', 'featured')
+        min_price = parse_query_float(request.GET.get('min_price'))
+        max_price = parse_query_float(request.GET.get('max_price'))
+        items_per_page = int(request.GET.get('per_page', 12))
+        
+        # Determine product type and base queryset
+        if category_type == 'men':
+            base_queryset = Cloths.objects.filter(category='men').annotate(
+                avg_rating=Avg('product_reviews__rating'),
+                review_count=Count('product_reviews')
+            )
+        elif category_type == 'women':
+            base_queryset = Cloths.objects.filter(category='women').annotate(
+                avg_rating=Avg('product_reviews__rating'),
+                review_count=Count('product_reviews')
+            )
+        elif category_type == 'kids':
+            base_queryset = Cloths.objects.filter(category='kids').annotate(
+                avg_rating=Avg('product_reviews__rating'),
+                review_count=Count('product_reviews')
+            )
+        elif category_type == 'toys':
+            base_queryset = Toy.objects.all()
+        else:
+            return JsonResponse({'error': 'Invalid category type'}, status=400)
+        
+        # Apply search
+        filtered = base_queryset
+        if search:
+            filtered = filtered.filter(Q(name__icontains=search))
+        
+        # Apply subcategory filter (only for cloths)
+        if subcategory and subcategory != 'all' and category_type != 'toys':
+            filtered = filtered.filter(subcategory=subcategory)
+        
+        # Convert to list and parse prices
+        products = list(filtered)
+        for product in products:
+            # Handle different product types
+            if category_type == 'toys':
+                product.numeric_price = parse_catalog_price(product.price)
+            else:
+                product.numeric_price = parse_catalog_price(
+                    getattr(product, 'price2') or getattr(product, 'price1') or getattr(product, 'price')
+                )
+        
+        # Apply price filters
+        if min_price is not None:
+            products = [p for p in products if p.numeric_price >= min_price]
+        if max_price is not None:
+            products = [p for p in products if p.numeric_price <= max_price]
+        
+        # Apply sorting
+        if sort == 'price_asc':
+            products.sort(key=lambda p: p.numeric_price)
+        elif sort == 'price_desc':
+            products.sort(key=lambda p: p.numeric_price, reverse=True)
+        elif sort == 'name_asc':
+            products.sort(key=lambda p: p.name.lower() if hasattr(p, 'name') else p.title.lower())
+        elif sort == 'name_desc':
+            products.sort(key=lambda p: p.name.lower() if hasattr(p, 'name') else p.title.lower(), reverse=True)
+        elif sort == 'oldest':
+            products.sort(key=lambda p: p.id)
+        else:  # featured (newest)
+            products.sort(key=lambda p: p.id, reverse=True)
+        
+        # Pagination
+        paginator = Paginator(products, items_per_page)
+        page_obj = paginator.get_page(page_num)
+        
+        # Build product JSON response
+        products_json = []
+        for product in page_obj.object_list:
+            is_cloth = hasattr(product, 'category') and hasattr(product, 'avg_rating')
+            
+            # Get rating value based on product type
+            if is_cloth:
+                rating = float(product.avg_rating) if product.avg_rating else 0
+                reviews = product.review_count if hasattr(product, 'review_count') else 0
+            else:
+                rating = float(getattr(product, 'rating', 0))
+                reviews = 0
+            
+            # Get price based on product type
+            if is_cloth:
+                price = getattr(product, 'price2') or getattr(product, 'price1') or getattr(product, 'price')
+            else:
+                price = getattr(product, 'price')
+            
+            products_json.append({
+                'id': product.id,
+                'name': getattr(product, 'name') or getattr(product, 'title'),
+                'price': str(price),
+                'image': product.imageUrl.url if product.imageUrl else '',
+                'url': f"/product/{category_type}/{product.id}/" if is_cloth else f"/product/toy/{product.id}/",
+                'rating': rating,
+                'reviews': reviews,
+                'type': category_type if is_cloth else 'toy',
+                'in_stock': getattr(product, 'in_stock', True),
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'products': products_json,
+            'page': page_obj.number,
+            'total_pages': paginator.num_pages,
+            'total_products': paginator.count,
+            'has_next': page_obj.has_next(),
+            'has_previous': page_obj.has_previous(),
+        })
+    
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)

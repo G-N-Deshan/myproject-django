@@ -3,7 +3,8 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import (Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy,
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
-                     ProductImage, Inventory, Coupon, ProductVariant, OrderTracking)
+                     ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
+                     BackInStockNotification, OutOfStockReservation)
 
 # Admin site branding
 admin.site.site_header = 'KidZone Admin Dashboard'
@@ -25,7 +26,7 @@ class CardAdmin(admin.ModelAdmin):
 
 @admin.register(Offers)
 class OffersAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'offers_badge', 'price1', 'price2', 'end_time']
+    list_display = ['title', 'category', 'offers_badge', 'price1', 'price2', 'stock_quantity', 'end_time']
     list_filter = ['category']
     search_fields = ['title', 'description']
     ordering = ['-id']
@@ -33,8 +34,8 @@ class OffersAdmin(admin.ModelAdmin):
         ('Basic Info', {
             'fields': ('imageUrl', 'title', 'offers_badge', 'description', 'button_text', 'category'),
         }),
-        ('Pricing', {
-            'fields': ('price1', 'price2', 'stock_text', 'end_time'),
+        ('Pricing & Stock', {
+            'fields': ('price1', 'price2', 'stock_quantity', 'stock_text', 'end_time'),
         }),
         ('Product Detail Page Content', {
             'fields': ('long_description', 'features', 'material'),
@@ -47,13 +48,13 @@ class OffersAdmin(admin.ModelAdmin):
 
 @admin.register(NewArrivals)
 class NewArrivalsAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'offers_badge', 'price']
+    list_display = ['title', 'category', 'offers_badge', 'price', 'stock_quantity']
     list_filter = ['category']
     search_fields = ['title', 'description']
     ordering = ['-id']
     fieldsets = (
         ('Basic Info', {
-            'fields': ('imageUrl', 'title', 'offers_badge', 'description', 'price', 'category'),
+            'fields': ('imageUrl', 'title', 'offers_badge', 'description', 'price', 'stock_quantity', 'category'),
         }),
         ('Product Detail Page Content', {
             'fields': ('long_description', 'features', 'material'),
@@ -66,16 +67,17 @@ class NewArrivalsAdmin(admin.ModelAdmin):
 
 @admin.register(Cloths)
 class ClothsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'subcategory', 'price1', 'discount_text']
+    list_display = ['name', 'category', 'subcategory', 'price1', 'stock_quantity', 'stock_status', 'discount_text']
     list_filter = ['category', 'subcategory']
     search_fields = ['name', 'desccription']
     ordering = ['-id']
+    list_editable = ['stock_quantity']
     fieldsets = (
         ('Basic Info', {
             'fields': ('imageUrl', 'name', 'desccription', 'category', 'subcategory'),
         }),
-        ('Pricing', {
-            'fields': ('price', 'price1', 'price2', 'discount_text'),
+        ('Pricing & Stock', {
+            'fields': ('price', 'price1', 'price2', 'discount_text', 'stock_quantity'),
         }),
         ('Product Detail Page Content', {
             'fields': ('long_description', 'features', 'material', 'care_instructions', 'sizes_available'),
@@ -85,6 +87,21 @@ class ClothsAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
+    def stock_status(self, obj):
+        from .stock_utils import get_stock_status
+        status = get_stock_status(obj, 'cloth')
+        colors = {
+            'in-stock': '#10b981',
+            'low-stock': '#f59e0b',
+            'out-of-stock': '#ef4444',
+        }
+        color = colors.get(status['badge_class'], '#64748b')
+        return format_html(
+            '<span style="background:{};color:#fff;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:600">{}</span>',
+            color, status['badge_text']
+        )
+    stock_status.short_description = 'Stock Status'
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
@@ -111,15 +128,16 @@ class ContactMessageAdmin(admin.ModelAdmin):
     
 @admin.register(Toy)
 class ToyAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'age_range', 'price', 'is_bestseller', 'is_new']
+    list_display = ['name', 'category', 'age_range', 'price', 'stock_quantity', 'stock_status', 'is_bestseller', 'is_new']
     list_filter = ['category', 'age_range', 'is_bestseller', 'is_new']
     search_fields = ['name', 'description']
+    list_editable = ['stock_quantity']
     fieldsets = (
         ('Basic Info', {
             'fields': ('imageUrl', 'name', 'description', 'category', 'age_range'),
         }),
-        ('Pricing & Flags', {
-            'fields': ('price', 'original_price', 'rating', 'is_bestseller', 'is_new'),
+        ('Pricing, Stock & Flags', {
+            'fields': ('price', 'original_price', 'rating', 'stock_quantity', 'is_bestseller', 'is_new'),
         }),
         ('Product Detail Page Content', {
             'fields': ('long_description', 'features', 'material', 'safety_info', 'dimensions'),
@@ -128,6 +146,21 @@ class ToyAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
+    def stock_status(self, obj):
+        from .stock_utils import get_stock_status
+        status = get_stock_status(obj, 'toy')
+        colors = {
+            'in-stock': '#10b981',
+            'low-stock': '#f59e0b',
+            'out-of-stock': '#ef4444',
+        }
+        color = colors.get(status['badge_class'], '#64748b')
+        return format_html(
+            '<span style="background:{};color:#fff;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:600">{}</span>',
+            color, status['badge_text']
+        )
+    stock_status.short_description = 'Stock Status'
     
     
 @admin.register(WishlistItem)
@@ -383,4 +416,84 @@ class OrderTrackingAdmin(admin.ModelAdmin):
     list_filter = ['status', 'created_at']
     search_fields = ['order__order_number']
     readonly_fields = ['created_at']
+
+
+# ══════════════════════════════════════════════════════════════
+# LIVE STOCK INDICATORS (Feature 5)
+# ══════════════════════════════════════════════════════════════
+
+@admin.register(BackInStockNotification)
+class BackInStockNotificationAdmin(admin.ModelAdmin):
+    list_display = ['user', 'get_product_name', 'item_type', 'is_active', 'created_at', 'notified_at']
+    list_filter = ['item_type', 'is_active', 'created_at']
+    search_fields = ['user__username', 'cloth__name', 'toy__name']
+    readonly_fields = ['created_at', 'notified_at']
+    actions = ['mark_active', 'mark_inactive']
+
+    def get_product_name(self, obj):
+        return obj.get_product().name
+    get_product_name.short_description = 'Product'
+
+    @admin.action(description='Mark as Active')
+    def mark_active(self, request, queryset):
+        queryset.update(is_active=True)
+
+    @admin.action(description='Mark as Inactive')
+    def mark_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+
+
+@admin.register(OutOfStockReservation)
+class OutOfStockReservationAdmin(admin.ModelAdmin):
+    list_display = ['user', 'get_product_name', 'quantity', 'status_badge', 'created_at', 'expires_at']
+    list_filter = ['status', 'item_type', 'created_at']
+    search_fields = ['user__username', 'email', 'cloth__name', 'toy__name']
+    readonly_fields = ['created_at', 'notified_at', 'completed_at']
+    actions = ['mark_notified', 'mark_completed', 'mark_cancelled']
+    date_hierarchy = 'created_at'
+
+    fieldsets = (
+        ('Customer Info', {
+            'fields': ('user', 'email'),
+        }),
+        ('Product Info', {
+            'fields': ('item_type', 'cloth', 'toy', 'quantity', 'size', 'color'),
+        }),
+        ('Status & Dates', {
+            'fields': ('status', 'created_at', 'notified_at', 'completed_at', 'expires_at'),
+        }),
+    )
+
+    def get_product_name(self, obj):
+        return obj.get_product().name
+    get_product_name.short_description = 'Product'
+
+    def status_badge(self, obj):
+        colors = {
+            'pending': '#f59e0b',
+            'notified': '#3b82f6',
+            'completed': '#10b981',
+            'cancelled': '#ef4444',
+        }
+        color = colors.get(obj.status, '#64748b')
+        return format_html(
+            '<span style="background:{};color:#fff;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600">{}</span>',
+            color, obj.get_status_display()
+        )
+    status_badge.short_description = 'Status'
+    status_badge.admin_order_field = 'status'
+
+    @admin.action(description='Mark as Notified')
+    def mark_notified(self, request, queryset):
+        for obj in queryset:
+            obj.mark_as_notified()
+
+    @admin.action(description='Mark as Completed')
+    def mark_completed(self, request, queryset):
+        for obj in queryset:
+            obj.mark_as_completed()
+
+    @admin.action(description='Cancel Reservation')
+    def mark_cancelled(self, request, queryset):
+        queryset.update(status='cancelled')
 

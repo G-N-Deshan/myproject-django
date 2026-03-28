@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="{%static 'footer.css'%}">
     <link rel="stylesheet" href="{%static 'index.css'%}">
     <link rel="stylesheet" href="{%static 'scroll-reveal.css'%}">
+    <link rel="stylesheet" href="{% static 'product-comparison.css' %}">
+    <link rel="stylesheet" href="{% static 'wishlist-enhanced.css' %}">
+    <link rel="stylesheet" href="{% static 'pagination-loader.css' %}">
 
     <script>
         tailwind.config = {
@@ -171,18 +174,17 @@
                                 {{ offer.offers_badge }}
                             </span>
                             <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                            <div class="absolute top-4 right-4 z-20">
+                                {% include "components/wishlist-heart-button.html" with item_type="offer" item_id=offer.id %}
+                            </div>
                             <!-- Overlay -->
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end justify-center pb-6 gap-3">
                                 <a href="{% url 'product_detail' 'offer' offer.id %}" class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
                                     <i class="bi bi-eye mr-1"></i>Quick View
                                 </a>
-                                <button
-                                    class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-full text-sm transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 delay-75 hover:bg-indigo-700"
-                                    data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}">
-                                    <i class="bi bi-cart-plus mr-1"></i>Add to Cart
-                                </button>
                             </div>
                         </div>
+                        {% include "components/stock-indicator.html" with product=offer item_type="offer" %}
                         <div class="p-5">
                             <h3 class="font-semibold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-1">
                                 <a href="{% url 'product_detail' 'offer' offer.id %}" class="hover:text-indigo-600" style="color:inherit;text-decoration:none">{{ offer.title }}</a>
@@ -195,9 +197,10 @@
                                 <span class="text-sm text-slate-400 line-through">${{ offer.price1 }}</span>
                                 {% endif %}
                             </div>
-                            {% if offer.stock_text %}
-                            <span class="inline-block px-2 py-0.5 bg-amber-50 text-amber-700 text-xs rounded-full font-medium">{{ offer.stock_text }}</span>
-                            {% endif %}
+                            <div class="flex items-center gap-2 pt-2">
+                                <button class="flex-1 px-3 py-2 bg-indigo-600 text-white rounded font-semibold text-sm hover:bg-indigo-700 transition" data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}"><i class="bi bi-bag-plus"></i> Add</button>
+                                {% include "components/compare-button.html" with item_type="offer" item_id=offer.id %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -232,25 +235,32 @@
                         <div class="relative overflow-hidden">
                             <span class="absolute top-4 right-4 z-10 px-3 py-1 bg-emerald-500 text-white text-[11px] font-bold rounded-full">NEW</span>
                             <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }}" class="w-full h-56 object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                            <div class="absolute top-4 left-4 z-20">
+                                {% include "components/wishlist-heart-button.html" with item_type="arrival" item_id=arrival.id %}
+                            </div>
                             <a href="{% url 'product_detail' 'arrival' arrival.id %}" class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
                                 <span class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
                                     <i class="bi bi-eye mr-1"></i>Quick View
                                 </span>
                             </a>
                         </div>
+                        {% include "components/stock-indicator.html" with product=arrival item_type="arrival" %}
                         <div class="p-5">
                             <span class="text-[11px] text-indigo-600 font-bold uppercase tracking-wider">{{ arrival.category }}</span>
                             <h3 class="font-semibold text-slate-800 mt-1 mb-2 line-clamp-1">
                                 <a href="{% url 'product_detail' 'arrival' arrival.id %}" class="hover:text-indigo-600 transition-colors" style="color:inherit;text-decoration:none">{{ arrival.title }}</a>
                             </h3>
                             <p class="text-sm text-slate-400 mb-4 line-clamp-2">{{ arrival.description }}</p>
-                            <div class="flex items-center justify-between">
+                            <div class="flex items-center justify-between gap-2">
                                 <span class="text-xl font-bold text-slate-800">${{ arrival.price }}</span>
-                                <button
-                                    class="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center hover:scale-110 hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/25"
-                                    data-add-to-cart data-item-type="arrival" data-item-id="{{ arrival.id }}">
-                                    <i class="bi bi-cart-plus"></i>
-                                </button>
+                                <div class="flex items-center gap-2">
+                                    <button
+                                        class="px-3 py-2 bg-indigo-600 text-white rounded font-semibold text-sm hover:bg-indigo-700 transition"
+                                        data-add-to-cart data-item-type="arrival" data-item-id="{{ arrival.id }}">
+                                        <i class="bi bi-bag-plus"></i> Add
+                                    </button>
+                                    {% include "components/compare-button.html" with item_type="arrival" item_id=arrival.id %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -604,9 +614,13 @@
 
     {% include 'footer.html' %}
 
-    <script src="{% static 'cart_utils.js' %}"></script>
-    <script src="{% static 'home.js' %}"></script>
-    <script src="{%static 'scroll-reveal.js'%}"></script>
-    <script src="{% static 'global.js' %}"></script>
+    <script src="{% static 'cart_utils.js' %}" defer></script>
+    <script src="{% static 'home.js' %}" defer></script>
+    <script src="{%static 'scroll-reveal.js'%}" defer></script>
+    <script src="{% static 'global.js' %}" defer></script>
+    <script src="{% static 'quick-view.js' %}" defer></script>
+    <script src="{% static 'product-comparison.js' %}" defer></script>
+    <script src="{% static 'wishlist-enhanced.js' %}" defer></script>
+    <script src="{% static 'pagination-loader.js' %}" defer></script>
 </body>
 </html>

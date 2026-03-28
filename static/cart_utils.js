@@ -3,11 +3,15 @@
  * Used across all pages to manage cart state
  */
 
-// Inject spinner keyframes
+// Inject spinner and toast animations
 if (!document.getElementById('cartSpinStyle')) {
     const s = document.createElement('style');
     s.id = 'cartSpinStyle';
-    s.textContent = '@keyframes cartSpin{to{transform:rotate(360deg)}}';
+    s.textContent = `
+        @keyframes cartSpin{to{transform:rotate(360deg)}}
+        @keyframes slideIn{from{transform:translateX(400px);opacity:0}to{transform:translateX(0);opacity:1}}
+        @keyframes slideOut{from{transform:translateX(0);opacity:1}to{transform:translateX(400px);opacity:0}}
+    `;
     document.head.appendChild(s);
 }
 
@@ -156,9 +160,21 @@ function showGlobalToast(message, type = 'success') {
     
     const toast = document.createElement('div');
     toast.className = 'global-toast';
-    toast.textContent = message;
     
-    const bgColor = type === 'success' ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)';
+    // Create icon element
+    const iconSpan = document.createElement('span');
+    iconSpan.style.marginRight = '0.5rem';
+    iconSpan.style.fontSize = '1.2rem';
+    iconSpan.textContent = type === 'success' ? '✓' : '⚠';
+    
+    // Create message span
+    const msgSpan = document.createElement('span');
+    msgSpan.textContent = message;
+    
+    toast.appendChild(iconSpan);
+    toast.appendChild(msgSpan);
+    
+    const bgColor = type === 'success' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
     
     toast.style.cssText = `
         position: fixed;
@@ -167,11 +183,15 @@ function showGlobalToast(message, type = 'success') {
         background: ${bgColor};
         color: #fff;
         padding: 1rem 1.5rem;
-        border-radius: 10px;
+        border-radius: 12px;
         font-weight: 600;
         z-index: 99999;
         animation: slideIn 0.3s ease;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        max-width: 350px;
+        word-wrap: break-word;
     `;
     
     document.body.appendChild(toast);

@@ -1,0 +1,289 @@
+/* ═══════════════════════════════════════════════════════════════
+   STANDARDIZED DESIGN SYSTEM - G11 FASHION & TOYS
+   Use these colors consistently across all pages
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+    /* ── PRIMARY COLORS (Brand) ── */
+    --color-primary: #6366f1;           /* Indigo - Main brand color */
+    --color-primary-light: #eef2ff;     /* Light indigo background */
+    --color-primary-dark: #4f46e5;      /* Dark indigo for hover states */
+    --color-primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    
+    /* ── ACCENT COLORS ── */
+    --color-accent: #ec4899;            /* Rose/Pink - Secondary brand */
+    --color-accent-light: #fbf1f8;      /* Light pink background */
+    --color-accent-dark: #be185d;       /* Dark pink for hover */
+    
+    /* ── TERTIARY COLOR ── */
+    --color-tertiary: #f59e0b;          /* Amber/Orange - CTA, highlights */
+    --color-tertiary-light: #fffbeb;    /* Light amber background */
+    --color-tertiary-dark: #d97706;     /* Dark amber for hover */
+    
+    /* ── SEMANTIC COLORS ── */
+    --color-success: #10b981;           /* Green - Confirmations, success */
+    --color-warning: #f59e0b;           /* Amber - Warnings, cautions */
+    --color-error: #ef4444;             /* Red - Errors, deletions */
+    --color-info: #3b82f6;              /* Blue - Information, tips */
+    
+    /* ── NEUTRAL COLORS ── */
+    --color-bg-primary: #ffffff;        /* White - Main background */
+    --color-bg-secondary: #f8fafc;      /* Light gray - Secondary background */
+    --color-bg-tertiary: #f1f5f9;       /* Lighter gray - Tertiary background */
+    --color-text-primary: #1e293b;      /* Dark gray - Main text */
+    --color-text-secondary: #64748b;    /* Gray - Secondary text */
+    --color-text-tertiary: #94a3b8;     /* Light gray - Tertiary text */
+    --color-text-inverse: #ffffff;      /* White - Text on dark backgrounds */
+    --color-border: #e2e8f0;            /* Light gray - Borders, dividers */
+    --color-border-dark: #cbd5e1;       /* Medium gray - Darker borders */
+    
+    /* ── SHADOWS ── */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --shadow-primary: 0 4px 20px rgba(99, 102, 241, 0.3);
+    
+    /* ── TYPOGRAPHY ── */
+    --font-primary: 'Inter', 'Poppins', sans-serif;
+    --font-display: 'Playfair Display', serif;
+    --font-mono: 'Monaco', 'Courier New', monospace;
+    
+    /* ── TRANSITIONS ── */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HERO SECTION - STANDARDIZED ACROSS ALL PAGES
+   ═══════════════════════════════════════════════════════════════ */
+
+.hero, .page-hero, [class*="hero"], [class*="banner"] {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #8b5cf6 100%) !important;
+    color: white;
+    text-align: center;
+    padding: 60px 30px 40px;
+    border-radius: 0;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before,
+.page-hero::before,
+[class*="hero"]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='white' opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='3'/%3E%3Crect x='20' y='20' width='20' height='20' fill='none' stroke='white' stroke-width='0.5'/%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.05;
+    pointer-events: none;
+}
+
+.hero h1, .hero h2,
+.page-hero h1, .page-hero h2,
+[class*="hero"] h1, [class*="hero"] h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    margin: 0 0 15px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: white;
+    position: relative;
+    z-index: 2;
+}
+
+.hero p, .page-hero p,
+[class*="hero"] > p {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.95);
+    position: relative;
+    z-index: 2;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT USAGE GUIDELINES
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Navigation & Headers */
+nav, header {
+    background-color: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border);
+}
+
+nav a:hover {
+    color: var(--color-primary);
+}
+
+/* Buttons - See buttons.css for detailed styling */
+button,
+input[type="button"],
+input[type="submit"],
+.btn {
+    background: var(--color-primary-gradient);
+    color: var(--color-text-inverse);
+    border: none;
+    cursor: pointer;
+}
+
+button:hover,
+input[type="submit"]:hover,
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-primary);
+}
+
+/* Links */
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
+/* Cards & Containers */
+.card, [class*="card"],
+section, .section,
+[class*="container"] {
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+}
+
+.card:hover, [class*="card"]:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+
+/* Badges & Tags */
+.badge, .tag, [class*="badge"],
+[class*="tag"], [class*="label"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark);
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.badge.success { background: #d1fae5; color: var(--color-success); }
+.badge.warning { background: #fef3c7; color: var(--color-warning); }
+.badge.error { background: #fee2e2; color: var(--color-error); }
+
+/* Forms */
+input,
+textarea,
+select {
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-dark);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: var(--font-primary);
+    color: var(--color-text-primary);
+    transition: all var(--transition-fast);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+    background-color: var(--color-bg-primary);
+}
+
+/* Labels */
+label {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--color-text-primary);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 0;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+h3 { font-size: clamp(1.25rem, 3vw, 1.875rem); }
+
+/* Body Text */
+p {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* Emphasize Text */
+strong, b { 
+    color: var(--color-text-primary);
+    font-weight: 700;
+}
+
+em, i {
+    font-style: italic;
+    color: var(--color-text-secondary);
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg-primary: #1e293b;
+        --color-bg-secondary: #0f172a;
+        --color-bg-tertiary: #1a1f35;
+        --color-text-primary: #e2e8f0;
+        --color-text-secondary: #cbd5e1;
+        --color-text-tertiary: #94a3b8;
+        --color-border: #334155;
+        --color-border-dark: #475569;
+    }
+    
+    body {
+        background-color: var(--color-bg-primary);
+        color: var(--color-text-primary);
+    }
+    
+    input, textarea, select {
+        background-color: var(--color-bg-secondary);
+        border-color: var(--color-border);
+        color: var(--color-text-primary);
+    }
+    
+    input:focus, textarea:focus, select:focus {
+        box-shadow: 0 0 0 3px var(--color-primary-light, rgba(99, 102, 241, 0.1));
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: more) {
+    :root {
+        --shadow-primary: 0 4px 20px rgba(99, 102, 241, 0.5);
+    }
+    
+    button, input[type="button"], input[type="submit"], .btn {
+        border: 2px solid currentColor;
+    }
+    
+    input, textarea, select {
+        border-width: 2px;
+    }
+}

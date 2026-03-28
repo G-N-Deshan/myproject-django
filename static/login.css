@@ -25,7 +25,8 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
         linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
     background-size: 60px 60px;
-    animation: lgGridMove 20s linear infinite;
+    /* Grid animation removed for performance - static grid is less distracting */
+    /* animation: lgGridMove 20s linear infinite; */
 }
 @keyframes lgGridMove {
     0% { transform: translateY(0); }
@@ -37,7 +38,8 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
     position: absolute;
     border-radius: 16px;
     opacity: 0.12;
-    animation: lgShapeFloat 8s ease-in-out infinite;
+    /* Reduced animation speed (from 8s to 15s) to reduce distraction, only on desktop */
+    animation: lgShapeFloat 15s ease-in-out infinite;
 }
 .lg-shape-1 { width: 80px; height: 80px; border: 2px solid #a5b4fc; top: 10%; left: 8%; animation-delay: 0s; transform: rotate(15deg); }
 .lg-shape-2 { width: 55px; height: 55px; background: #818cf8; top: 65%; right: 10%; animation-delay: 1.5s; border-radius: 50%; }
@@ -201,5 +203,15 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
         padding: 2rem 1.25rem;
         border-radius: 1.2rem;
     }
+        opacity: 0.06; 
+        /* Disable animations on mobile to reduce distraction and improve performance */
+        animation: none !important;
+    }
+    .reveal-lg {
+        /* Disable staggered reveal animations on mobile for faster form access */
+        animation: none !important;
+        opacity: 1;
+        transform: none;
+   
     .lg-shape { opacity: 0.06; }
 }

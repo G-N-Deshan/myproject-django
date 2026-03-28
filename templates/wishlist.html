@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="{% static 'components.css' %}">
     <link rel="stylesheet" href="{% static 'wishlist.css' %}">
     <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+    <link rel="stylesheet" href="{% static 'product-comparison.css' %}">
+    <link rel="stylesheet" href="{% static 'wishlist-enhanced.css' %}">
+    <link rel="stylesheet" href="{% static 'pagination-loader.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -198,9 +202,13 @@
 
     {% include 'footer.html' %}
 
-    <script src="{% static 'cart_utils.js' %}"></script>
-    <script src="{% static 'wishlist.js' %}"></script>
-    <script src="{% static 'global.js' %}"></script>
-    <script src="{% static 'scroll-reveal.js' %}"></script>
+    <script src="{% static 'cart_utils.js' %}" defer></script>
+    <script src="{% static 'wishlist.js' %}" defer></script>
+    <script src="{% static 'global.js' %}" defer></script>
+    <script src="{% static 'scroll-reveal.js' %}" defer></script>
+    <script src="{% static 'quick-view.js' %}" defer></script>
+    <script src="{% static 'product-comparison.js' %}" defer></script>
+    <script src="{% static 'wishlist-enhanced.js' %}" defer></script>
+    <script src="{% static 'pagination-loader.js' %}" defer></script>
 </body>
 </html>

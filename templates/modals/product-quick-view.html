@@ -1,0 +1,17 @@
+<!-- Quick View Modal Template -->
+<!-- This modal dynamically loads product data via AJAX -->
+<!-- Include this in base.html with: {% include "modals/product-quick-view.html" %} -->
+
+<link rel="stylesheet" href="{% static 'quick-view.css' %}">
+<script src="{% static 'quick-view.js' %}" defer></script>
+
+<!-- 
+  The modal and backdrop are created dynamically by quick-view.js
+  This ensures a single instance and clean state management
+  
+  When opened, the QuickViewModal class:
+  1. Shows modal and backdrop with proper z-index
+  2. Fetches product data from /api/quick-view/{item_type}/{item_id}/
+  3. Populates with product details, images, and options
+  4. Handles form interactions (size selection, add to cart, wishlist)
+-->

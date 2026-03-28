@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'navbar.css' %}">
     <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <link rel="stylesheet" href="{% static 'kids-cloths.css' %}">
     <style>
         :root {
             --sky: #e0f2fe;
@@ -439,8 +440,13 @@
         .grid article:nth-child(4) { animation-delay: .18s; }
     </style>
     <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+    <link rel="stylesheet" href="{% static 'product-comparison.css' %}">
+    <link rel="stylesheet" href="{% static 'wishlist-enhanced.css' %}">
+    <link rel="stylesheet" href="{% static 'pagination-loader.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
+    <div id="toastContainer" class="fixed top-5 right-5 z-[9999] max-w-sm space-y-2 pointer-events-none"></div>
     {% include 'navbar.html' %}
 
     <div class="kids-wrap">
@@ -538,9 +544,13 @@
                     <div class="img-wrap">
                         <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" loading="lazy">
                         <div class="img-overlay">
-                            <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="quick-view-link"><i class="bi bi-eye"></i> Quick View</a>
+                            <button class="quick-view-btn" data-item-type="cloth" data-item-id="{{ cloth.id }}"><i class="bi bi-eye"></i> Quick View</button>
+                            <div style="position: absolute; top: 12px; right: 12px;">
+                                {% include "components/wishlist-heart-button.html" with item_type="cloth" item_id=cloth.id %}
+                            </div>
                         </div>
                     </div>
+                    {% include "components/stock-indicator.html" with product=cloth item_type="cloth" %}
                     <div class="body">
                         <h3 class="name"><a href="{% url 'product_detail' 'cloth' cloth.id %}" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
                         <span class="meta">{{ cloth.get_subcategory_display|default:'Everyday wear' }}</span>
@@ -552,6 +562,7 @@
                         {% if cloth.discount_text %}<span class="badge">{{ cloth.discount_text }}</span>{% endif %}
                         <div class="card-actions">
                             <a class="buy-link" href="{% url 'product_detail' 'cloth' cloth.id %}"><i class="bi bi-eye"></i> View</a>
+                            {% include "components/compare-button.html" with item_type="cloth" item_id=cloth.id %}
                             <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}"><i class="bi bi-bag-plus"></i></button>
                         </div>
                     </div>
@@ -575,9 +586,13 @@
                     <div class="img-wrap">
                         <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" loading="lazy">
                         <div class="img-overlay">
-                            <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="quick-view-link"><i class="bi bi-eye"></i> Quick View</a>
+                            <button class="quick-view-btn" data-item-type="cloth" data-item-id="{{ cloth.id }}"><i class="bi bi-eye"></i> Quick View</button>
+                            <div style="position: absolute; top: 12px; right: 12px;">
+                                {% include "components/wishlist-heart-button.html" with item_type="cloth" item_id=cloth.id %}
+                            </div>
                         </div>
                     </div>
+                    {% include "components/stock-indicator.html" with product=cloth item_type="cloth" %}
                     <div class="body">
                         <h3 class="name"><a href="{% url 'product_detail' 'cloth' cloth.id %}" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
                         <span class="meta">{{ cloth.get_subcategory_display|default:'Everyday wear' }}</span>
@@ -589,6 +604,7 @@
                         {% if cloth.discount_text %}<span class="badge">{{ cloth.discount_text }}</span>{% endif %}
                         <div class="card-actions">
                             <a class="buy-link" href="{% url 'product_detail' 'cloth' cloth.id %}"><i class="bi bi-eye"></i> View</a>
+                            {% include "components/compare-button.html" with item_type="cloth" item_id=cloth.id %}
                             <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}"><i class="bi bi-bag-plus"></i></button>
                         </div>
                     </div>
@@ -602,7 +618,7 @@
     </div>
 
     {% with page_obj=all_kids_cloths %}
-    {% include 'includes/pagination.html' %}
+    {% include 'includes/load-more-section.html' %}
     {% endwith %}
 
     {% include 'footer.html' %}
@@ -617,7 +633,7 @@
             }
         })();
     </script>
-    <script src="{% static 'cart_utils.js' %}"></script>
+    <script src="{% static 'cart_utils.js' %}" defer></script>
     <script>
         (function () {
             const tabs = document.querySelectorAll('.tab-btn');
@@ -651,7 +667,11 @@
             sections.forEach((section) => observer.observe(section));
         })();
     </script>
-    <script src="{% static 'global.js' %}"></script>
-    <script src="{% static 'scroll-reveal.js' %}"></script>
+    <script src="{% static 'global.js' %}" defer></script>
+    <script src="{% static 'scroll-reveal.js' %}" defer></script>
+    <script src="{% static 'quick-view.js' %}" defer></script>
+    <script src="{% static 'product-comparison.js' %}" defer></script>
+    <script src="{% static 'wishlist-enhanced.js' %}" defer></script>
+    <script src="{% static 'pagination-loader.js' %}" defer></script>
 </body>
 </html>

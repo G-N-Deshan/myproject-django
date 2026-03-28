@@ -1,0 +1,17 @@
+<!-- Stock Indicator Component -->
+<!-- Reusable stock status badge for products -->
+{% load static %}
+
+<div class="stock-indicator">
+    {% with stock=product.stock_quantity %}
+        {% if stock <= 0 %}
+            <span class="stock-badge out-of-stock">Out of Stock</span>
+        {% elif stock <= 5 %}
+            <span class="stock-badge low-stock">Only {{ stock }} left!</span>
+            <div class="stock-status-bar low-stock"></div>
+        {% else %}
+            <span class="stock-badge in-stock">In Stock</span>
+            <div class="stock-status-bar in-stock"></div>
+        {% endif %}
+    {% endwith %}
+</div>
