@@ -1,38 +1,30 @@
-/**
- * Navbar Live Search
- * Provides real-time search suggestions as user types
- */
 
 (function() {
     'use strict';
-    
+
     const searchInput = document.getElementById('nav-search-input');
     const resultsContainer = document.getElementById('nav-search-results');
     const itemsContainer = document.getElementById('nav-search-items');
     const emptyMessage = document.getElementById('nav-search-empty');
     const spinner = document.getElementById('nav-search-spinner');
-    
+
     let searchTimeout;
-    const DEBOUNCE_DELAY = 300; // milliseconds
-    const MIN_CHARS = 2; // Minimum characters to start searching
-    
-    if (!searchInput) return; // Exit if search input not found
-    
-    /**
-     * Perform search via API
-     */
+    const DEBOUNCE_DELAY = 300;
+    const MIN_CHARS = 2;
+
+    if (!searchInput) return;
+
     async function performSearch(query) {
         if (query.length < MIN_CHARS) {
             resultsContainer.style.display = 'none';
             return;
         }
-        
-        // Show spinner
+
         spinner.style.display = 'block';
         itemsContainer.innerHTML = '';
         emptyMessage.style.display = 'none';
         resultsContainer.style.display = 'block';
-        
+
         try {
             const response = await fetch(`/api/products/?q=${encodeURIComponent(query)}&type=all`, {
                 method: 'GET',
@@ -40,22 +32,20 @@
                     'X-Requested-With': 'XMLHttpRequest',
                 }
             });
-            
+
             if (!response.ok) throw new Error('Search failed');
-            
+
             const data = await response.json();
             spinner.style.display = 'none';
-            
-            // Limit to first 6 results
+
             const results = data.products.slice(0, 6);
-            
+
             if (results.length === 0) {
                 emptyMessage.style.display = 'block';
                 itemsContainer.innerHTML = '';
                 return;
             }
-            
-            // Build results HTML
+
             itemsContainer.innerHTML = results.map(item => `
                 <a href="${item.url}" class="nav-search-item" style="
                     display: flex;
@@ -103,8 +93,7 @@
                     ">Rs. ${item.price}</div>
                 </a>
             `).join('');
-            
-            // Add hover effect
+
             document.querySelectorAll('.nav-search-item').forEach(item => {
                 item.addEventListener('mouseenter', function() {
                     this.style.background = '#f8fafc';
@@ -113,7 +102,7 @@
                     this.style.background = 'transparent';
                 });
             });
-            
+
         } catch (error) {
             console.error('Search error:', error);
             spinner.style.display = 'none';
@@ -121,50 +110,38 @@
             emptyMessage.textContent = 'Error loading results';
         }
     }
-    
-    /**
-     * Debounced search handler
-     */
+
     function handleSearchInput(e) {
         const query = e.target.value.trim();
-        
-        // Clear previous timeout
+
         clearTimeout(searchTimeout);
-        
+
         if (!query) {
             resultsContainer.style.display = 'none';
             return;
         }
-        
-        // Set new timeout
+
         searchTimeout = setTimeout(() => {
             performSearch(query);
         }, DEBOUNCE_DELAY);
     }
-    
-    /**
-     * Close dropdown when clicking outside
-     */
+
     function handleClickOutside(e) {
         if (!e.target.closest('.nav-search-form')) {
             resultsContainer.style.display = 'none';
         }
     }
-    
-    /**
-     * Handle keyboard navigation
-     */
+
     function handleKeyDown(e) {
         if (e.key === 'Escape') {
             resultsContainer.style.display = 'none';
             searchInput.blur();
         } else if (e.key === 'Enter') {
-            // Allow form submission
+
             return;
         }
     }
-    
-    // Event listeners
+
     searchInput.addEventListener('input', handleSearchInput);
     searchInput.addEventListener('keydown', handleKeyDown);
     searchInput.addEventListener('focus', function() {
@@ -172,18 +149,17 @@
             resultsContainer.style.display = 'block';
         }
     });
-    
+
     document.addEventListener('click', handleClickOutside);
-    
-    // Close dropdown when a result is clicked
+
     document.addEventListener('click', function(e) {
         if (e.target.closest('.nav-search-item')) {
-            // Allow navigation to happen naturally
+
             setTimeout(() => {
                 resultsContainer.style.display = 'none';
             }, 100);
         }
     });
-    
+
     console.log('✓ Navbar live search initialized');
 })();

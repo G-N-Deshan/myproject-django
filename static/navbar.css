@@ -50,7 +50,6 @@ body{
     flex-shrink: 0;
 }
 
-/* Navigation Links Container */
 .nav-links-container {
     display: flex;
     align-items: center;
@@ -131,7 +130,6 @@ body{
     font-weight: 600;
 }
 
-/* Search Input Styling */
 .nav-search-input {
     padding: 0.5rem 2.2rem 0.5rem 1rem !important;
     border: 2px solid var(--color-primary) !important;
@@ -225,7 +223,6 @@ body{
     cursor: pointer;
 }
 
-/* Cart Icon Container */
 .cart-icon-link {
     position: relative;
     display: inline-flex;
@@ -290,7 +287,6 @@ body{
     }
 }
 
-/* Cart Count Badge (Old - kept for compatibility) */
 .nav-link--cart .cart-count {
     display: inline-flex;
     align-items: center;
@@ -307,7 +303,6 @@ body{
     line-height: 1;
 }
 
-/* Hamburger Toggle Button - hidden on desktop */
 .nav-hamburger {
     display: none;
     flex-direction: column;
@@ -338,10 +333,8 @@ body{
     transform: translateY(-8px) rotate(-45deg);
 }
 
-/* Mobile auth links - hidden on desktop */
 .nav-mobile-auth { display: none !important; }
 
-/* Responsive Design */
 @media only screen and (max-width: 1200px) {
     .section-0 {
         height: 9rem;
@@ -408,13 +401,10 @@ body{
         flex-wrap: nowrap;
     }
 
-    /* Show hamburger */
     .nav-hamburger { display: flex; order: 3; }
 
-    /* Hide desktop auth buttons */
     .nav-desktop-auth { display: none !important; }
 
-    /* Nav links become a dropdown drawer */
     .nav-links-container {
         display: none;
         flex-direction: column;
@@ -456,7 +446,6 @@ body{
         justify-content: flex-start;
     }
 
-    /* Show mobile auth links in drawer */
     .nav-mobile-auth { display: block !important; }
     .nav-mobile-auth .nav-link { border-top: 1px solid #f1f5f9; }
 

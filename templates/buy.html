@@ -136,9 +136,15 @@
                             <span class="ml-auto text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-full">{{ offer.stock_text }}</span>
                             {% endif %}
                         </div>
-                        <button class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-indigo-500/30 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2" data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}">
-                            <i class="bi bi-cart-plus"></i> {{ offer.button_text }}
-                        </button>
+                        <div class="grid grid-cols-[1fr_auto_auto] gap-2">
+                            <a href="{% url 'product_detail' 'offer' offer.id %}" class="py-2.5 bg-indigo-50 border border-indigo-200 text-indigo-700 font-bold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1 text-sm">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                            {% include "components/compare-button.html" with item_type="offer" item_id=offer.id %}
+                            <button class="py-2.5 px-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-lg hover:shadow-lg hover:shadow-indigo-500/30 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-1" data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}">
+                                <i class="bi bi-cart-plus"></i>
+                            </button>
+                        </div>
                     </div>
                 </article>
                 {% endfor %}
@@ -178,10 +184,16 @@
                         </h3>
                         <p class="text-slate-500 text-sm line-clamp-2 mb-3">{{ item.description }}</p>
                         {% with item_rating=item.avg_rating item_review_count=item.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
-                        <div class="flex items-center justify-between">
+                        <div class="mb-4">
                             <span class="text-xl font-black text-indigo-600">{{ item.price }}</span>
-                            <button class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-indigo-500/30 hover:scale-[1.02] transition-all duration-300 flex items-center gap-2 text-sm" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">
-                                <i class="bi bi-cart-plus"></i> Add to cart
+                        </div>
+                        <div class="grid grid-cols-[1fr_auto_auto] gap-2">
+                            <a href="{% url 'product_detail' 'arrival' item.id %}" class="py-2.5 bg-pink-50 border border-pink-200 text-pink-700 font-bold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1 text-sm">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                            {% include "components/compare-button.html" with item_type="arrival" item_id=item.id %}
+                            <button class="py-2.5 px-3 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-bold rounded-lg hover:shadow-lg hover:shadow-pink-500/30 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-1" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">
+                                <i class="bi bi-cart-plus"></i>
                             </button>
                         </div>
                     </div>
@@ -195,5 +207,6 @@
     <script src="{% static 'cart_utils.js' %}" defer></script>
     <script src="{% static 'global.js' %}" defer></script>
     <script src="{% static 'scroll-reveal.js' %}" defer></script>
+    <script src="{% static 'product-comparison.js' %}" defer></script>
 </body>
 </html>

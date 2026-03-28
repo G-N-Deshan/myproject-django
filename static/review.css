@@ -1,4 +1,4 @@
-/* ═══ Reviews Page Styles ═══ */
+
 html {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -6,7 +6,6 @@ html {
 }
 html::-webkit-scrollbar { display: none; }
 
-/* Filter chips */
 .filter-chip {
     background: #f1f5f9;
     color: #475569;
@@ -23,7 +22,6 @@ html::-webkit-scrollbar { display: none; }
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
-/* Review card entrance animation */
 .review-card-new {
     animation: cardSlideUp 0.5s ease-out both;
 }
@@ -38,12 +36,10 @@ html::-webkit-scrollbar { display: none; }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Form file input */
 .form-file {
     font-size: 14px;
 }
 
-/* Line clamp utility */
 .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -51,7 +47,6 @@ html::-webkit-scrollbar { display: none; }
     overflow: hidden;
 }
 
-/* 3D Floating Shape Animations */
 @keyframes floatSlow {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     50% { transform: translateY(-35px) rotate(-4deg); }

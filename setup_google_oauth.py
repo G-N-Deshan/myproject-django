@@ -1,19 +1,12 @@
-"""
-Setup script for Google OAuth in django-allauth
-Run: python manage.py shell < setup_google_oauth.py
-"""
-
 from django.contrib.sites.models import Site
 from allauth.socialaccount.models import SocialApp
 
-# Step 1: Update Site (required by allauth)
 site = Site.objects.get_current()
 site.name = 'KidZone Store'
-site.domain = '127.0.0.1:8000'  # For local - change to your domain in production
+site.domain = '127.0.0.1:8000'
 site.save()
 print(f"✓ Updated Site: {site.name} ({site.domain})")
 
-# Step 2: Check if Google SocialApp exists
 try:
     google_app = SocialApp.objects.get(provider='google')
     print(f"✓ Google OAuth app already exists: {google_app.name}")

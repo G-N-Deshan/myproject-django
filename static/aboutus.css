@@ -15,7 +15,6 @@ html::-webkit-scrollbar {
 
 }
 
-/* Hero Section */
 .about-hero {
     position: relative;
     background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("../media/about-hero.jpg");
@@ -64,7 +63,6 @@ html::-webkit-scrollbar {
     line-height: var(--line-height-relaxed);
 }
 
-/* Mission Section */
 .mission-section {
     padding: 100px 20px;
     background: linear-gradient(135deg, var(--color-background) 0%, var(--color-surface) 100%);
@@ -163,7 +161,6 @@ html::-webkit-scrollbar {
     transform: scale(1.05);
 }
 
-/* Values Section */
 .values-section {
     padding: 100px 20px;
     background: #ffffff;
@@ -232,7 +229,6 @@ html::-webkit-scrollbar {
     line-height: var(--line-height-relaxed);
 }
 
-/* Timeline Section */
 .timeline-section {
     padding: 100px 20px;
     background: linear-gradient(135deg, var(--color-background) 0%, var(--color-surface-hover) 100%);
@@ -324,7 +320,6 @@ html::-webkit-scrollbar {
     line-height: var(--line-height-relaxed);
 }
 
-/* Team Section */
 .team-section {
     padding: 100px 20px;
     background: var(--color-surface);
@@ -394,7 +389,6 @@ html::-webkit-scrollbar {
     line-height: var(--line-height-normal);
 }
 
-/* CTA Section */
 .cta-section {
     padding: 100px 20px;
     background: var(--gradient-primary);
@@ -456,7 +450,6 @@ html::-webkit-scrollbar {
     background: rgba(255, 255, 255, 0.1);
 }
 
-/* 3D Floating Shapes */
 .hero-shapes {
     position: absolute;
     inset: 0;
@@ -562,7 +555,6 @@ html::-webkit-scrollbar {
     50% { transform: scale(1.4); opacity: 0.3; }
 }
 
-/* Animations */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -583,7 +575,6 @@ html::-webkit-scrollbar {
     }
 }
 
-/* Card Entrance Animation */
 .value-card { animation: aboutCardUp .5s ease-out both; }
 .value-card:nth-child(1) { animation-delay: .06s; }
 .value-card:nth-child(2) { animation-delay: .14s; }
@@ -604,7 +595,6 @@ html::-webkit-scrollbar {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .mission-container {
         grid-template-columns: 1fr;

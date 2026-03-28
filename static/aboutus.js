@@ -3,15 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initTimelineAnimation();
 });
 
-/**
- * Animate elements when scrolling into view
- */
 function animateOnScroll() {
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     };
-    
+
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -21,7 +18,7 @@ function animateOnScroll() {
             }
         });
     }, observerOptions);
-    
+
     document.querySelectorAll('.value-card, .stat-item, .team-card').forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
@@ -30,19 +27,15 @@ function animateOnScroll() {
     });
 }
 
-/**
- * Timeline dot animation
- */
 function initTimelineAnimation() {
     const dots = document.querySelectorAll('.timeline-dot');
-    
+
     dots.forEach((dot, index) => {
         dot.style.animation = `pulse 2s infinite`;
         dot.style.animationDelay = `${index * 0.2}s`;
     });
 }
 
-// Add CSS for pulse animation if not already present
 if (!document.querySelector('#about-animations')) {
     const style = document.createElement('style');
     style.id = 'about-animations';

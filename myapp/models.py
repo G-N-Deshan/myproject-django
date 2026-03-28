@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -12,7 +11,6 @@ class Card(models.Model):
     def __str__(self):
         return self.name
     
-
 class Offers(models.Model):
     
     CATEGORY_CHOICES = [
@@ -41,7 +39,6 @@ class Offers(models.Model):
     def __str__(self):
         return self.title
     
-
 class NewArrivals(models.Model):
     
     CATEGORY_CHOICES = [
@@ -65,7 +62,6 @@ class NewArrivals(models.Model):
     def __str__(self):
         return self.title
     
-
 class Cloths(models.Model):
     CATEGORY_CHOICES = [
         ('kids-men', 'Kids Boys'),
@@ -105,7 +101,6 @@ class Cloths(models.Model):
     def __str__(self):
         return self.name
     
-
 class Review(models.Model):
     RATING_CHOICES = [
         (1, 'Poor'),
@@ -129,7 +124,6 @@ class Review(models.Model):
     class Meta:
         ordering = ['-created_at']
     
-
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
@@ -144,7 +138,6 @@ class ContactMessage(models.Model):
 
     class Meta:
         ordering = ['-created_at']
-
 
 class Toy(models.Model):
     CATEGORY_CHOICES = [
@@ -195,7 +188,6 @@ class Toy(models.Model):
     class Meta:
         ordering = ['-created_at']
         
-
 class WishlistItem(models.Model):
 
     ITEM_TYPE_CHOICES = [
@@ -213,13 +205,11 @@ class WishlistItem(models.Model):
     
     added_at = models.DateTimeField(auto_now_add=True)
     
-    # Price notification features
     price_alert_enabled = models.BooleanField(default=False, help_text='Send notification when price drops')
     original_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, help_text='Price when item was added to wishlist')
     alert_threshold_percent = models.IntegerField(default=10, help_text='Alert if price drops by this percentage (default 10%)')
     last_alert_sent = models.DateTimeField(blank=True, null=True, help_text='Last time price alert was sent for this item')
     
-    # Wishlist sharing
     is_shared = models.BooleanField(default=False, help_text='Include in public/shared wishlist')
     shared_at = models.DateTimeField(blank=True, null=True, help_text='When wishlist was made public')
     
@@ -239,11 +229,9 @@ class WishlistItem(models.Model):
         return f"{self.user.username} - {item_name}"
     
     def get_item(self):
-        """Get the actual product item (Cloth or Toy)"""
         return self.cloth if self.cloth else self.toy
     
     def get_current_price(self):
-        """Get the current price of the item"""
         from decimal import Decimal
         item = self.get_item()
         if not item:
@@ -260,7 +248,6 @@ class WishlistItem(models.Model):
         return None
     
     def check_price_drop(self):
-        """Check if price has dropped by the alert threshold"""
         if not self.price_alert_enabled or not self.original_price:
             return False
         
@@ -268,14 +255,12 @@ class WishlistItem(models.Model):
         if not current_price:
             return False
         
-        # Calculate threshold price
         threshold_amount = self.original_price * (self.alert_threshold_percent / 100)
         threshold_price = self.original_price - threshold_amount
         
         return current_price <= threshold_price
     
     def get_price_drop_percent(self):
-        """Get percentage price drop from original"""
         if not self.original_price:
             return 0
         
@@ -300,9 +285,7 @@ class WishlistItem(models.Model):
         item = self.get_item()
         return item.get_category_display() if hasattr(item, 'get_category_display') else item.category
 
-
 class WishlistShare(models.Model):
-    """Track shared wishlists and access permissions"""
     
     STATUS_CHOICES = [
         ('active', 'Active'),
@@ -317,16 +300,13 @@ class WishlistShare(models.Model):
     
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
     
-    # Share options
     allow_comments = models.BooleanField(default=False, help_text='Allow viewers to comment')
     allow_suggestions = models.BooleanField(default=True, help_text='Allow viewers to suggest items')
     show_prices = models.BooleanField(default=True, help_text='Display prices in shared wishlist')
     show_created_dates = models.BooleanField(default=True, help_text='Show when items were added')
     
-    # Expiration
     expires_at = models.DateTimeField(blank=True, null=True, help_text='When shared link expires')
     
-    # Analytics
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     view_count = models.IntegerField(default=0, help_text='Number of times shared wishlist was viewed')
@@ -341,16 +321,13 @@ class WishlistShare(models.Model):
         return f"{self.owner.username}'s shared wishlist"
     
     def is_active(self):
-        """Check if share link is still valid"""
         if self.status != 'active':
             return False
         if self.expires_at and timezone.now() > self.expires_at:
             return False
         return True
 
-
 class PriceAlert(models.Model):
-    """Track price changes and alerts sent"""
     
     ALERT_TYPE_CHOICES = [
         ('price_drop', 'Price Drop'),
@@ -362,16 +339,13 @@ class PriceAlert(models.Model):
     
     alert_type = models.CharField(max_length=20, choices=ALERT_TYPE_CHOICES)
     
-    # Price information
     old_price = models.DecimalField(max_digits=10, decimal_places=2)
     new_price = models.DecimalField(max_digits=10, decimal_places=2)
     price_drop_percent = models.DecimalField(max_digits=5, decimal_places=2)
     
-    # Notification status
     is_sent = models.BooleanField(default=False, help_text='Whether notification was sent to user')
     sent_at = models.DateTimeField(blank=True, null=True)
     
-    # User action tracking
     user_viewed = models.BooleanField(default=False)
     user_purchased = models.BooleanField(default=False)
     
@@ -389,7 +363,6 @@ class PriceAlert(models.Model):
     def __str__(self):
         item = self.wishlist_item.get_item()
         return f"{item.name if item else 'Unknown'} - {self.alert_type}"
-
 
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cart', null=True, blank=True)
@@ -417,7 +390,6 @@ class Cart(models.Model):
     class Meta:
         verbose_name = 'Shopping Cart'
         verbose_name_plural = 'Shopping Carts'
-
 
 class CartItem(models.Model):
     ITEM_TYPE_CHOICES = [
@@ -455,9 +427,6 @@ class CartItem(models.Model):
     
     @staticmethod
     def _to_float(value):
-        """
-        Convert values like 'Rs 1,299.00', '$45', '1200' safely to float.
-        """
         if value is None:
             return 0.0
         if isinstance(value, (int, float)):
@@ -467,7 +436,6 @@ class CartItem(models.Model):
         if not s:
             return 0.0
 
-        # keep digits, dot, comma, minus
         s = re.sub(r'[^0-9,.\-]', '', s).replace(',', '')
         try:
             return float(s) if s else 0.0
@@ -496,7 +464,6 @@ class CartItem(models.Model):
         verbose_name = 'Cart Item'
         verbose_name_plural = 'Cart Items'
 
-
 class Order(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
@@ -509,7 +476,6 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     order_number = models.CharField(max_length=50, unique=True)
     
-    # Shipping Information
     full_name = models.CharField(max_length=200)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
@@ -518,7 +484,6 @@ class Order(models.Model):
     postal_code = models.CharField(max_length=20)
     country = models.CharField(max_length=100)
     
-    # Order Details
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
     tax = models.DecimalField(max_digits=10, decimal_places=2)
     shipping = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -540,7 +505,6 @@ class Order(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     item_name = models.CharField(max_length=200)
@@ -551,7 +515,6 @@ class OrderItem(models.Model):
     
     def __str__(self):
         return f"{self.quantity}x {self.item_name}"
-
 
 class ProductReview(models.Model):
     RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
@@ -582,11 +545,6 @@ class ProductReview(models.Model):
     def __str__(self):
         return f"{self.name} - {self.rating}/5"
 
-
-# ══════════════════════════════════════════════════════
-# PRODUCT IMAGE GALLERY
-# ══════════════════════════════════════════════════════
-
 class ProductImage(models.Model):
     PRODUCT_TYPE_CHOICES = [
         ('cloth', 'Cloth'),
@@ -612,11 +570,6 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product_type} (order: {self.sort_order})"
-
-
-# ══════════════════════════════════════════════════════
-# INVENTORY MANAGEMENT
-# ══════════════════════════════════════════════════════
 
 class Inventory(models.Model):
     PRODUCT_TYPE_CHOICES = [
@@ -656,11 +609,6 @@ class Inventory(models.Model):
         name = getattr(product, 'name', None) or getattr(product, 'title', '?')
         return f"{name} — {self.stock} in stock"
 
-
-# ══════════════════════════════════════════════════════
-# COUPON / DISCOUNT SYSTEM
-# ══════════════════════════════════════════════════════
-
 class Coupon(models.Model):
     DISCOUNT_TYPES = [
         ('percentage', 'Percentage'),
@@ -699,11 +647,6 @@ class Coupon(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-
-# ══════════════════════════════════════════════════════
-# SIZE / COLOR VARIANTS
-# ══════════════════════════════════════════════════════
-
 class ProductVariant(models.Model):
     cloth = models.ForeignKey('Cloths', on_delete=models.CASCADE, related_name='variants')
     size = models.CharField(max_length=20, blank=True, help_text='e.g. S, M, L, XL')
@@ -725,11 +668,6 @@ class ProductVariant(models.Model):
             parts.append(self.color)
         return f"{self.cloth.name} — {' / '.join(parts)}" if parts else self.cloth.name
 
-
-# ══════════════════════════════════════════════════════
-# ORDER TRACKING
-# ══════════════════════════════════════════════════════
-
 class OrderTracking(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='tracking_updates')
     status = models.CharField(max_length=20, choices=Order.STATUS_CHOICES)
@@ -744,11 +682,6 @@ class OrderTracking(models.Model):
     def __str__(self):
         return f"{self.order.order_number} → {self.get_status_display()} ({self.created_at:%Y-%m-%d %H:%M})"
 
-
-# ══════════════════════════════════════════════════════
-# SITE UPDATE TRACKER  (for real-time frontend refresh)
-# ══════════════════════════════════════════════════════
-
 class SiteUpdate(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -761,15 +694,7 @@ class SiteUpdate(models.Model):
         obj.save()
         return obj
 
-
-# ══════════════════════════════════════════════════════
-# LIVE STOCK INDICATORS (Feature 5)
-# ══════════════════════════════════════════════════════
-
 class BackInStockNotification(models.Model):
-    """
-    Allows users to opt-in for notifications when out-of-stock items are back in stock.
-    """
     ITEM_TYPE_CHOICES = [
         ('cloth', 'Clothing'),
         ('toy', 'Toy'),
@@ -793,15 +718,9 @@ class BackInStockNotification(models.Model):
         return f"{self.user.username} → {product_name} (Back in Stock Alert)"
 
     def get_product(self):
-        """Get the actual product object"""
         return self.cloth if self.cloth else self.toy
 
-
 class OutOfStockReservation(models.Model):
-    """
-    Allows users to reserve/pre-order out-of-stock items.
-    Supports early bird listings and backorder management.
-    """
     ITEM_TYPE_CHOICES = [
         ('cloth', 'Clothing'),
         ('toy', 'Toy'),
@@ -838,24 +757,19 @@ class OutOfStockReservation(models.Model):
         return f"{self.user.username} → {product_name} x{self.quantity} ({self.get_status_display()})"
 
     def get_product(self):
-        """Get the actual product object"""
         return self.cloth if self.cloth else self.toy
 
     def is_expired(self):
-        """Check if reservation has expired"""
         if self.expires_at and self.expires_at < timezone.now():
             return True
         return False
 
     def mark_as_notified(self):
-        """Mark as notified when product comes back in stock"""
         self.status = 'notified'
         self.notified_at = timezone.now()
         self.save()
 
     def mark_as_completed(self):
-        """Mark as completed when user purchases"""
         self.status = 'completed'
         self.completed_at = timezone.now()
         self.save()
-

@@ -1,9 +1,4 @@
-/**
- * Global cart utility functions
- * Used across all pages to manage cart state
- */
 
-// Inject spinner and toast animations
 if (!document.getElementById('cartSpinStyle')) {
     const s = document.createElement('style');
     s.id = 'cartSpinStyle';
@@ -49,7 +44,6 @@ if (window.__cartUtilsBootstrapped) {
 
             const csrftoken = getCookie('csrftoken');
 
-            // If CSRF cookie missing, use safe GET fallback
             if (!csrftoken) {
                 window.location.href = fallbackUrl;
                 return false;
@@ -65,7 +59,7 @@ if (window.__cartUtilsBootstrapped) {
             });
 
             if (!response.ok) {
-                // e.g., 403/500 -> fallback
+
                 window.location.href = fallbackUrl;
                 return false;
             }
@@ -95,7 +89,7 @@ if (window.__cartUtilsBootstrapped) {
             return false;
         } catch (error) {
             console.error('Error adding to cart:', error);
-            // Final fallback path
+
             window.location.href = fallbackUrl;
             return false;
         } finally {
@@ -118,7 +112,7 @@ if (window.__cartUtilsBootstrapped) {
 
             const itemType = btn.dataset.itemType;
             const itemId = btn.dataset.itemId;
-            
+
             if (!itemType || !itemId) {
                 console.error('Missing data-item-type or data-item-id:', btn);
                 return;
@@ -145,37 +139,34 @@ function updateGlobalCartCount(count) {
             el.classList.remove('has-items');
         }
     });
-    
-    // Cache cart count in localStorage for instant display on next page load
+
     try {
         localStorage.setItem('kids_cart_count', count);
     } catch(e) {
-        // localStorage not available
+
     }
 }
 
 function showGlobalToast(message, type = 'success') {
     const existing = document.querySelector('.global-toast');
     if (existing) existing.remove();
-    
+
     const toast = document.createElement('div');
     toast.className = 'global-toast';
-    
-    // Create icon element
+
     const iconSpan = document.createElement('span');
     iconSpan.style.marginRight = '0.5rem';
     iconSpan.style.fontSize = '1.2rem';
     iconSpan.textContent = type === 'success' ? '✓' : '⚠';
-    
-    // Create message span
+
     const msgSpan = document.createElement('span');
     msgSpan.textContent = message;
-    
+
     toast.appendChild(iconSpan);
     toast.appendChild(msgSpan);
-    
+
     const bgColor = type === 'success' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
-    
+
     toast.style.cssText = `
         position: fixed;
         bottom: 2rem;
@@ -193,9 +184,9 @@ function showGlobalToast(message, type = 'success') {
         max-width: 350px;
         word-wrap: break-word;
     `;
-    
+
     document.body.appendChild(toast);
-    
+
     setTimeout(() => {
         toast.style.animation = 'slideOut 0.3s ease';
         setTimeout(() => toast.remove(), 300);
@@ -206,7 +197,7 @@ async function loadCartCount() {
     try {
         const response = await fetch('/cart/get/');
         const data = await response.json();
-        
+
         if (data.success) {
             updateGlobalCartCount(data.cart_count);
         }
@@ -215,7 +206,6 @@ async function loadCartCount() {
     }
 }
 
-// Add CSS animations if not already present
 if (!document.querySelector('#cart-utils-styles')) {
     const style = document.createElement('style');
     style.id = 'cart-utils-styles';

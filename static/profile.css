@@ -21,7 +21,6 @@ body {
     min-height: 100vh;
 }
 
-/* Navigation and Content */
 .section-0 {
     flex-shrink: 0;
 }
@@ -38,7 +37,6 @@ body {
     animation: fadeIn 0.6s ease-out;
 }
 
-/* Profile Header */
 .profile-header {
     position: relative;
     background: var(--color-surface);
@@ -55,7 +53,6 @@ body {
     overflow: hidden;
 }
 
-/* 3D Floating Shapes on Cover */
 .cover-shape {
     position: absolute;
     pointer-events: none;
@@ -141,7 +138,6 @@ body {
     animation: pfPulseRing 8s ease-in-out infinite 2s;
 }
 
-/* Card entrance animation */
 .profile-card {
     animation: profCardUp .5s ease-out both;
 }
@@ -219,7 +215,6 @@ body {
     box-shadow: 0 12px 28px rgba(99, 102, 241, 0.4);
 }
 
-/* Main Content Grid */
 .profile-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -233,7 +228,6 @@ body {
     gap: 30px;
 }
 
-/* Profile Cards */
 .profile-card {
     background: #ffffff;
     border-radius: 16px;
@@ -265,7 +259,6 @@ body {
     padding: 25px;
 }
 
-/* Info Groups */
 .info-group {
     margin-bottom: 20px;
     padding-bottom: 20px;
@@ -308,7 +301,6 @@ body {
     color: #065f46;
 }
 
-/* Settings Buttons */
 .settings-btn {
     display: block;
     width: 100%;
@@ -341,7 +333,6 @@ body {
     border-color: #ef4444;
 }
 
-/* Stats Grid */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -379,7 +370,6 @@ body {
     margin-top: 8px;
 }
 
-/* Quick Actions */
 .quick-actions {
     display: grid;
     gap: 12px;
@@ -410,7 +400,6 @@ body {
     font-size: 1.3rem;
 }
 
-/* Review Items */
 .review-item {
     padding: 16px;
     background: #f8fafc;
@@ -438,7 +427,6 @@ body {
     color: #94a3b8;
 }
 
-/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -495,7 +483,6 @@ body {
     color: #0f172a;
 }
 
-/* Edit Form */
 .edit-form {
     padding: 25px;
 }
@@ -579,7 +566,6 @@ body {
     box-shadow: 0 12px 28px rgba(99, 102, 241, 0.4);
 }
 
-/* Not Authenticated */
 .not-authenticated {
     background: #ffffff;
     border-radius: 16px;
@@ -613,13 +599,11 @@ body {
     box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
 }
 
-/* Footer */
 footer {
     flex-shrink: 0;
     margin-top: auto;
 }
 
-/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -631,7 +615,6 @@ footer {
     }
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .profile-info {
         flex-direction: column;
@@ -768,7 +751,6 @@ footer {
     }
 }
 
-/* Toast Notification */
 .toast {
     visibility: hidden;
     min-width: 280px;
@@ -807,7 +789,6 @@ footer {
     font-size: 0.95rem;
 }
 
-/* Checkbox Label Styles */
 .checkbox-label {
     display: flex;
     align-items: center;

@@ -1,11 +1,6 @@
-/* ═══════════════════════════════════════════════════════════════
-   STANDARDIZED BUTTON STYLES & TOUCH TARGETS
-   Ensures all buttons are 44px+ (accessible touch target size)
-   ═══════════════════════════════════════════════════════════════ */
 
-/* Base Button Styles */
 button, [role="button"], input[type="button"], input[type="submit"], a.btn {
-    /* Minimum touch target: 44x44px (iOS) / 48x48px (Android) */
+
     min-height: 44px;
     min-width: 44px;
     padding: 0.75rem 1.5rem;
@@ -29,7 +24,6 @@ button, [role="button"], input[type="button"], input[type="submit"], a.btn {
     -ms-user-select: none;
 }
 
-/* Remove default button styling that can make it too small */
 button::-moz-focus-inner,
 input[type="button"]::-moz-focus-inner,
 input[type="submit"]::-moz-focus-inner,
@@ -38,7 +32,6 @@ input[type="reset"]::-moz-focus-inner {
     padding: 0;
 }
 
-/* ── PRIMARY BUTTON (Call-to-Action) ── */
 .btn-primary,
 button.primary,
 input[type="submit"] {
@@ -76,7 +69,6 @@ input[type="submit"]:disabled {
     transform: none;
 }
 
-/* ── SECONDARY BUTTON ── */
 .btn-secondary,
 button.secondary {
     background: rgba(255, 255, 255, 0.1);
@@ -97,7 +89,6 @@ button.secondary:focus-visible {
     outline-offset: 2px;
 }
 
-/* ── DANGER BUTTON (Delete, Remove) ── */
 .btn-danger,
 button.danger {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
@@ -117,7 +108,6 @@ button.danger:focus-visible {
     outline-offset: 2px;
 }
 
-/* ── SUCCESS BUTTON ── */
 .btn-success,
 button.success {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -137,7 +127,6 @@ button.success:focus-visible {
     outline-offset: 2px;
 }
 
-/* ── ICON BUTTON (Smaller) ── */
 .btn-icon,
 button.icon {
     min-width: 44px;
@@ -166,7 +155,6 @@ button.icon.outline:hover {
     background: rgba(99, 102, 241, 0.05);
 }
 
-/* ── TEXT BUTTON (Link-like) ── */
 .btn-text,
 button.text {
     background: transparent;
@@ -189,7 +177,6 @@ button.text:focus-visible {
     outline-offset: 2px;
 }
 
-/* ── LOADING STATE ── */
 .btn:disabled,
 button:disabled,
 .btn.loading,
@@ -216,7 +203,6 @@ button.loading::after {
     to { transform: rotate(360deg); }
 }
 
-/* ── EXIT/CLOSE BUTTON ── */
 .btn-close,
 button.close {
     min-width: 36px;
@@ -239,7 +225,6 @@ button.close:hover {
     color: #1e293b;
 }
 
-/* ── RESPONSIVE: Ensure touch targets on mobile ── */
 @media (max-width: 768px) {
     button, [role="button"], input[type="button"], input[type="submit"], a.btn {
         min-height: 48px;
@@ -255,7 +240,6 @@ button.close:hover {
         height: 48px;
     }
 
-    /* Ensure clickable areas are well-spaced on mobile */
     button + button,
     .btn + .btn,
     a.btn + a.btn {
@@ -263,7 +247,6 @@ button.close:hover {
     }
 }
 
-/* ── FOCUS-VISIBLE for better accessibility ── */
 button:focus-visible,
 input[type="button"]:focus-visible,
 input[type="submit"]:focus-visible,
@@ -272,7 +255,6 @@ input[type="submit"]:focus-visible,
     outline-offset: 2px;
 }
 
-/* ── GROUP BUTTONS ── */
 .btn-group {
     display: inline-flex;
     gap: 0;
@@ -295,7 +277,6 @@ input[type="submit"]:focus-visible,
     border-radius: 0 0.75rem 0.75rem 0;
 }
 
-/* Ensure proper colors in dark mode */
 @media (prefers-color-scheme: dark) {
     .btn-secondary,
     button.secondary {
@@ -323,7 +304,6 @@ input[type="submit"]:focus-visible,
     }
 }
 
-/* High contrast mode support */
 @media (prefers-contrast: more) {
     button, [role="button"], input[type="button"], input[type="submit"], a.btn {
         border: 2px solid currentColor;

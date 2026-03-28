@@ -1,11 +1,3 @@
-/**
- * Advanced Filtering System - Styles
- * Filter panel, price slider, checkboxes, badges
- */
-
-/* =====================================================
-   FILTER PANEL MAIN CONTAINER
-   ===================================================== */
 
 #filter-panel {
     transition: all 0.3s ease;
@@ -21,7 +13,6 @@
     margin-bottom: 2rem;
 }
 
-/* Filter panel sidebar */
 .filter-sidebar {
     width: 280px;
     background: #f8f9fa;
@@ -64,10 +55,6 @@
     color: #5a32a3;
 }
 
-/* =====================================================
-   FILTER SECTION (Price, Materials, Sizes, Brands)
-   ===================================================== */
-
 .filter-section {
     margin-bottom: 1.8rem;
     padding-bottom: 1.5rem;
@@ -104,10 +91,6 @@
     color: #6f42c1;
 }
 
-/* =====================================================
-   PRICE SLIDER
-   ===================================================== */
-
 #price-slider-container {
     display: flex;
     flex-direction: column;
@@ -136,7 +119,6 @@
     gap: 0.8rem;
 }
 
-/* Range slider input styling */
 input[type="range"] {
     width: 100%;
     height: 6px;
@@ -182,10 +164,6 @@ input[type="range"]::-moz-range-thumb:hover {
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
     transform: scale(1.1);
 }
-
-/* =====================================================
-   FILTER CHECKBOXES (Material, Size, Brand)
-   ===================================================== */
 
 .filter-checkbox-group {
     display: flex;
@@ -240,10 +218,6 @@ input[type="range"]::-moz-range-thumb:hover {
     margin-left: auto;
     flex-shrink: 0;
 }
-
-/* =====================================================
-   ACTIVE FILTERS BADGES
-   ===================================================== */
 
 #active-filters-container {
     display: flex;
@@ -324,10 +298,6 @@ input[type="range"]::-moz-range-thumb:hover {
     }
 }
 
-/* =====================================================
-   NO RESULTS MESSAGE
-   ===================================================== */
-
 .no-results-message {
     grid-column: 1 / -1;
     padding: 3rem 2rem;
@@ -360,15 +330,11 @@ input[type="range"]::-moz-range-thumb:hover {
     font-size: 0.95rem;
 }
 
-/* =====================================================
-   MOBILE RESPONSIVE DESIGN
-   ===================================================== */
-
 @media (max-width: 1024px) {
     .filter-sidebar {
         width: 240px;
     }
-    
+
     .filter-container {
         gap: 1.5rem;
     }
@@ -378,7 +344,7 @@ input[type="range"]::-moz-range-thumb:hover {
     .filter-container {
         flex-direction: column;
     }
-    
+
     .filter-sidebar {
         position: fixed;
         top: 0;
@@ -394,23 +360,22 @@ input[type="range"]::-moz-range-thumb:hover {
         display: flex;
         flex-direction: column;
     }
-    
+
     .filter-sidebar.show {
         transform: translateX(0);
     }
-    
+
     .filter-sidebar-header {
         position: sticky;
         top: 0;
         background-color: #f8f9fa;
         z-index: 10;
     }
-    
-    /* Filter panel backdrop on mobile */
+
     .filter-panel::before {
         display: none;
     }
-    
+
     .filter-panel.show::before {
         content: '';
         position: fixed;
@@ -427,25 +392,21 @@ input[type="range"]::-moz-range-thumb:hover {
     .filter-sidebar {
         padding: 1rem;
     }
-    
+
     .filter-section {
         margin-bottom: 1.2rem;
         padding-bottom: 1rem;
     }
-    
+
     .filter-badge {
         padding: 0.4rem 0.8rem;
         font-size: 0.8rem;
     }
-    
+
     .filter-section-title button {
         font-size: 0.75rem;
     }
 }
-
-/* =====================================================
-   FILTER BUTTON (MOBILE TOGGLE)
-   ===================================================== */
 
 .filter-toggle-btn {
     display: none;
@@ -489,10 +450,6 @@ input[type="range"]::-moz-range-thumb:hover {
     transform: translateY(-2px);
 }
 
-/* =====================================================
-   ACCESSIBILITY & ANIMATIONS
-   ===================================================== */
-
 @media (prefers-reduced-motion: reduce) {
     input[type="range"]::-webkit-slider-thumb,
     input[type="range"]::-moz-range-thumb,
@@ -503,17 +460,12 @@ input[type="range"]::-moz-range-thumb:hover {
     }
 }
 
-/* Focus states for keyboard navigation */
 button:focus-visible,
 input[type="checkbox"]:focus-visible,
 input[type="range"]:focus-visible {
     outline: 2px solid #6366f1;
     outline-offset: 2px;
 }
-
-/* =====================================================
-   SCROLLBAR STYLING (for filter sidebar)
-   ===================================================== */
 
 .filter-sidebar::-webkit-scrollbar {
     width: 6px;
@@ -533,7 +485,6 @@ input[type="range"]:focus-visible {
     background: #94a3b8;
 }
 
-/* Firefox scrollbar */
 .filter-sidebar {
     scrollbar-color: #cbd5e1 #f1f5f9;
     scrollbar-width: thin;

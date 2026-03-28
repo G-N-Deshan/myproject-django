@@ -1,6 +1,3 @@
-/* ═══════════════════════════════════════════
-   SIGNUP PAGE — 3D ANIMATED BACKGROUND
-   ═══════════════════════════════════════════ */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -8,7 +5,6 @@ html::-webkit-scrollbar { width: 5px; }
 html::-webkit-scrollbar-track { background: #0f172a; }
 html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 99px; }
 
-/* ── Full-page background ── */
 .signup-bg-wrapper {
     position: fixed;
     inset: 0;
@@ -16,7 +12,6 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
     background: #0f172a;
 }
 
-/* ── Grid overlay ── */
 .su-grid-overlay {
     position: absolute;
     inset: 0;
@@ -32,7 +27,6 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
     100% { transform: translateY(60px); }
 }
 
-/* ── Floating shapes ── */
 .su-shape {
     position: absolute;
     border-radius: 16px;
@@ -53,7 +47,6 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
     50% { transform: translateY(-28px) rotate(calc(var(--r, 15deg) + 12deg)); }
 }
 
-/* ── Card ── */
 .su-card {
     width: 100%;
     max-width: 480px;
@@ -68,7 +61,6 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
         0 25px 50px rgba(0, 0, 0, 0.3);
 }
 
-/* ── Google Button ── */
 .su-google-btn {
     display: flex;
     align-items: center;
@@ -91,7 +83,6 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
     transform: translateY(-1px);
 }
 
-/* ── Inputs ── */
 .su-input-group {
     position: relative;
     display: flex;
@@ -129,7 +120,6 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
     color: #a5b4fc;
 }
 
-/* ── Password toggle ── */
 .su-toggle-pw {
     position: absolute;
     right: 0.8rem;
@@ -143,7 +133,6 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
 }
 .su-toggle-pw:hover { color: rgba(255, 255, 255, 0.7); }
 
-/* ── Password strength bar ── */
 .su-strength-bar {
     height: 3px;
     background: rgba(255, 255, 255, 0.06);
@@ -158,7 +147,6 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
     transition: width 0.4s ease, background 0.4s ease;
 }
 
-/* ── Submit button ── */
 .su-submit-btn {
     width: 100%;
     padding: 0.9rem 1.5rem;
@@ -194,7 +182,6 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
     transform: translateY(0);
 }
 
-/* ── Reveal animation ── */
 .reveal-su {
     opacity: 0;
     transform: translateY(24px);
@@ -209,7 +196,6 @@ html::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius:
     transform: translateY(0);
 }
 
-/* ── Responsive ── */
 @media (max-width: 640px) {
     .su-card {
         max-width: 95%;

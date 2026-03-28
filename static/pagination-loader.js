@@ -1,8 +1,3 @@
-/**
- * Pagination & Infinite Scroll Engine
- * Handles "Load More" button and mobile infinite scroll
- * Features: AJAX product loading, infinite scroll detection, load state management
- */
 
 class PaginationLoader {
     constructor(options = {}) {
@@ -12,16 +7,14 @@ class PaginationLoader {
         this.isLoading = false;
         this.isMobile = window.innerWidth <= 768;
         this.enableInfiniteScroll = options.enableInfiniteScroll !== false && this.isMobile;
-        this.infiniteScrollThreshold = options.infiniteScrollThreshold || 300; // pixels from bottom
+        this.infiniteScrollThreshold = options.infiniteScrollThreshold || 300;
         this.productsPerPage = options.productsPerPage || 12;
-        
-        // Container selectors
+
         this.productContainer = options.productContainer || '.grid, .arrivals-list, .toys-grid';
         this.paginationContainer = options.paginationContainer || '.pagination-nav, .load-more-section';
         this.loadMoreButton = options.loadMoreButton || '.load-more-btn';
         this.infiniteScrollIndicator = options.infiniteScrollIndicator || '.infinite-scroll-indicator';
-        
-        // Current filters
+
         this.filters = {
             q: new URLSearchParams(window.location.search).get('q') || '',
             subcategory: new URLSearchParams(window.location.search).get('subcategory') || 'all',
@@ -29,31 +22,27 @@ class PaginationLoader {
             min_price: new URLSearchParams(window.location.search).get('min_price') || '',
             max_price: new URLSearchParams(window.location.search).get('max_price') || '',
         };
-        
-        // Callbacks
+
         this.onBeforeLoad = options.onBeforeLoad || null;
         this.onAfterLoad = options.onAfterLoad || null;
         this.onError = options.onError || null;
-        
+
         this.init();
     }
 
     init() {
-        // Get initial page count from DOM
+
         const pageInfo = document.querySelector('[data-total-pages]');
         if (pageInfo) {
             this.totalPages = parseInt(pageInfo.dataset.totalPages);
         }
 
-        // Setup Load More button
         this.setupLoadMoreButton();
 
-        // Setup infinite scroll on mobile
         if (this.enableInfiniteScroll) {
             this.setupInfiniteScroll();
         }
 
-        // Update on window resize
         window.addEventListener('resize', () => this.handleResize());
     }
 
@@ -69,8 +58,7 @@ class PaginationLoader {
 
     setupInfiniteScroll() {
         window.addEventListener('scroll', () => this.handleScroll());
-        
-        // Also setup intersection observer for better performance
+
         const sentinel = document.querySelector('.infinite-scroll-sentinel');
         if (sentinel && 'IntersectionObserver' in window) {
             const observer = new IntersectionObserver(
@@ -90,10 +78,9 @@ class PaginationLoader {
     handleScroll() {
         if (this.isLoading || this.currentPage >= this.totalPages) return;
 
-        // Check if user scrolled near bottom
         const scrollPosition = window.innerHeight + window.scrollY;
         const pageHeight = document.documentElement.scrollHeight;
-        
+
         if (pageHeight - scrollPosition < this.infiniteScrollThreshold) {
             this.loadNextPage();
         }
@@ -103,7 +90,6 @@ class PaginationLoader {
         const wasMobile = this.isMobile;
         this.isMobile = window.innerWidth <= 768;
 
-        // Enable/disable infinite scroll based on device
         if (this.isMobile && !wasMobile && this.enableInfiniteScroll) {
             this.setupInfiniteScroll();
         }
@@ -119,17 +105,14 @@ class PaginationLoader {
     async loadProducts() {
         this.isLoading = true;
 
-        // Update button state
         const button = document.querySelector('.load-more-btn');
         if (button) {
             button.disabled = true;
             button.innerHTML = '<span class="loading-spinner"></span> Loading...';
         }
 
-        // Show loading indicator
         this.showLoadingIndicator();
 
-        // Execute callback
         if (this.onBeforeLoad) this.onBeforeLoad();
 
         try {
@@ -149,36 +132,29 @@ class PaginationLoader {
 
             if (!data.success) throw new Error(data.error || 'Failed to load products');
 
-            // Render products
             this.renderProducts(data.products);
 
-            // Update pagination info
             this.totalPages = data.total_pages;
             this.currentPage = data.page;
 
-            // Update button visibility
             this.updateLoadMoreButton(data.has_next);
 
-            // Execute callback
             if (this.onAfterLoad) this.onAfterLoad(data);
 
-            // Trigger cart and wishlist updates if present
             if (window.updateCartUI) window.updateCartUI();
             if (window.WishlistManager) window.WishlistManager.syncWishlistState();
 
         } catch (error) {
             console.error('Error loading products:', error);
             this.showError('Failed to load more products. Please try again.');
-            
+
             if (this.onError) this.onError(error);
-            
-            // Reset page number on error
+
             this.currentPage--;
 
         } finally {
             this.isLoading = false;
 
-            // Reset button state
             const button = document.querySelector('.load-more-btn');
             if (button) {
                 button.disabled = false;
@@ -194,12 +170,11 @@ class PaginationLoader {
         if (containers.length === 0) return;
 
         const container = containers[0];
-        
-        // HTML templates for different layouts
+
         const productHTMLs = products.map(product => {
-            // Detect layout type from existing products
+
             const existingProduct = container.querySelector('article, .arrival-card, .toy-card');
-            
+
             if (existingProduct && existingProduct.classList.contains('arrival-card')) {
                 return this.createArrivalCardHTML(product);
             } else if (existingProduct && existingProduct.classList.contains('toy-card')) {
@@ -209,7 +184,6 @@ class PaginationLoader {
             }
         });
 
-        // Add to container
         const tempDiv = document.createElement('div');
         productHTMLs.forEach(html => {
             tempDiv.innerHTML = html;
@@ -218,12 +192,11 @@ class PaginationLoader {
             }
         });
 
-        // Reinitialize interactive elements
         this.reinitializeElements();
     }
 
     createProductCardHTML(product) {
-        const rating = product.reviews > 0 
+        const rating = product.reviews > 0
             ? `<div class="rating"><span>${product.rating.toFixed(1)}★</span> (${product.reviews})</div>`
             : '';
 
@@ -257,7 +230,7 @@ class PaginationLoader {
     }
 
     createArrivalCardHTML(product) {
-        const rating = product.reviews > 0 
+        const rating = product.reviews > 0
             ? `<div style="text-align:center;font-size:12px;margin:8px 0;"><span>${product.rating.toFixed(1)}★</span> (${product.reviews})</div>`
             : '';
 
@@ -287,7 +260,7 @@ class PaginationLoader {
     }
 
     createToyCardHTML(product) {
-        const rating = product.reviews > 0 
+        const rating = product.reviews > 0
             ? `<div class="toy-rating" style="text-align:center;font-size:12px;margin:8px 0;"><span>${product.rating.toFixed(1)}★</span> (${product.reviews})</div>`
             : '';
 
@@ -321,7 +294,7 @@ class PaginationLoader {
     }
 
     reinitializeElements() {
-        // Reinitialize quick-view buttons
+
         if (window.initializeQuickView) {
             const buttons = document.querySelectorAll('.quick-view-btn');
             buttons.forEach(button => {
@@ -330,7 +303,6 @@ class PaginationLoader {
             });
         }
 
-        // Reinitialize add-to-cart buttons
         if (window.initializeCartButtons) {
             const cartButtons = document.querySelectorAll('[data-add-to-cart]');
             cartButtons.forEach(button => {
@@ -339,12 +311,10 @@ class PaginationLoader {
             });
         }
 
-        // Reinitialize wishlist hearts
         if (window.WishlistManager) {
             window.WishlistManager.renderAllHeartButtons();
         }
 
-        // Trigger cart UI update
         if (window.updateCartUI) {
             window.updateCartUI();
         }
@@ -359,8 +329,7 @@ class PaginationLoader {
             button.disabled = false;
         } else {
             button.style.display = 'none';
-            
-            // Show "no more products" message
+
             const endMessage = document.querySelector('.load-more-end');
             if (endMessage) {
                 endMessage.style.display = 'block';
@@ -383,7 +352,7 @@ class PaginationLoader {
     }
 
     showError(message) {
-        // Show toast error message
+
         if (window.showToast) {
             window.showToast(message, 'error');
         } else {
@@ -392,10 +361,9 @@ class PaginationLoader {
     }
 }
 
-// Auto-initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-    // Detect category type from URL or data attribute
-    const categoryType = document.body.dataset.categoryType || 
+
+    const categoryType = document.body.dataset.categoryType ||
                         new URLSearchParams(window.location.pathname).get('category') ||
                         (window.location.pathname.includes('mens') && 'men') ||
                         (window.location.pathname.includes('women') && 'women') ||

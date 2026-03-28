@@ -1,11 +1,3 @@
-/**
- * LIVE STOCK INDICATORS
- * Stock status badges, low stock warnings, and notifications
- */
-
-/* ═════════════════════════════════════════════════════════════ */
-/* STOCK STATUS BADGES */
-/* ═════════════════════════════════════════════════════════════ */
 
 .stock-badge {
     display: inline-flex;
@@ -31,7 +23,6 @@
     }
 }
 
-/* In Stock - Green */
 .stock-badge.in-stock {
     background-color: #d1fae5;
     color: #065f46;
@@ -43,7 +34,6 @@
     font-weight: 700;
 }
 
-/* Low Stock - Amber/Yellow */
 .stock-badge.low-stock {
     background-color: #fef3c7;
     color: #92400e;
@@ -55,7 +45,6 @@
     font-weight: 700;
 }
 
-/* Out of Stock - Red */
 .stock-badge.out-of-stock {
     background-color: #fee2e2;
     color: #991b1b;
@@ -67,10 +56,6 @@
     content: '✕';
     font-weight: 700;
 }
-
-/* ═════════════════════════════════════════════════════════════ */
-/* STOCK INDICATOR ON PRODUCT CARDS */
-/* ═════════════════════════════════════════════════════════════ */
 
 .product-card .stock-indicator {
     position: absolute;
@@ -84,15 +69,10 @@
     backdrop-filter: blur(2px);
 }
 
-/* "Only X left!" text style */
 .stock-text {
     font-size: 0.875rem;
     font-weight: 600;
 }
-
-/* ═════════════════════════════════════════════════════════════ */
-/* STOCK STATUS BAR (below product image) */
-/* ═════════════════════════════════════════════════════════════ */
 
 .stock-status-bar {
     height: 0.5rem;
@@ -125,10 +105,6 @@
 .stock-status-bar.out-of-stock {
     background: #e5e7eb;
 }
-
-/* ═════════════════════════════════════════════════════════════ */
-/* RESERVATION BUTTON */
-/* ═════════════════════════════════════════════════════════════ */
 
 .btn-reserve {
     display: inline-flex;
@@ -166,10 +142,6 @@
     opacity: 0.6;
 }
 
-/* ═════════════════════════════════════════════════════════════ */
-/* BACK IN STOCK ALERT */
-/* ═════════════════════════════════════════════════════════════ */
-
 .back-in-stock-alert {
     display: inline-flex;
     align-items: center;
@@ -187,10 +159,6 @@
     content: '🔔';
     font-size: 0.875rem;
 }
-
-/* ═════════════════════════════════════════════════════════════ */
-/* SELL-OUT NOTICE */
-/* ═════════════════════════════════════════════════════════════ */
 
 .sell-out-overlay {
     position: absolute;
@@ -218,10 +186,6 @@
     text-align: center;
 }
 
-/* ═════════════════════════════════════════════════════════════ */
-/* STOCK COUNTDOWN TIMER (for flash sales/quick restocks) */
-/* ═════════════════════════════════════════════════════════════ */
-
 .stock-countdown {
     display: inline-flex;
     align-items: center;
@@ -240,10 +204,6 @@
     content: '⏱';
     font-size: 0.875rem;
 }
-
-/* ═════════════════════════════════════════════════════════════ */
-/* RESPONSIVE ADJUSTMENTS */
-/* ═════════════════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
     .stock-badge {
@@ -268,10 +228,6 @@
     }
 }
 
-/* ═════════════════════════════════════════════════════════════ */
-/* ACCESSIBILITY */
-/* ═════════════════════════════════════════════════════════════ */
-
 .stock-badge:focus-visible,
 .btn-reserve:focus-visible {
     outline: 2px solid #6366f1;
@@ -290,7 +246,6 @@
     }
 }
 
-/* High contrast mode support */
 @media (prefers-contrast: more) {
     .stock-badge {
         border-width: 2px;

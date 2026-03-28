@@ -1,12 +1,6 @@
-/* ═══════════════════════════════════════════
-   G11 HOME PAGE — HOME.JS
-   All interactive features for the redesigned home page
-   ═══════════════════════════════════════════ */
-
 (function () {
     'use strict';
 
-    /* ── 1. Canvas Particle System (Hero) ── */
     function initParticles() {
         const canvas = document.getElementById('heroParticles');
         if (!canvas) return;
@@ -44,7 +38,6 @@
                 ctx.fill();
             });
 
-            // Draw connecting lines between nearby particles
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
@@ -62,7 +55,6 @@
             raf = requestAnimationFrame(draw);
         }
 
-        // Only animate when hero is visible
         const heroObs = new IntersectionObserver(entries => {
             entries.forEach(e => {
                 if (e.isIntersecting) { if (!raf) draw(); }
@@ -72,7 +64,6 @@
         heroObs.observe(canvas.parentElement);
     }
 
-    /* ── 2. Hero Background Parallax ── */
     function initHeroParallax() {
         const bg = document.getElementById('heroBg');
         if (!bg) return;
@@ -91,7 +82,6 @@
         });
     }
 
-    /* ── 3. 3D Tilt Effect on Cards ── */
     function initTiltCards() {
         document.querySelectorAll('.tilt-card').forEach(card => {
             const inner = card.querySelector('.card-inner');
@@ -116,7 +106,6 @@
         });
     }
 
-    /* ── 4. Animated Number Counters ── */
     function initCounters() {
         const counters = document.querySelectorAll('.counter[data-target]');
         if (!counters.length) return;
@@ -136,7 +125,6 @@
                 function step(now) {
                     const elapsed = now - start;
                     const progress = Math.min(elapsed / duration, 1);
-                    // Ease-out cubic
                     const ease = 1 - Math.pow(1 - progress, 3);
                     const current = target * ease;
                     el.textContent = current.toFixed(decimals) + (progress >= 1 ? suffix : '');
@@ -149,7 +137,6 @@
         counters.forEach(c => obs.observe(c));
     }
 
-    /* ── 5. Magnetic Button Effect ── */
     function initMagneticButtons() {
         document.querySelectorAll('.mag-btn').forEach(btn => {
             btn.addEventListener('mousemove', e => {
@@ -164,12 +151,10 @@
         });
     }
 
-    /* ── 6. Scroll Reveal (IntersectionObserver) ── */
     function initScrollReveal() {
         const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
         if (!revealEls.length) return;
 
-        // Immediately reveal anything already in or near the viewport
         function revealIfVisible(el) {
             const rect = el.getBoundingClientRect();
             if (rect.top < window.innerHeight + 50 && rect.bottom > -50) {
@@ -184,7 +169,6 @@
             if (!revealIfVisible(el)) pending.push(el);
         });
 
-        // Observe remaining elements
         if (pending.length) {
             const obs = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
@@ -198,7 +182,6 @@
             pending.forEach(el => obs.observe(el));
         }
 
-        // Also re-check on scroll for any stragglers
         let scrollTimer;
         function onScroll() {
             clearTimeout(scrollTimer);
@@ -208,7 +191,6 @@
         }
         window.addEventListener('scroll', onScroll, { passive: true });
 
-        // Final safety net: reveal everything after 3 seconds
         setTimeout(() => {
             document.querySelectorAll('.reveal:not(.visible), .reveal-stagger:not(.visible)').forEach(el => {
                 el.classList.add('visible');
@@ -217,7 +199,6 @@
         }, 3000);
     }
 
-    /* ── 7. Feature Card Click Navigation ── */
     function initFeatureNav() {
         document.querySelectorAll('#features .tilt-card').forEach(card => {
             const inner = card.querySelector('.card-inner');
@@ -236,13 +217,11 @@
         });
     }
 
-    /* ── 8. Auto-dismiss messages ── */
     function initMessages() {
         const box = document.getElementById('msgBox');
         if (box) setTimeout(() => { box.style.display = 'none'; }, 5000);
     }
 
-    /* ── Boot ── */
     document.addEventListener('DOMContentLoaded', () => {
         initParticles();
         initHeroParallax();
@@ -254,9 +233,3 @@
         initMessages();
     });
 })();
-//             } catch (err) {
-//                 showToast('Could not add to cart');
-//             }
-//         });
-//     });
-// }

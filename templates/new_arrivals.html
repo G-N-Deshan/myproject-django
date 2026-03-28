@@ -100,13 +100,15 @@
                 {% with item_rating=item.avg_rating item_review_count=item.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                 <div class="arrival-meta">
                     <span class="price">{{item.price}}</span>
-                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}"><i class="bi bi-bag-plus"></i> Add to cart</a>
+                    <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 8px;">
+                        <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-btn" style="background: #f0f9ff; border: 1px solid #bfdbfe; color: #1e40af;"><i class="bi bi-eye"></i> View</a>
+                        {% include "components/compare-button.html" with item_type="arrival" item_id=item.id %}
+                        <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}" style="background: linear-gradient(135deg, #2563eb, #0f766e); color: white;"><i class="bi bi-bag-plus"></i></a>
+                    </div>
                 </div>
             </article>
 
             {% endfor %}
-
-
 
 
             <!-- <article class="arrival-card">
@@ -211,13 +213,15 @@
                 {% with item_rating=item.avg_rating item_review_count=item.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                 <div class="arrival-meta">
                     <span class="price">{{item.price}}</span>
-                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">Add to cart</a>
+                    <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 8px;">
+                        <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-btn" style="background: #f0f9ff; border: 1px solid #bfdbfe; color: #1e40af;"><i class="bi bi-eye"></i> View</a>
+                        {% include "components/compare-button.html" with item_type="arrival" item_id=item.id %}
+                        <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}" style="background: linear-gradient(135deg, #2563eb, #0f766e); color: white;"><i class="bi bi-bag-plus"></i></a>
+                    </div>
                 </div>
             </article>
 
             {% endfor %}
-
-
 
 
 
@@ -331,15 +335,15 @@
                 {% with item_rating=item.avg_rating item_review_count=item.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                 <div class="arrival-meta">
                     <span class="price">{{item.price}}</span>
-                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">Add to cart</a>
+                    <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 8px;">
+                        <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-btn" style="background: #f0f9ff; border: 1px solid #bfdbfe; color: #1e40af;"><i class="bi bi-eye"></i> View</a>
+                        {% include "components/compare-button.html" with item_type="arrival" item_id=item.id %}
+                        <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}" style="background: linear-gradient(135deg, #2563eb, #0f766e); color: white;"><i class="bi bi-bag-plus"></i></a>
+                    </div>
                 </div>
             </article>
 
             {% endfor %}
-
-
-
-
 
             <!-- <article class="arrival-card">
                 <div class="arrival-media">

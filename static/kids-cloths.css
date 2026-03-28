@@ -185,12 +185,6 @@ html::-webkit-scrollbar {
     }
 }
 
-
-
-
-/* ...existing code... */
-
-/* Kids page: Girls/Boys sections */
 .girls-section,
 .boys-section {
     position: relative;
@@ -346,7 +340,6 @@ html::-webkit-scrollbar {
     box-shadow: 0 10px 18px rgba(99, 102, 241, 0.25);
 }
 
-/* Responsive */
 @media (max-width: 1200px) {
     .cloths-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -368,4 +361,3 @@ html::-webkit-scrollbar {
         font-size: 2rem;
     }
 }
-/* ...existing code... */

@@ -1,7 +1,3 @@
-"""
-Django settings for myproject project.
-"""
-
 from pathlib import Path
 from decouple import config, Csv
 import os
@@ -9,7 +5,6 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ── Security ──────────────────────────────────────────
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
@@ -19,7 +14,6 @@ CSRF_TRUSTED_ORIGINS = config(
     cast=Csv(),
 )
 
-# ── Application definition ───────────────────────────
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,13 +22,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    # Third-party
     'rest_framework',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    # Local
     'myapp',
 ]
 
@@ -74,7 +66,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
-# ── Database ──────────────────────────────────────────
 DATABASE_URL = config('DATABASE_URL', default='')
 if DATABASE_URL:
     DATABASES = {
@@ -92,7 +83,6 @@ else:
         }
     }
 
-# ── Auth ──────────────────────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -113,13 +103,11 @@ ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
-# ── Internationalization ──────────────────────────────
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ── Static & Media ────────────────────────────────────
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -138,7 +126,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# ── Cloudinary (production media storage) ─────────────
 CLOUDINARY_URL = config('CLOUDINARY_URL', default='')
 if CLOUDINARY_URL:
     import cloudinary
@@ -150,13 +137,11 @@ if CLOUDINARY_URL:
     }
     MEDIA_URL = '/media/'
 
-# ── Session / CSRF ────────────────────────────────────
 SESSION_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_HTTPONLY = False  # must be False for JS AJAX
+CSRF_COOKIE_HTTPONLY = False
 
-# ── Email ─────────────────────────────────────────────
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
@@ -170,12 +155,10 @@ else:
 DEFAULT_FROM_EMAIL = 'KidZone <noreply@kidzone.com>'
 PASSWORD_RESET_TIMEOUT = 3600
 
-# ── Stripe ────────────────────────────────────────────
 STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY', default='pk_test_placeholder')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='sk_test_placeholder')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='whsec_placeholder')
 
-# ── REST Framework ────────────────────────────────────
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 12,
@@ -184,20 +167,17 @@ REST_FRAMEWORK = {
     ],
 }
 
-# ── Caching ────────────────────────────────────────────
-# Enable caching for better performance
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
-        'TIMEOUT': 3600,  # 1 hour
+        'TIMEOUT': 3600,
         'OPTIONS': {
             'MAX_ENTRIES': 1000
         }
     }
 }
 
-# Cache templates for faster rendering
 TEMPLATE_LOADERS = (
     ('django.template.loaders.cached.Loader', (
         'django.template.loaders.filesystem.Loader',
@@ -205,10 +185,8 @@ TEMPLATE_LOADERS = (
     )),
 )
 
-# ── Compression & HTTP Headers ──────────────────────── 
 MIDDLEWARE.insert(2, 'django.middleware.gzip.GZipMiddleware')
 
-# Static files compression (handled by WhiteNoise)
 WHITENOISE_MIMETYPES = {
     '.js': 'application/javascript',
     '.css': 'text/css',
@@ -217,25 +195,22 @@ WHITENOISE_MIMETYPES = {
     '.ttf': 'font/ttf',
 }
 
-# Cache busting with WhiteNoise
 WHITENOISE_ADD_HEADERS_TO = (
     r'.*(\.js|\.css|\.woff|\.woff2|\.ttf|\.png|\.jpg|\.jpeg|\.gif|\.webp)$',
 )
 
-# ── HTTP Response Headers for Caching ────────────────
 HTTP_CACHE_HEADERS = {
     'default': {
-        'Cache-Control': 'max-age=3600, public',  # 1 hour for dynamic content
+        'Cache-Control': 'max-age=3600, public',
     },
     'static': {
-        'Cache-Control': 'max-age=31536000, public, immutable',  # 1 year for static (versioned) assets
+        'Cache-Control': 'max-age=31536000, public, immutable',
     },
     'media': {
-        'Cache-Control': 'max-age=86400, public',  # 24 hours for media files
+        'Cache-Control': 'max-age=86400, public',
     },
 }
 
-# Security Headers
 SECURE_BROWSER_XSS_FILTER = True
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
@@ -245,7 +220,6 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
 
-# ── Logging ───────────────────────────────────────────
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

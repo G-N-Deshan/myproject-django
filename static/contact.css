@@ -1,4 +1,4 @@
-/* ═══ Contact Page Styles ═══ */
+
 html {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -6,7 +6,6 @@ html {
 }
 html::-webkit-scrollbar { display: none; }
 
-/* Error list styling */
 .errorlist {
     margin-top: 6px;
     color: var(--color-error);

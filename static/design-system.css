@@ -1,63 +1,48 @@
-/* ═══════════════════════════════════════════════════════════════
-   STANDARDIZED DESIGN SYSTEM - G11 FASHION & TOYS
-   Use these colors consistently across all pages
-   ═══════════════════════════════════════════════════════════════ */
 
 :root {
-    /* ── PRIMARY COLORS (Brand) ── */
-    --color-primary: #6366f1;           /* Indigo - Main brand color */
-    --color-primary-light: #eef2ff;     /* Light indigo background */
-    --color-primary-dark: #4f46e5;      /* Dark indigo for hover states */
+
+    --color-primary: #6366f1;
+    --color-primary-light: #eef2ff;
+    --color-primary-dark: #4f46e5;
     --color-primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    
-    /* ── ACCENT COLORS ── */
-    --color-accent: #ec4899;            /* Rose/Pink - Secondary brand */
-    --color-accent-light: #fbf1f8;      /* Light pink background */
-    --color-accent-dark: #be185d;       /* Dark pink for hover */
-    
-    /* ── TERTIARY COLOR ── */
-    --color-tertiary: #f59e0b;          /* Amber/Orange - CTA, highlights */
-    --color-tertiary-light: #fffbeb;    /* Light amber background */
-    --color-tertiary-dark: #d97706;     /* Dark amber for hover */
-    
-    /* ── SEMANTIC COLORS ── */
-    --color-success: #10b981;           /* Green - Confirmations, success */
-    --color-warning: #f59e0b;           /* Amber - Warnings, cautions */
-    --color-error: #ef4444;             /* Red - Errors, deletions */
-    --color-info: #3b82f6;              /* Blue - Information, tips */
-    
-    /* ── NEUTRAL COLORS ── */
-    --color-bg-primary: #ffffff;        /* White - Main background */
-    --color-bg-secondary: #f8fafc;      /* Light gray - Secondary background */
-    --color-bg-tertiary: #f1f5f9;       /* Lighter gray - Tertiary background */
-    --color-text-primary: #1e293b;      /* Dark gray - Main text */
-    --color-text-secondary: #64748b;    /* Gray - Secondary text */
-    --color-text-tertiary: #94a3b8;     /* Light gray - Tertiary text */
-    --color-text-inverse: #ffffff;      /* White - Text on dark backgrounds */
-    --color-border: #e2e8f0;            /* Light gray - Borders, dividers */
-    --color-border-dark: #cbd5e1;       /* Medium gray - Darker borders */
-    
-    /* ── SHADOWS ── */
+
+    --color-accent: #ec4899;
+    --color-accent-light: #fbf1f8;
+    --color-accent-dark: #be185d;
+
+    --color-tertiary: #f59e0b;
+    --color-tertiary-light: #fffbeb;
+    --color-tertiary-dark: #d97706;
+
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    --color-info: #3b82f6;
+
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8fafc;
+    --color-bg-tertiary: #f1f5f9;
+    --color-text-primary: #1e293b;
+    --color-text-secondary: #64748b;
+    --color-text-tertiary: #94a3b8;
+    --color-text-inverse: #ffffff;
+    --color-border: #e2e8f0;
+    --color-border-dark: #cbd5e1;
+
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     --shadow-primary: 0 4px 20px rgba(99, 102, 241, 0.3);
-    
-    /* ── TYPOGRAPHY ── */
+
     --font-primary: 'Inter', 'Poppins', sans-serif;
     --font-display: 'Playfair Display', serif;
     --font-mono: 'Monaco', 'Courier New', monospace;
-    
-    /* ── TRANSITIONS ── */
+
     --transition-fast: 0.15s ease;
     --transition-base: 0.3s ease;
     --transition-slow: 0.5s ease;
 }
-
-/* ═══════════════════════════════════════════════════════════════
-   HERO SECTION - STANDARDIZED ACROSS ALL PAGES
-   ═══════════════════════════════════════════════════════════════ */
 
 .hero, .page-hero, [class*="hero"], [class*="banner"] {
     background: linear-gradient(135deg, var(--color-primary) 0%, #8b5cf6 100%) !important;
@@ -105,11 +90,6 @@
     z-index: 2;
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   COMPONENT USAGE GUIDELINES
-   ═══════════════════════════════════════════════════════════════ */
-
-/* Navigation & Headers */
 nav, header {
     background-color: var(--color-bg-primary);
     border-bottom: 1px solid var(--color-border);
@@ -119,7 +99,6 @@ nav a:hover {
     color: var(--color-primary);
 }
 
-/* Buttons - See buttons.css for detailed styling */
 button,
 input[type="button"],
 input[type="submit"],
@@ -137,7 +116,6 @@ input[type="submit"]:hover,
     box-shadow: var(--shadow-primary);
 }
 
-/* Links */
 a {
     color: var(--color-primary);
     text-decoration: none;
@@ -148,7 +126,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Cards & Containers */
 .card, [class*="card"],
 section, .section,
 [class*="container"] {
@@ -165,7 +142,6 @@ section, .section,
     transform: translateY(-4px);
 }
 
-/* Badges & Tags */
 .badge, .tag, [class*="badge"],
 [class*="tag"], [class*="label"] {
     display: inline-flex;
@@ -183,7 +159,6 @@ section, .section,
 .badge.warning { background: #fef3c7; color: var(--color-warning); }
 .badge.error { background: #fee2e2; color: var(--color-error); }
 
-/* Forms */
 input,
 textarea,
 select {
@@ -205,7 +180,6 @@ select:focus {
     background-color: var(--color-bg-primary);
 }
 
-/* Labels */
 label {
     font-weight: 600;
     color: var(--color-text-primary);
@@ -213,7 +187,6 @@ label {
     display: block;
 }
 
-/* Headings */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     color: var(--color-text-primary);
@@ -226,15 +199,13 @@ h1 { font-size: clamp(2rem, 5vw, 3rem); }
 h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
 h3 { font-size: clamp(1.25rem, 3vw, 1.875rem); }
 
-/* Body Text */
 p {
     color: var(--color-text-secondary);
     line-height: 1.6;
     margin-bottom: 1rem;
 }
 
-/* Emphasize Text */
-strong, b { 
+strong, b {
     color: var(--color-text-primary);
     font-weight: 700;
 }
@@ -244,7 +215,6 @@ em, i {
     color: var(--color-text-secondary);
 }
 
-/* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
     :root {
         --color-bg-primary: #1e293b;
@@ -256,33 +226,32 @@ em, i {
         --color-border: #334155;
         --color-border-dark: #475569;
     }
-    
+
     body {
         background-color: var(--color-bg-primary);
         color: var(--color-text-primary);
     }
-    
+
     input, textarea, select {
         background-color: var(--color-bg-secondary);
         border-color: var(--color-border);
         color: var(--color-text-primary);
     }
-    
+
     input:focus, textarea:focus, select:focus {
         box-shadow: 0 0 0 3px var(--color-primary-light, rgba(99, 102, 241, 0.1));
     }
 }
 
-/* High Contrast Mode Support */
 @media (prefers-contrast: more) {
     :root {
         --shadow-primary: 0 4px 20px rgba(99, 102, 241, 0.5);
     }
-    
+
     button, input[type="button"], input[type="submit"], .btn {
         border: 2px solid currentColor;
     }
-    
+
     input, textarea, select {
         border-width: 2px;
     }

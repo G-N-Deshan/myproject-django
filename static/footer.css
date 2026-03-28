@@ -78,7 +78,6 @@ body{
     font-size: var(--fs-sm);
 }
 
-/* Contact Info */
 .contact-info {
     display: flex;
     flex-direction: column;
@@ -103,7 +102,6 @@ body{
     font-size: 1rem;
 }
 
-/* Social Section */
 .social-section h4 {
     margin: 0 0 0.8rem;
     color: var(--color-text-inverse);
@@ -143,7 +141,6 @@ body{
     font-size: 1.1rem;
 }
 
-/* Footer Columns */
 .footer-column{
     display: flex;
     flex-direction: column;
@@ -207,7 +204,6 @@ body{
     transform: translateX(0);
 }
 
-/* Newsletter Column */
 .newsletter-column {
     background: rgba(255, 255, 255, 0.05);
     padding: 1.5rem;
@@ -273,7 +269,6 @@ body{
     margin: 0.75rem 0 0;
 }
 
-/* Footer Bottom */
 .footer-bottom {
     background: rgba(0, 0, 0, 0.3);
     padding: 1.5rem;
@@ -316,7 +311,6 @@ body{
     color: #475569;
 }
 
-/* Responsive */
 @media (max-width: 1200px){
     .footer-container{
         grid-template-columns: repeat(3, 1fr);
@@ -327,7 +321,7 @@ body{
         grid-column: span 3;
         padding-right: 0;
     }
-    
+
     .newsletter-column {
         grid-column: span 3;
     }
@@ -342,11 +336,11 @@ body{
     .footer-brand{
         grid-column: span 2;
     }
-    
+
     .newsletter-column {
         grid-column: span 2;
     }
-    
+
     .footer-main {
         padding: 2rem 1rem 1.5rem;
     }
@@ -362,7 +356,7 @@ body{
         grid-column: span 1;
         text-align: center;
     }
-    
+
     .newsletter-column {
         grid-column: span 1;
     }
@@ -370,32 +364,32 @@ body{
     .brand-row{
         justify-content: center;
     }
-    
+
     .contact-info {
         align-items: center;
     }
-    
+
     .social-links {
         justify-content: center;
     }
-    
+
     .footer-title::after {
         left: 50%;
         transform: translateX(-50%);
     }
-    
+
     .footer-title {
         text-align: center;
     }
-    
+
     .footer-list a:hover {
         padding-left: 0;
     }
-    
+
     .footer-list a:hover::before {
         display: none;
     }
-    
+
     .footer-bottom-content {
         flex-direction: column;
         text-align: center;

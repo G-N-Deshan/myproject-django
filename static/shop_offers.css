@@ -24,20 +24,10 @@ body::-webkit-scrollbar {
     display: none;
 }
 
-
-
-
-
-
-
-
-
-
 .hero::before {
     display: none;
 }
 
-/* 3D Floating Shapes */
 .hero-shapes {
     position: absolute;
     inset: 0;
@@ -157,7 +147,6 @@ body::-webkit-scrollbar {
     letter-spacing: 0.5px;
 }
 
-
 .filter-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -199,14 +188,6 @@ body::-webkit-scrollbar {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4);
 }
-
-
-
-
-
-
-
-
 
 .offers,
 .arrivals {
@@ -298,7 +279,6 @@ body::-webkit-scrollbar {
     transition: transform 0.4s ease;
 }
 
-/* Quick View overlay for offers & arrivals */
 .offer-img-wrap,
 .arrival-media {
     position: relative;
@@ -371,7 +351,6 @@ body::-webkit-scrollbar {
     text-decoration: none;
 }
 
-
 .offer-card a:not(.offer-btn),
 .arrival-card a:not(.arrival-btn) {
     display: block;
@@ -410,7 +389,7 @@ body::-webkit-scrollbar {
     display: block;
     text-decoration: none;
     text-align: center;
-    
+
 }
 
 .offer-btn:hover,
@@ -449,7 +428,6 @@ body::-webkit-scrollbar {
     }
 }
 
-/* Card Entrance Animation */
 .offer-card { animation: offerCardUp .5s ease-out both; }
 .offer-card:nth-child(1) { animation-delay: .05s; }
 .offer-card:nth-child(2) { animation-delay: .12s; }
@@ -467,7 +445,6 @@ body::-webkit-scrollbar {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive */
 @media (max-width: 992px) {
     .offers-list,
     .arrivals-list {
@@ -477,6 +454,168 @@ body::-webkit-scrollbar {
     .filter-bar { flex-wrap: wrap; gap: 0.5rem; }
     .filter-btn { padding: 0.7rem 1.4rem; font-size: 0.85rem; }
 }
+/* Enhanced Filter UI */
+.filter-sidebar {
+    animation: slideInLeft 0.3s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.filter-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.filter-sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.filter-sidebar::-webkit-scrollbar-thumb {
+    background: #6366f1;
+    border-radius: 10px;
+}
+
+.filter-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #4f46e5;
+}
+
+.sort-dropdown {
+    background: white;
+    color: #333;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.result-count {
+    font-weight: 600;
+}
+
+.no-results {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.clear-filters {
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.clear-filters:active {
+    transform: scale(0.98);
+}
+
+/* Improved Offer Card Animations */
+.offer-card {
+    animation: slideUp 0.5s ease-out both;
+    position: relative;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.offer-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.offer-card:hover::before {
+    left: 100%;
+}
+
+/* Better filter button styling */
+.filter-btn {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.filter-btn[data-filter] {
+    background: white;
+    color: #333;
+    border: 2px solid #ddd;
+    padding: 8px 12px;
+    margin: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 13px;
+}
+
+.filter-btn[data-filter]:hover {
+    border-color: #6366f1;
+    color: #6366f1;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.1);
+}
+
+.filter-btn[data-filter].active {
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+}
+
+/* Mobile responsive improvements */
+@media (max-width: 968px) {
+    .filter-sidebar.mobile-closed {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        z-index: 1000;
+        border-radius: 0;
+        overflow-y: auto;
+        transition: left 0.3s ease;
+    }
+
+    .filter-sidebar:not(.mobile-closed) {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        z-index: 1000;
+        border-radius: 0;
+        overflow-y: auto;
+    }
+
+    .toggle-filter-btn {
+        margin-bottom: 16px;
+    }
+}
+
 @media (max-width: 576px) {
     .offers-list,
     .arrivals-list {
@@ -492,4 +631,17 @@ body::-webkit-scrollbar {
     .shape--square { width: 50px; height: 50px; }
     .shape--ring { width: 60px; height: 60px; }
     .shape--dot { width: 20px; height: 20px; }
+    
+    .main-container {
+        padding: 0 16px;
+    }
+    
+    .sort-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .sort-dropdown {
+        width: 100%;
+    }
 }

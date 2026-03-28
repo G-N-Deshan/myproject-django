@@ -1,8 +1,7 @@
 from django.apps import AppConfig
 
-
 class MyappConfig(AppConfig):
     name = 'myapp'
 
     def ready(self):
-        import myapp.signals  # noqa: F401
+        import myapp.signals

@@ -1,6 +1,5 @@
 from .models import Cart, WishlistItem
 
-# Breadcrumb mapping: URL path prefix -> (label, url)
 BREADCRUMB_MAP = {
     '/about/': 'About Us',
     '/contact/': 'Contact',
@@ -26,9 +25,7 @@ BREADCRUMB_MAP = {
     '/payment/': 'Payment',
 }
 
-
 def global_context(request):
-    """Provide cart_count, wishlist_count, and breadcrumbs to every template."""
     cart_count = 0
     wishlist_count = 0
 
@@ -47,7 +44,6 @@ def global_context(request):
     except Exception:
         pass
 
-    # Auto-generate breadcrumbs
     path = request.path
     breadcrumbs = []
     if path != '/':

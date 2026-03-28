@@ -1,4 +1,4 @@
-/* ═══ Buy Page Styles ═══ */
+
 html {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -6,7 +6,6 @@ html {
 }
 html::-webkit-scrollbar { display: none; }
 
-/* Messages */
 .messages {
     position: fixed;
     top: 20px;
@@ -58,7 +57,6 @@ html::-webkit-scrollbar { display: none; }
     to { opacity: 0; }
 }
 
-/* 3D Floating shapes */
 .hero-float {
     animation: heroFloat 6s ease-in-out infinite;
 }
@@ -86,7 +84,6 @@ html::-webkit-scrollbar { display: none; }
     50% { transform: scale(1.35); opacity: 0.25; }
 }
 
-/* Product card entrance */
 .product-card {
     animation: cardFadeUp 0.5s ease-out both;
 }
@@ -98,7 +95,6 @@ html::-webkit-scrollbar { display: none; }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Line clamp */
 .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;

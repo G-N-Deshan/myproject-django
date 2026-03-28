@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Smooth scroll for anchor links
+
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Animate toys on scroll
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -38,13 +37,11 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(card);
     });
 
-    // Add to cart animation
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             const hasDataset = this.dataset.itemType && this.dataset.itemId;
-            if (!hasDataset) return; // let normal default behavior continue if not dataset-driven
+            if (!hasDataset) return;
 
-            // no preventDefault here if you rely on cart_utils global handler
             const originalText = this.textContent;
             this.textContent = '✓ Added!';
             this.style.background = '#10b981';

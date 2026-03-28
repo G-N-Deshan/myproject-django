@@ -18,11 +18,10 @@ function getCookie(name) {
 }
 
 function getCsrfToken() {
-    // 1) cookie (normal)
+
     const fromCookie = getCookie('csrftoken');
     if (fromCookie) return fromCookie;
 
-    // 2) hidden input fallback (your checkout form already has csrf token)
     const hidden = document.querySelector('input[name="csrfmiddlewaretoken"]');
     if (hidden && hidden.value) return hidden.value;
 
@@ -35,7 +34,7 @@ async function loadCart() {
     try {
         const response = await fetch('/cart/get/');
         const data = await response.json();
-        
+
         if (data.success) {
             renderCart(data);
         } else {
@@ -58,7 +57,7 @@ function renderCart(data) {
         if (emptyCartMsg) emptyCartMsg.style.display = 'block';
     } else {
         if (emptyCartMsg) emptyCartMsg.style.display = 'none';
-        
+
         data.items.forEach((item) => {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
@@ -77,7 +76,7 @@ function renderCart(data) {
                     <div class="item-price">$${item.price.toFixed(2)}</div>
                     <div class="quantity-control">
                         <button class="qty-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
-                        <input type="number" class="qty-input" value="${item.quantity}" min="1" 
+                        <input type="number" class="qty-input" value="${item.quantity}" min="1"
                                onchange="updateQuantity(${item.id}, this.value)">
                         <button class="qty-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
                     </div>
@@ -95,7 +94,7 @@ function renderCart(data) {
 async function updateQuantity(itemId, quantity) {
     quantity = parseInt(quantity);
     if (quantity < 1) return;
-    
+
     try {
         const response = await fetch(`/cart/update/${itemId}/`, {
             method: 'POST',
@@ -106,7 +105,7 @@ async function updateQuantity(itemId, quantity) {
             },
             body: JSON.stringify({ quantity: quantity })
         });
-        
+
         const data = await response.json();
         if (data.success) {
             loadCart();
@@ -121,7 +120,7 @@ async function updateQuantity(itemId, quantity) {
 
 async function removeItem(itemId) {
     if (!confirm('Remove this item from cart?')) return;
-    
+
     try {
         const response = await fetch(`/cart/remove/${itemId}/`, {
             method: 'POST',
@@ -130,7 +129,7 @@ async function removeItem(itemId) {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         });
-        
+
         const data = await response.json();
         if (data.success) {
             loadCart();
@@ -144,7 +143,6 @@ async function removeItem(itemId) {
     }
 }
 
-// Optional clear cart support if you add a clear button
 async function clearCart() {
     try {
         const response = await fetch('/cart/clear/', {
@@ -165,7 +163,7 @@ function updateSummary(data) {
     const subtotalEl = document.getElementById('subtotal');
     const taxEl = document.getElementById('tax');
     const totalEl = document.getElementById('total');
-    
+
     if (subtotalEl) subtotalEl.textContent = `$${data.subtotal.toFixed(2)}`;
     if (taxEl) taxEl.textContent = `$${data.tax.toFixed(2)}`;
     if (totalEl) totalEl.textContent = `$${data.total.toFixed(2)}`;
@@ -193,9 +191,9 @@ function showToast(message) {
         font-weight: 600;
         z-index: 9999;
     `;
-    
+
     document.body.appendChild(toast);
-    
+
     setTimeout(() => {
         toast.remove();
     }, 3000);

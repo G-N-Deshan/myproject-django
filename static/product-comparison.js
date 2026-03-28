@@ -1,7 +1,3 @@
-/**
- * PRODUCT COMPARISON TOOL
- * Allows comparing 2-4 products side-by-side
- */
 
 class ProductComparison {
     constructor() {
@@ -15,33 +11,23 @@ class ProductComparison {
         this.renderComparisonWidget();
     }
 
-    /**
-     * Load comparison list from localStorage
-     */
     loadFromStorage() {
         const stored = localStorage.getItem('productComparisons');
         return stored ? JSON.parse(stored) : [];
     }
 
-    /**
-     * Save comparison list to localStorage
-     */
     saveToStorage() {
         localStorage.setItem('productComparisons', JSON.stringify(this.comparisons));
         this.renderComparisonWidget();
     }
 
-    /**
-     * Add product to comparison
-     */
     addProduct(itemType, itemId) {
-        // Check if already in comparison
+
         if (this.comparisons.some(c => c.itemType === itemType && c.itemId === itemId)) {
             this.showToast(`Product already in comparison`, 'warning');
             return;
         }
 
-        // Check max limit
         if (this.comparisons.length >= this.maxComparisons) {
             this.showToast(`Maximum ${this.maxComparisons} products can be compared`, 'warning');
             return;
@@ -53,9 +39,6 @@ class ProductComparison {
         this.updateComparisonButtons();
     }
 
-    /**
-     * Remove product from comparison
-     */
     removeProduct(itemType, itemId) {
         this.comparisons = this.comparisons.filter(
             c => !(c.itemType === itemType && c.itemId === itemId)
@@ -65,9 +48,6 @@ class ProductComparison {
         this.updateComparisonButtons();
     }
 
-    /**
-     * Clear all comparisons
-     */
     clearComparisons() {
         this.comparisons = [];
         this.saveToStorage();
@@ -75,19 +55,13 @@ class ProductComparison {
         this.updateComparisonButtons();
     }
 
-    /**
-     * Check if product is in comparison
-     */
     isInComparison(itemType, itemId) {
         return this.comparisons.some(c => c.itemType === itemType && c.itemId === itemId);
     }
 
-    /**
-     * Render floating comparison widget
-     */
     renderComparisonWidget() {
         let widget = document.getElementById('productComparisonWidget');
-        
+
         if (!widget) {
             widget = document.createElement('div');
             widget.id = 'productComparisonWidget';
@@ -151,26 +125,20 @@ class ProductComparison {
         `;
     }
 
-    /**
-     * Update comparison buttons on product cards
-     */
     updateComparisonButtons() {
         const buttons = document.querySelectorAll('.compare-btn');
         buttons.forEach(btn => {
             const itemType = btn.dataset.itemType;
             const itemId = btn.dataset.itemId;
             const isAdded = this.isInComparison(itemType, itemId);
-            
+
             btn.classList.toggle('added', isAdded);
-            btn.innerHTML = isAdded 
+            btn.innerHTML = isAdded
                 ? '<i class="bi bi-check-lg"></i> In Comparison'
                 : '<i class="bi bi-columns-gap"></i> Compare';
         });
     }
 
-    /**
-     * Open comparison modal
-     */
     async openComparison() {
         if (this.comparisons.length < 2) {
             this.showToast('Add at least 2 products to compare', 'warning');
@@ -179,8 +147,7 @@ class ProductComparison {
 
         const modal = document.getElementById('comparisonModal') || this.createComparisonModal();
         const content = modal.querySelector('.comparison-modal-content');
-        
-        // Show loading state
+
         content.innerHTML = '<div class="comparison-loading"><div class="spinner"></div><p>Loading products...</p></div>';
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -194,9 +161,6 @@ class ProductComparison {
         }
     }
 
-    /**
-     * Fetch products data from API
-     */
     async fetchProductsForComparison() {
         const promises = this.comparisons.map(item =>
             fetch(`/api/quick-view/${item.itemType}/${item.itemId}/`).then(r => r.json())
@@ -204,9 +168,6 @@ class ProductComparison {
         return Promise.all(promises);
     }
 
-    /**
-     * Render comparison table
-     */
     renderComparisonTable(container, products) {
         if (!products || products.length === 0) {
             container.innerHTML = '<p class="error-msg">No products to display</p>';
@@ -248,9 +209,6 @@ class ProductComparison {
         this.attachComparisonActions(container, products);
     }
 
-    /**
-     * Build comparison table rows
-     */
     buildComparisonRows(products) {
         const properties = [
             { key: 'price', label: 'Price', format: 'currency' },
@@ -275,9 +233,6 @@ class ProductComparison {
         `).join('');
     }
 
-    /**
-     * Format property value for display
-     */
     formatPropertyValue(value, format) {
         if (!value) return '<span class="not-available">N/A</span>';
 
@@ -300,9 +255,6 @@ class ProductComparison {
         }
     }
 
-    /**
-     * Attach event listeners to comparison modal actions
-     */
     attachComparisonActions(container, products) {
         container.querySelectorAll('.btn-add-to-cart').forEach((btn, idx) => {
             btn.addEventListener('click', () => {
@@ -313,11 +265,8 @@ class ProductComparison {
         });
     }
 
-    /**
-     * Add product to cart
-     */
     addToCart(itemType, itemId) {
-        // Trigger existing cart functionality
+
         const event = new CustomEvent('addToCart', {
             detail: { itemType, itemId }
         });
@@ -325,9 +274,6 @@ class ProductComparison {
         this.showToast('Added to cart', 'success');
     }
 
-    /**
-     * Create comparison modal
-     */
     createComparisonModal() {
         const modal = document.createElement('div');
         modal.id = 'comparisonModal';
@@ -345,9 +291,6 @@ class ProductComparison {
         return modal;
     }
 
-    /**
-     * Close comparison modal
-     */
     closeComparison() {
         const modal = document.getElementById('comparisonModal');
         if (modal) {
@@ -356,17 +299,14 @@ class ProductComparison {
         }
     }
 
-    /**
-     * Attach global event listeners
-     */
     attachEventListeners() {
-        // Compare button clicks
+
         document.addEventListener('click', (e) => {
             const btn = e.target.closest('.compare-btn');
             if (btn) {
                 const itemType = btn.dataset.itemType;
                 const itemId = btn.dataset.itemId;
-                
+
                 if (this.isInComparison(itemType, itemId)) {
                     this.removeProduct(itemType, itemId);
                 } else {
@@ -375,7 +315,6 @@ class ProductComparison {
             }
         });
 
-        // Close modal on escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.closeComparison();
@@ -383,9 +322,6 @@ class ProductComparison {
         });
     }
 
-    /**
-     * Show toast notification
-     */
     showToast(message, type = 'info') {
         const container = document.getElementById('toastContainer');
         if (!container) return;
@@ -409,9 +345,6 @@ class ProductComparison {
         }, 3000);
     }
 
-    /**
-     * Get toast icon based on type
-     */
     getToastIcon(type) {
         switch (type) {
             case 'success': return 'check-circle';
@@ -422,7 +355,6 @@ class ProductComparison {
     }
 }
 
-// Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
     window.productComparison = new ProductComparison();
 });

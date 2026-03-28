@@ -1,7 +1,3 @@
-/**
- * QUICK-VIEW MODAL FUNCTIONALITY
- * Opens product details in a modal without page navigation
- */
 
 class QuickViewModal {
     constructor() {
@@ -12,7 +8,7 @@ class QuickViewModal {
     }
 
     init() {
-        // Create modal if it doesn't exist
+
         if (!document.getElementById('quickViewModal')) {
             this.createModal();
         }
@@ -35,7 +31,7 @@ class QuickViewModal {
     }
 
     attachEventListeners() {
-        // Close button
+
         document.addEventListener('click', (e) => {
             if (e.target.closest('.quick-view-close')) {
                 this.close();
@@ -45,7 +41,6 @@ class QuickViewModal {
             }
         });
 
-        // Quick view buttons on products
         document.addEventListener('click', (e) => {
             const btn = e.target.closest('.quick-view-btn');
             if (btn) {
@@ -55,14 +50,12 @@ class QuickViewModal {
             }
         });
 
-        // Keyboard: Escape to close
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.close();
             }
         });
 
-        // Size/option selection
         document.addEventListener('click', (e) => {
             const optBtn = e.target.closest('.qv-option-btn');
             if (optBtn && this.modal?.classList.contains('active')) {
@@ -73,7 +66,6 @@ class QuickViewModal {
             }
         });
 
-        // Thumbnail clicks to change main image
         document.addEventListener('click', (e) => {
             const thumb = e.target.closest('.qv-thumbnail');
             if (thumb && this.modal?.classList.contains('active')) {
@@ -82,7 +74,7 @@ class QuickViewModal {
                     mainImg.src = thumb.querySelector('img').src;
                     mainImg.alt = thumb.querySelector('img').alt;
                 }
-                // Update active thumbnail
+
                 document.querySelectorAll('.qv-thumbnail').forEach(t => {
                     t.classList.remove('active');
                 });
@@ -96,7 +88,6 @@ class QuickViewModal {
         this.backdrop.classList.add('active');
         document.body.style.overflow = 'hidden';
 
-        // Load product data
         await this.loadProduct(itemType, itemId);
     }
 
@@ -149,7 +140,7 @@ class QuickViewModal {
 
             <div class="qv-details">
                 ${product.badge ? `<div class="qv-badge">${product.badge}</div>` : ''}
-                
+
                 <h2 class="qv-title">${product.name}</h2>
 
                 ${rating > 0 ? `
@@ -219,7 +210,7 @@ class QuickViewModal {
 
     getStockStatus(product) {
         const stock = product.stock_level || 0;
-        
+
         if (stock <= 0) {
             return {
                 text: '❌ Out of Stock',
@@ -239,11 +230,9 @@ class QuickViewModal {
     }
 }
 
-// Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
     window.quickViewModal = new QuickViewModal();
 
-    // Handle "Add to Cart" from quick view
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('.qv-add-to-cart');
         if (btn) {
@@ -252,14 +241,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const selectedSize = document.querySelector('.qv-option-btn[data-size].selected')?.dataset.size;
             const selectedColor = document.querySelector('.qv-option-btn[data-color].selected')?.dataset.color;
 
-            // Call existing addToCart function with options
             if (window.addToCart) {
                 window.addToCart(itemType, itemId, btn, { size: selectedSize, color: selectedColor });
             }
         }
     });
 
-    // Handle "Add to Wishlist" from quick view
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('.qv-wishlist-btn');
         if (btn) {
@@ -285,7 +272,7 @@ async function toggleWishlist(itemType, itemId, button) {
         });
 
         const data = await response.json();
-        
+
         if (data.added) {
             button.classList.add('wishlisted');
             button.innerHTML = '<i class="bi bi-heart-fill"></i> Wishlisted';

@@ -1,8 +1,4 @@
-/* ══════════════════════════════════════════════════════
-   GLOBAL JS — Toast, Loading, Quick-View, Live Stock, Recently Viewed
-   ══════════════════════════════════════════════════════ */
 
-/* ── Toast Notifications ── */
 function showToast(message, type = 'info') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -43,8 +39,6 @@ function showToast(message, type = 'info') {
     }, 4000);
 }
 
-
-/* ── Loading Overlay ── */
 function showLoading() {
     const el = document.getElementById('loadingOverlay');
     if (el) el.classList.remove('hidden');
@@ -55,8 +49,6 @@ function hideLoading() {
     if (el) el.classList.add('hidden');
 }
 
-
-/* ── Quick-View Modal ── */
 let _quickViewData = {};
 
 function openQuickView(data) {
@@ -73,7 +65,6 @@ function openQuickView(data) {
     document.getElementById('qvBadge').textContent = data.badge || data.type || '';
     document.getElementById('qvDetailLink').href = data.url || '#';
 
-    // Stock badge
     const stockEl = document.getElementById('qvStock');
     if (data.stock !== undefined) {
         if (data.stock <= 0) {
@@ -116,8 +107,6 @@ function quickAddToCart() {
     .catch(() => showToast('Something went wrong', 'error'));
 }
 
-
-/* ── Cart Badge Updater ── */
 function updateCartBadge(count) {
     document.querySelectorAll('[data-cart-count]').forEach(el => {
         el.textContent = count;
@@ -130,8 +119,6 @@ function getCsrfToken() {
     return cookie ? cookie.split('=')[1] : '';
 }
 
-
-/* ── Live Stock Status Polling ── */
 function initLiveStockUpdates() {
     const stockElements = document.querySelectorAll('[data-stock-product]');
     if (stockElements.length === 0) return;
@@ -163,11 +150,9 @@ function initLiveStockUpdates() {
     }
 
     refreshStock();
-    setInterval(refreshStock, 30000); // Refresh every 30 seconds
+    setInterval(refreshStock, 30000);
 }
 
-
-/* ── Recently Viewed Products ── */
 function trackRecentlyViewed(product) {
     if (!product || !product.id) return;
     let items = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
@@ -204,10 +189,8 @@ function renderRecentlyViewed(containerId) {
     `).join('');
 }
 
-
-/* ── Lazy Loading Images ── */
 function initLazyImages() {
-    if ('loading' in HTMLImageElement.prototype) return; // Native support
+    if ('loading' in HTMLImageElement.prototype) return;
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -223,8 +206,6 @@ function initLazyImages() {
     document.querySelectorAll('img[data-src]').forEach(img => observer.observe(img));
 }
 
-
-/* ── Auto-init ── */
 document.addEventListener('DOMContentLoaded', function() {
     initLiveStockUpdates();
     initLazyImages();

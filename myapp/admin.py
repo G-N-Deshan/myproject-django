@@ -1,4 +1,3 @@
-
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import (Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy,
@@ -6,11 +5,9 @@ from .models import (Card, Cloths, Offers, NewArrivals, Review, ContactMessage, 
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
                      BackInStockNotification, OutOfStockReservation)
 
-# Admin site branding
 admin.site.site_header = 'KidZone Admin Dashboard'
 admin.site.site_title = 'KidZone Admin'
 admin.site.index_title = 'Manage Your Store'
-
 
 @admin.register(Card)
 class CardAdmin(admin.ModelAdmin):
@@ -22,7 +19,6 @@ class CardAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="50" height="50" style="object-fit:cover;border-radius:6px" />', obj.imageUrl.url)
         return '-'
     image_preview.short_description = 'Image'
-
 
 @admin.register(Offers)
 class OffersAdmin(admin.ModelAdmin):
@@ -45,7 +41,6 @@ class OffersAdmin(admin.ModelAdmin):
         }),
     )
 
-
 @admin.register(NewArrivals)
 class NewArrivalsAdmin(admin.ModelAdmin):
     list_display = ['title', 'category', 'offers_badge', 'price', 'stock_quantity']
@@ -63,7 +58,6 @@ class NewArrivalsAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
-
 
 @admin.register(Cloths)
 class ClothsAdmin(admin.ModelAdmin):
@@ -125,7 +119,6 @@ class ContactMessageAdmin(admin.ModelAdmin):
     def mark_as_unread(self, request, queryset):
         queryset.update(is_read=False)
     
-    
 @admin.register(Toy)
 class ToyAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'age_range', 'price', 'stock_quantity', 'stock_status', 'is_bestseller', 'is_new']
@@ -162,7 +155,6 @@ class ToyAdmin(admin.ModelAdmin):
         )
     stock_status.short_description = 'Stock Status'
     
-    
 @admin.register(WishlistItem)
 class WishlistItemAdmin(admin.ModelAdmin):
     list_display = ['user', 'item_type', 'get_item_name', 'added_at']
@@ -174,7 +166,6 @@ class WishlistItemAdmin(admin.ModelAdmin):
         return obj.get_item().name
     
     get_item_name.short_description = 'Item Name'
-
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
@@ -202,7 +193,6 @@ class CartAdmin(admin.ModelAdmin):
     get_item_count.short_description = 'Items'
     get_total.short_description = 'Total'
 
-
 @admin.register(CartItem)
 class CartItemAdmin(admin.ModelAdmin):
     list_display = ['id', 'cart', 'item_type', 'get_item_name', 'quantity', 'get_subtotal']
@@ -218,19 +208,16 @@ class CartItemAdmin(admin.ModelAdmin):
     get_item_name.short_description = 'Item'
     get_subtotal.short_description = 'Subtotal'
 
-
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
     readonly_fields = ['item_name', 'item_type', 'quantity', 'price', 'subtotal']
     can_delete = False
 
-
 class OrderTrackingInline(admin.TabularInline):
     model = OrderTracking
     extra = 1
     readonly_fields = ['created_at']
-
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -293,12 +280,10 @@ class OrderAdmin(admin.ModelAdmin):
     def mark_cancelled(self, request, queryset):
         queryset.update(status='cancelled')
 
-
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['order', 'item_name', 'quantity', 'price', 'subtotal']
     list_filter = ['item_type']
-
 
 @admin.register(ProductReview)
 class ProductReviewAdmin(admin.ModelAdmin):
@@ -306,11 +291,6 @@ class ProductReviewAdmin(admin.ModelAdmin):
     list_filter = ['product_type', 'rating', 'created_at']
     search_fields = ['name', 'title', 'comment']
     readonly_fields = ['created_at']
-
-
-# ══════════════════════════════════════════════════════
-# NEW MODEL REGISTRATIONS
-# ══════════════════════════════════════════════════════
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
@@ -324,26 +304,21 @@ class ProductImageInline(admin.TabularInline):
         return '-'
     image_preview.short_description = 'Preview'
 
-
 class InventoryInline(admin.StackedInline):
     model = Inventory
     extra = 0
     max_num = 1
     fields = ['sku', 'stock', 'low_stock_threshold']
 
-
 class ProductVariantInline(admin.TabularInline):
     model = ProductVariant
     extra = 1
     fields = ['size', 'color', 'color_code', 'extra_price', 'stock']
 
-
-# Add inlines to existing product admins
 ClothsAdmin.inlines = [ProductImageInline, InventoryInline, ProductVariantInline]
 ToyAdmin.inlines = [ProductImageInline, InventoryInline]
 OffersAdmin.inlines = [ProductImageInline, InventoryInline]
 NewArrivalsAdmin.inlines = [ProductImageInline, InventoryInline]
-
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
@@ -356,7 +331,6 @@ class ProductImageAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="50" height="50" style="object-fit:cover;border-radius:6px" />', obj.image.url)
         return '-'
     image_preview.short_description = 'Preview'
-
 
 @admin.register(Inventory)
 class InventoryAdmin(admin.ModelAdmin):
@@ -378,7 +352,6 @@ class InventoryAdmin(admin.ModelAdmin):
         return format_html('<span style="color:#10b981;font-weight:600">In Stock</span>')
     stock_status.short_description = 'Status'
 
-
 @admin.register(Coupon)
 class CouponAdmin(admin.ModelAdmin):
     list_display = ['code', 'discount_type', 'discount_value', 'min_order_amount', 'used_count', 'max_uses', 'is_active', 'valid_until', 'coupon_status']
@@ -392,7 +365,6 @@ class CouponAdmin(admin.ModelAdmin):
             return format_html('<span style="color:#10b981;font-weight:600">Active</span>')
         return format_html('<span style="color:#ef4444;font-weight:600">Expired/Invalid</span>')
     coupon_status.short_description = 'Status'
-
 
 @admin.register(ProductVariant)
 class ProductVariantAdmin(admin.ModelAdmin):
@@ -409,18 +381,12 @@ class ProductVariantAdmin(admin.ModelAdmin):
         return '-'
     color_swatch.short_description = 'Color'
 
-
 @admin.register(OrderTracking)
 class OrderTrackingAdmin(admin.ModelAdmin):
     list_display = ['order', 'status', 'note', 'created_at']
     list_filter = ['status', 'created_at']
     search_fields = ['order__order_number']
     readonly_fields = ['created_at']
-
-
-# ══════════════════════════════════════════════════════════════
-# LIVE STOCK INDICATORS (Feature 5)
-# ══════════════════════════════════════════════════════════════
 
 @admin.register(BackInStockNotification)
 class BackInStockNotificationAdmin(admin.ModelAdmin):
@@ -441,7 +407,6 @@ class BackInStockNotificationAdmin(admin.ModelAdmin):
     @admin.action(description='Mark as Inactive')
     def mark_inactive(self, request, queryset):
         queryset.update(is_active=False)
-
 
 @admin.register(OutOfStockReservation)
 class OutOfStockReservationAdmin(admin.ModelAdmin):
@@ -496,4 +461,3 @@ class OutOfStockReservationAdmin(admin.ModelAdmin):
     @admin.action(description='Cancel Reservation')
     def mark_cancelled(self, request, queryset):
         queryset.update(status='cancelled')
-

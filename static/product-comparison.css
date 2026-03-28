@@ -1,9 +1,4 @@
-/**
- * PRODUCT COMPARISON STYLING
- * Widget, modal, and table styles for product comparison
- */
 
-/* ═══ Comparison Widget ═══ */
 #productComparisonWidget {
     position: fixed;
     bottom: 24px;
@@ -336,7 +331,6 @@
     color: #6366f1;
 }
 
-/* ═══ Comparison Modal ═══ */
 .comparison-modal {
     display: none;
     position: fixed;
@@ -405,7 +399,6 @@
     padding: 24px;
 }
 
-/* ═══ Comparison Table ═══ */
 .comparison-table-wrapper {
     width: 100%;
     overflow-x: auto;
@@ -578,7 +571,6 @@
     line-height: 1.4;
 }
 
-/* ═══ Comparison Actions ═══ */
 .comparison-actions-bottom {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -611,7 +603,6 @@
     transform: translateY(-2px);
 }
 
-/* ═══ Compare Button ═══ */
 .compare-btn {
     padding: 10px 14px;
     background: linear-gradient(135deg, #f0f4ff 0%, #f3f4f6 100%);
@@ -714,7 +705,6 @@
     margin-left: 4px;
 }
 
-/* Mobile Responsive */
 @media (max-width: 768px) {
     .compare-btn {
         padding: 8px 10px;
@@ -735,7 +725,6 @@
     }
 }
 
-/* Dark Mode */
 @media (prefers-color-scheme: dark) {
     .compare-btn {
         background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
@@ -762,7 +751,6 @@
     }
 }
 
-/* ═══ Loading State ═══ */
 .comparison-loading {
     display: flex;
     flex-direction: column;
@@ -800,7 +788,6 @@
     margin: 0;
 }
 
-/* ═══ Responsive ═══ */
 @media (max-width: 768px) {
     #productComparisonWidget {
         bottom: 12px;
@@ -873,7 +860,6 @@
     }
 }
 
-/* ═══ Reduced Motion ═══ */
 @media (prefers-reduced-motion: reduce) {
     .comparison-widget,
     .comparison-modal,

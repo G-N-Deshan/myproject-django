@@ -13,13 +13,11 @@ _WATCHED_MODELS = (
     ProductVariant, OrderTracking, Order,
 )
 
-
 def _touch_site(sender, **kwargs):
     try:
         SiteUpdate.touch()
     except Exception:
-        pass  # DB may not be ready during migrations
-
+        pass
 
 for _model in _WATCHED_MODELS:
     post_save.connect(_touch_site, sender=_model)

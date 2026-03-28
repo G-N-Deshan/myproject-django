@@ -1,5 +1,4 @@
-/* Real-time site update polling
-   Detects admin changes and auto-reloads the page. */
+
 (function () {
     if (!window.fetch) return;
     var lastTs = '', timer, INTERVAL = 8000;

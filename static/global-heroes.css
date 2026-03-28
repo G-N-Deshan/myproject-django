@@ -1,8 +1,4 @@
-/* ============================================
-   GLOBAL HERO SECTION SYSTEM - Unified Styling
-   ============================================ */
 
-/* Base Hero Container */
 .hero,
 [class*="hero"],
 section[class*="hero"] {
@@ -17,10 +13,6 @@ section[class*="hero"] {
   background-position: center;
   text-align: center;
 }
-
-/* ═════════════════════════════════════════
-   HERO VARIANTS - PRIMARY (Brand Colors)
-   ═════════════════════════════════════════ */
 
 .hero--primary,
 .hero-primary {
@@ -37,10 +29,6 @@ section[class*="hero"] {
   pointer-events: none;
 }
 
-/* ═════════════════════════════════════════
-   HERO VARIANTS - ACCENT (Teal/Cyan)
-   ═════════════════════════════════════════ */
-
 .hero--accent,
 .hero-accent {
   background: linear-gradient(135deg, var(--color-accent) 0%, #06b6d4 100%);
@@ -55,10 +43,6 @@ section[class*="hero"] {
   background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(6, 182, 212, 0.15));
   pointer-events: none;
 }
-
-/* ═════════════════════════════════════════
-   HERO VARIANTS - DARK (Deep Indigo)
-   ═════════════════════════════════════════ */
 
 .hero--dark,
 .hero-dark {
@@ -75,10 +59,6 @@ section[class*="hero"] {
   pointer-events: none;
 }
 
-/* ═════════════════════════════════════════
-   HERO VARIANTS - LIGHT (Soft backgrounds)
-   ═════════════════════════════════════════ */
-
 .hero--light,
 .hero-light {
   background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-accent-light) 100%);
@@ -94,10 +74,6 @@ section[class*="hero"] {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(20, 184, 166, 0.08));
   pointer-events: none;
 }
-
-/* ═════════════════════════════════════════
-   HERO VARIANTS - CLEAR (Transparent blend)
-   ═════════════════════════════════════════ */
 
 .hero--clear,
 .hero-clear {
@@ -120,10 +96,6 @@ section[class*="hero"] {
   pointer-events: none;
 }
 
-/* ═════════════════════════════════════════
-   HERO CONTENT WRAPPER
-   ═════════════════════════════════════════ */
-
 .hero__content,
 .hero-content {
   position: relative;
@@ -144,10 +116,6 @@ section[class*="hero"] {
   }
 }
 
-/* ═════════════════════════════════════════
-   HERO TITLE & SUBTITLE
-   ═════════════════════════════════════════ */
-
 .hero__title,
 .hero-title {
   font-family: var(--font-display);
@@ -167,10 +135,6 @@ section[class*="hero"] {
   margin: 0 0 2rem;
   opacity: 0.95;
 }
-
-/* ═════════════════════════════════════════
-   HERO BADGE/TAG
-   ═════════════════════════════════════════ */
 
 .hero__badge,
 .hero-badge {
@@ -193,10 +157,6 @@ section[class*="hero"] {
   background: rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.5);
 }
-
-/* ═════════════════════════════════════════
-   HERO CTA BUTTONS
-   ═════════════════════════════════════════ */
 
 .hero__cta,
 .hero-cta {
@@ -252,10 +212,6 @@ section[class*="hero"] {
   transform: translateY(-2px);
 }
 
-/* ═════════════════════════════════════════
-   HERO OVERLAY & SHAPES
-   ═════════════════════════════════════════ */
-
 .hero__overlay,
 .hero-overlay {
   position: absolute;
@@ -282,10 +238,6 @@ section[class*="hero"] {
   opacity: 0.3;
   mix-blend-mode: overlay;
 }
-
-/* ═════════════════════════════════════════
-   RESPONSIVE - TABLET (768px)
-   ═════════════════════════════════════════ */
 
 @media (max-width: 768px) {
   .hero,
@@ -318,10 +270,6 @@ section[class*="hero"] {
     min-height: 40px;
   }
 }
-
-/* ═════════════════════════════════════════
-   RESPONSIVE - MOBILE (576px)
-   ═════════════════════════════════════════ */
 
 @media (max-width: 576px) {
   .hero,
@@ -363,10 +311,6 @@ section[class*="hero"] {
   }
 }
 
-/* ═════════════════════════════════════════
-   RESPONSIVE - SMALL MOBILE (480px)
-   ═════════════════════════════════════════ */
-
 @media (max-width: 480px) {
   .hero,
   [class*="hero"],
@@ -400,10 +344,6 @@ section[class*="hero"] {
   }
 }
 
-/* ═════════════════════════════════════════
-   ACCESSIBILITY
-   ═════════════════════════════════════════ */
-
 .hero__btn:focus-visible,
 .hero-btn:focus-visible {
   outline: 3px solid var(--color-primary);
@@ -416,7 +356,6 @@ section[class*="hero"] {
   outline-offset: 2px;
 }
 
-/* Prefers reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .hero__content,
   .hero-content {
@@ -429,7 +368,6 @@ section[class*="hero"] {
   }
 }
 
-/* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .hero--light,
   .hero-light {

@@ -1,0 +1,1106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Offers - KidZone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'navbar.css'%}">
+    <link rel="stylesheet" href="{% static 'footer.css'%}">
+    <link rel="stylesheet" href="{% static 'shop_offers.css'%}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css'%}">
+    <link rel="stylesheet" href="{% static 'product-comparison.css' %}">
+    <link rel="stylesheet" href="{% static 'wishlist-enhanced.css' %}">
+    <link rel="stylesheet" href="{% static 'pagination-loader.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+html::-webkit-scrollbar { width: 6px; }
+html::-webkit-scrollbar-track { background: #f8fafc; }
+html::-webkit-scrollbar-thumb { background: #a5b4fc; border-radius: 99px; }
+    .hero {
+        background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+        background-image: linear-gradient(135deg, rgba(99, 102, 241, 0.85) 0%, rgba(236, 72, 153, 0.85) 100%), url('/media/8.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        padding: 4rem 6vw;
+        text-align: center;
+        position: relative;
+        overflow: visible;
+        min-height: 350px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .filter-sidebar {
+        background: #f8f9fa;
+        padding: 24px;
+        border-radius: 12px;
+        height: fit-content;
+        position: sticky;
+        top: 20px;
+    }
+
+    .filter-group {
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .filter-group:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .filter-title {
+        font-weight: 600;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .filter-btn {
+        display: inline-block;
+        padding: 8px 12px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        border: 2px solid #ddd;
+        background: white;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+        border-color: #6366f1;
+        color: #6366f1;
+    }
+
+    .filter-btn.active {
+        background: #6366f1;
+        color: white;
+        border-color: #6366f1;
+    }
+
+    .price-range-container {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .price-input {
+        width: 50%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 13px;
+    }
+
+    .filter-checkbox {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .filter-checkbox input {
+        margin-right: 8px;
+        cursor: pointer;
+    }
+
+    .filter-checkbox label {
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .clear-filters {
+        display: inline-block;
+        padding: 10px 16px;
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        width: 100%;
+        margin-top: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .clear-filters:hover {
+        background: #ff5252;
+    }
+
+    .sort-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .result-count {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .sort-dropdown {
+        padding: 10px 16px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .sort-dropdown:hover {
+        border-color: #6366f1;
+    }
+
+    .main-container {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 24px;
+        padding: 0 6vw;
+        margin-bottom: 40px;
+    }
+
+    @media (max-width: 968px) {
+        .main-container {
+            grid-template-columns: 1fr;
+            padding: 0 20px;
+        }
+
+        .filter-sidebar {
+            position: static;
+        }
+
+        .filter-sidebar.mobile-closed {
+            display: none;
+        }
+    }
+
+    .toggle-filter-btn {
+        display: none;
+        padding: 10px 16px;
+        background: #6366f1;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        gap: 8px;
+    }
+
+    @media (max-width: 968px) {
+        .toggle-filter-btn {
+            display: flex;
+            align-items: center;
+        }
+
+        .sort-container {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px 20px;
+        color: #666;
+    }
+
+    .offers-grid-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+</head>
+<body>
+    <div id="toastContainer" class="fixed top-5 right-5 z-[9999] max-w-sm space-y-2 pointer-events-none"></div>
+    {% include 'navbar.html'%}
+
+    <section class="hero">
+        <div class="hero-shapes" aria-hidden="true">
+            <div class="shape shape--circle"></div>
+            <div class="shape shape--square"></div>
+            <div class="shape shape--ring"></div>
+            <div class="shape shape--dot"></div>
+            <div class="shape shape--zigzag1"></div>
+            <div class="shape shape--zigzag2"></div>
+            <div class="shape shape--flash1"></div>
+            <div class="shape shape--flash2"></div>
+        </div>
+        <div class="hero-content">
+            <h1>Today's Best Deals & Offers</h1>
+            <p style="color: white; margin-top: 10px;">Save up to 60% on your favorite products</p>
+        </div>
+    </section>
+
+    <div class="main-container">
+        <!-- Filter Sidebar -->
+        <aside class="filter-sidebar" id="filterSidebar">
+            <button class="clear-filters" id="closeFilterBtn" style="display: none; background: #999;">✕ Close Filters</button>
+            
+            <!-- Category Filter -->
+            <div class="filter-group">
+                <h3 class="filter-title">Category</h3>
+                <button class="filter-btn {% if selected_category == 'all' %}active{% endif %}" data-filter="category" data-value="all">All</button>
+                <button class="filter-btn {% if selected_category == 'kids' %}active{% endif %}" data-filter="category" data-value="kids">Kids</button>
+                <button class="filter-btn {% if selected_category == 'men' %}active{% endif %}" data-filter="category" data-value="men">Mens</button>
+                <button class="filter-btn {% if selected_category == 'women' %}active{% endif %}" data-filter="category" data-value="women">Womens</button>
+            </div>
+
+            <!-- Price Filter -->
+            <div class="filter-group">
+                <h3 class="filter-title">Price Range</h3>
+                <div class="price-range-container">
+                    <input type="number" class="price-input" id="minPrice" placeholder="Min" value="{{ min_price|default:0 }}" min="0">
+                    <span>-</span>
+                    <input type="number" class="price-input" id="maxPrice" placeholder="Max" value="{{ max_price|default:10000 }}" min="0">
+                </div>
+            </div>
+
+            <!-- Stock Filter -->
+            <div class="filter-group">
+                <h3 class="filter-title">Stock Status</h3>
+                <div class="filter-checkbox">
+                    <input type="radio" id="stockAll" name="stock" value="all" {% if stock_filter == 'all' %}checked{% endif %}>
+                    <label for="stockAll">All Items</label>
+                </div>
+                <div class="filter-checkbox">
+                    <input type="radio" id="stockInStock" name="stock" value="in_stock" {% if stock_filter == 'in_stock' %}checked{% endif %}>
+                    <label for="stockInStock">In Stock</label>
+                </div>
+                <div class="filter-checkbox">
+                    <input type="radio" id="stockLimited" name="stock" value="limited" {% if stock_filter == 'limited' %}checked{% endif %}>
+                    <label for="stockLimited">Limited Stock</label>
+                </div>
+            </div>
+
+            <!-- Rating Filter -->
+            <div class="filter-group">
+                <h3 class="filter-title">Rating</h3>
+                <button class="filter-btn {% if not rating_filter or rating_filter == '0' %}active{% endif %}" data-filter="rating" data-value="0">All Ratings</button>
+                <button class="filter-btn {% if rating_filter == '4' %}active{% endif %}" data-filter="rating" data-value="4">⭐ 4+</button>
+                <button class="filter-btn {% if rating_filter == '3' %}active{% endif %}" data-filter="rating" data-value="3">⭐ 3+</button>
+                <button class="filter-btn {% if rating_filter == '5' %}active{% endif %}" data-filter="rating" data-value="5">⭐ 5</button>
+            </div>
+
+            <button class="clear-filters" id="applyFilters">Apply Filters</button>
+            <button class="clear-filters" id="clearAllFilters" style="background: #999; margin-top: 8px;">Clear All</button>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="offers-grid-wrapper">
+            <!-- Toggle Filter Button (Mobile) -->
+            <button class="toggle-filter-btn" id="toggleFilterBtn">
+                <i class="bi bi-funnel"></i> Filters
+            </button>
+
+            <!-- Sort and Results -->
+            <div class="sort-container">
+                <span class="result-count">Showing {{ total_offers|default:"0" }} results</span>
+                <select class="sort-dropdown" id="sortSelect">
+                    <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest First</option>
+                    <option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="price_high" {% if sort_by == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                    <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Highest Rated</option>
+                    <option value="oldest" {% if sort_by == 'oldest' %}selected{% endif %}>Oldest First</option>
+                </select>
+            </div>
+
+            <!-- Kids Section -->
+            <section class="offers" id="kids-section">
+                <div class="section-top">
+                    <div>
+                        <p class="section-small">Limited-time</p>
+                        <h2>Hot Offers for Kids</h2>
+                        <p class="section-sub">Save on outfits, toys, and bundles picked for busy parents.</p>
+                    </div>
+                </div>
+
+                <div class="offers-list">
+                    {% for offers in kids_offers %}
+                    <article class="offer-card">
+                        <span class="offer-badge">{{ offers.offers_badge }}</span>
+                        <div class="offer-img-wrap">
+                            <img src="{{ offers.imageUrl.url }}" alt="{{ offers.offers_badge }}" loading="lazy">
+                            <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span><i class="bi bi-eye"></i> Quick View</span></a>
+                        </div>
+                        <h3><a href="{% url 'product_detail' 'offer' offers.id %}" style="color:inherit;text-decoration:none">{{ offers.title }}</a></h3>
+                        <p>{{ offers.description }}</p>
+                        {% with item_rating=offers.avg_rating item_review_count=offers.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                        <div class="offer-meta">
+                            {% if offers.price1 %}<span class="price">{{ offers.price1 }}</span>{% endif %}
+                            {% if offers.price2 %}<span class="price-old">{{ offers.price2 }}</span>{% endif %}
+                            {% if offers.stock_text %}<span class="stock">{{ offers.stock_text }}</span>{% endif %}
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 8px;">
+                            <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #6366f1, #ec4899); color: white;"><i class="bi bi-eye"></i> View</a>
+                            {% include "components/compare-button.html" with item_type="offer" item_id=offers.id %}
+                            <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #6366f1, #ec4899); color: white;" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}"><i class="bi bi-bag-plus"></i></a>
+                        </div>
+                    </article>
+                    {% empty %}
+                    <div class="no-results">
+                        <i class="bi bi-inbox" style="font-size: 48px; color: #ccc;"></i>
+                        <p style="margin-top: 12px;">No kids offers found. Try adjusting your filters.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if kids_total > 24 %}
+                <div style="text-align: center; margin-top: 24px;">
+                    <button class="clear-filters" style="background: #6366f1; max-width: 200px;" id="loadMoreKidsBtn" data-offset="24" data-category="kids">Load More <i class="bi bi-arrow-down"></i></button>
+                </div>
+                {% endif %}
+            </section>
+
+            <!-- Mens Section -->
+            <section class="offers" id="mens-section" style="display: none;">
+                <div class="section-top">
+                    <div>
+                        <p class="section-small">Limited-time</p>
+                        <h2>Hot Offers for Mens</h2>
+                        <p class="section-sub">Save on cloths and bundles picked for busy partners.</p>
+                    </div>
+                </div>
+
+                <div class="offers-list">
+                    {% for offers in men_offers %}
+                    <article class="offer-card">
+                        <span class="offer-badge">{{ offers.offers_badge }}</span>
+                        <div class="offer-img-wrap">
+                            <img src="{{ offers.imageUrl.url }}" alt="{{ offers.offers_badge }}" loading="lazy">
+                            <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span><i class="bi bi-eye"></i> Quick View</span></a>
+                        </div>
+                        <h3><a href="{% url 'product_detail' 'offer' offers.id %}" style="color:inherit;text-decoration:none">{{ offers.title }}</a></h3>
+                        <p>{{ offers.description }}</p>
+                        {% with item_rating=offers.avg_rating item_review_count=offers.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                        <div class="offer-meta">
+                            {% if offers.price1 %}<span class="price">{{ offers.price1 }}</span>{% endif %}
+                            {% if offers.price2 %}<span class="price-old">{{ offers.price2 }}</span>{% endif %}
+                            {% if offers.stock_text %}<span class="stock">{{ offers.stock_text }}</span>{% endif %}
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 8px;">
+                            <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #4b5563, #747f8f); color: white;"><i class="bi bi-eye"></i> View</a>
+                            {% include "components/compare-button.html" with item_type="offer" item_id=offers.id %}
+                            <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #4b5563, #747f8f); color: white;" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}"><i class="bi bi-bag-plus"></i></a>
+                        </div>
+                    </article>
+                    {% empty %}
+                    <div class="no-results">
+                        <i class="bi bi-inbox" style="font-size: 48px; color: #ccc;"></i>
+                        <p style="margin-top: 12px;">No mens offers found. Try adjusting your filters.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if men_total > 24 %}
+                <div style="text-align: center; margin-top: 24px;">
+                    <button class="clear-filters" style="background: #6366f1; max-width: 200px;" id="loadMoreMensBtn" data-offset="24" data-category="men">Load More <i class="bi bi-arrow-down"></i></button>
+                </div>
+                {% endif %}
+            </section>
+
+            <!-- Womens Section -->
+            <section class="offers" id="womens-section" style="display: none;">
+                <div class="section-top">
+                    <div>
+                        <p class="section-small">Limited-time</p>
+                        <h2>Hot Offers for Womens</h2>
+                        <p class="section-sub">Save on cloths and bundles picked for busy partners.</p>
+                    </div>
+                </div>
+
+                <div class="offers-list">
+                    {% for offers in women_offers %}
+                    <article class="offer-card">
+                        <span class="offer-badge">{{ offers.offers_badge }}</span>
+                        <div class="offer-img-wrap">
+                            <img src="{{ offers.imageUrl.url }}" alt="{{ offers.offers_badge }}" loading="lazy">
+                            <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span><i class="bi bi-eye"></i> Quick View</span></a>
+                        </div>
+                        <h3><a href="{% url 'product_detail' 'offer' offers.id %}" style="color:inherit;text-decoration:none">{{ offers.title }}</a></h3>
+                        <p>{{ offers.description }}</p>
+                        {% with item_rating=offers.avg_rating item_review_count=offers.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                        <div class="offer-meta">
+                            {% if offers.price1 %}<span class="price">{{ offers.price1 }}</span>{% endif %}
+                            {% if offers.price2 %}<span class="price-old">{{ offers.price2 }}</span>{% endif %}
+                            {% if offers.stock_text %}<span class="stock">{{ offers.stock_text }}</span>{% endif %}
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 8px;">
+                            <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #c2185b, #d81b60); color: white;"><i class="bi bi-eye"></i> View</a>
+                            {% include "components/compare-button.html" with item_type="offer" item_id=offers.id %}
+                            <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #c2185b, #d81b60); color: white;" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}"><i class="bi bi-bag-plus"></i></a>
+                        </div>
+                    </article>
+                    {% empty %}
+                    <div class="no-results">
+                        <i class="bi bi-inbox" style="font-size: 48px; color: #ccc;"></i>
+                        <p style="margin-top: 12px;">No womens offers found. Try adjusting your filters.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if women_total > 24 %}
+                <div style="text-align: center; margin-top: 24px;">
+                    <button class="clear-filters" style="background: #6366f1; max-width: 200px;" id="loadMoreWomensBtn" data-offset="24" data-category="women">Load More <i class="bi bi-arrow-down"></i></button>
+                </div>
+                {% endif %}
+            </section>
+        </div>
+    </div>
+
+    {% include 'footer.html'%}
+
+    <script src="{% static 'cart_utils.js' %}" defer></script>
+    <script src="{% static 'global.js' %}" defer></script>
+    <script src="{% static 'scroll-reveal.js' %}" defer></script>
+    <script src="{% static 'quick-view.js' %}" defer></script>
+    <script src="{% static 'product-comparison.js' %}" defer></script>
+    <script src="{% static 'wishlist-enhanced.js' %}" defer></script>
+    <script src="{% static 'pagination-loader.js' %}" defer></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Category Filter
+            const categoryBtns = document.querySelectorAll('[data-filter="category"]');
+            const ratingBtns = document.querySelectorAll('[data-filter="rating"]');
+            const sortSelect = document.getElementById('sortSelect');
+            const stockRadios = document.querySelectorAll('input[name="stock"]');
+            const minPriceInput = document.getElementById('minPrice');
+            const maxPriceInput = document.getElementById('maxPrice');
+            const applyBtn = document.getElementById('applyFilters');
+            const clearBtn = document.getElementById('clearAllFilters');
+            const toggleFilterBtn = document.getElementById('toggleFilterBtn');
+            const filterSidebar = document.getElementById('filterSidebar');
+            const closeFilterBtn = document.getElementById('closeFilterBtn');
+
+            const kidsSection = document.getElementById('kids-section');
+            const mensSection = document.getElementById('mens-section');
+            const womensSection = document.getElementById('womens-section');
+
+            let selectedCategory = '{{ selected_category }}' || 'all';
+
+            function updateQueryParams() {
+                const params = new URLSearchParams();
+                
+                // Get selected category
+                categoryBtns.forEach(btn => {
+                    if (btn.classList.contains('active')) {
+                        params.set('category', btn.dataset.value);
+                        selectedCategory = btn.dataset.value;
+                    }
+                });
+
+                // Get sort
+                if (sortSelect.value !== 'newest') {
+                    params.set('sort', sortSelect.value);
+                }
+
+                // Get price range
+                if (minPriceInput.value) params.set('min_price', minPriceInput.value);
+                if (maxPriceInput.value) params.set('max_price', maxPriceInput.value);
+
+                // Get rating
+                ratingBtns.forEach(btn => {
+                    if (btn.classList.contains('active') && btn.dataset.value !== '0') {
+                        params.set('rating', btn.dataset.value);
+                    }
+                });
+
+                // Get stock
+                stockRadios.forEach(radio => {
+                    if (radio.checked && radio.value !== 'all') {
+                        params.set('stock', radio.value);
+                    }
+                });
+
+                // Redirect with params
+                const url = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+                window.location.href = url;
+            }
+
+            // Category filter
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    showSection(btn.dataset.value);
+                });
+            });
+
+            // Show/Hide Sections
+            function showSection(type) {
+                kidsSection.style.display = type === 'kids' || type === 'all' ? 'block' : 'none';
+                mensSection.style.display = type === 'men' || type === 'all' ? 'block' : 'none';
+                womensSection.style.display = type === 'women' || type === 'all' ? 'block' : 'none';
+            }
+
+            // Sorting
+            sortSelect.addEventListener('change', updateQueryParams);
+
+            // Apply Filters Button
+            applyBtn.addEventListener('click', updateQueryParams);
+
+            // Clear All Filters
+            clearBtn.addEventListener('click', () => {
+                window.location.href = window.location.pathname;
+            });
+
+            // Rating filter
+            ratingBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    ratingBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+
+            // Mobile filter toggle
+            toggleFilterBtn.addEventListener('click', () => {
+                filterSidebar.classList.toggle('mobile-closed');
+                closeFilterBtn.style.display = filterSidebar.classList.contains('mobile-closed') ? 'none' : 'block';
+            });
+
+            closeFilterBtn.addEventListener('click', () => {
+                filterSidebar.classList.add('mobile-closed');
+                closeFilterBtn.style.display = 'none';
+            });
+
+            // Load More Button Handlers
+            const loadMoreBtns = document.querySelectorAll('[id^="loadMore"]');
+            loadMoreBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const category = this.dataset.category;
+                    const offset = parseInt(this.dataset.offset);
+                    const limit = 12;
+                    
+                    loadMoreItems(category, offset, limit, this);
+                });
+            });
+
+            // Initialize
+            showSection(selectedCategory);
+        });
+
+        // Load More AJAX Function
+        function loadMoreItems(category, offset, limit, button) {
+            button.disabled = true;
+            button.innerHTML = '<i class="bi bi-hourglass-split"></i> Loading...';
+            
+            const params = new URLSearchParams({
+                'category': category,
+                'offset': offset,
+                'limit': limit
+            });
+
+            fetch(`/get-more-offers/?${params.toString()}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.items) {
+                        const sectionId = category + '-section';
+                        const section = document.getElementById(sectionId);
+                        const offersList = section.querySelector('.offers-list');
+                        
+                        // Insert new items
+                        data.items.forEach(html => {
+                            const temp = document.createElement('div');
+                            temp.innerHTML = html;
+                            offersList.appendChild(temp.firstElementChild);
+                        });
+
+                        // Update offset in button
+                        const newOffset = offset + limit;
+                        button.dataset.offset = newOffset;
+
+                        // Check if more items available
+                        if (data.total <= newOffset) {
+                            button.style.display = 'none';
+                        } else {
+                            button.innerHTML = 'Load More <i class="bi bi-arrow-down"></i>';
+                            button.disabled = false;
+                        }
+
+                        // Re-initialize cart handlers for new items
+                        if (window.initializeCartHandlers) {
+                            window.initializeCartHandlers();
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading more items:', error);
+                    button.innerHTML = 'Load More <i class="bi bi-arrow-down"></i>';
+                    button.disabled = false;
+                });
+        }
+    </script>
+</body>
+</html>
+
+
+
+<section class="hero">
+    <!-- 3D Floating Shapes -->
+    <div class="hero-shapes" aria-hidden="true">
+        <div class="shape shape--circle"></div>
+        <div class="shape shape--square"></div>
+        <div class="shape shape--ring"></div>
+        <div class="shape shape--dot"></div>
+        <div class="shape shape--zigzag1"></div>
+        <div class="shape shape--zigzag2"></div>
+        <div class="shape shape--flash1"></div>
+        <div class="shape shape--flash2"></div>
+    </div>
+    <div class="hero-content">
+        <h1>Today's Best Deals & Offers</h1>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-category="kids">Kids Offers</button>
+            <button class="filter-btn" data-category="mens">Mens Offers</button>
+            <button class="filter-btn" data-category="womens">Womens Offers</button>   
+        </div>
+    </div>
+</section>
+
+
+
+
+<section class="offers" id="kids-section">
+        <div class="section-top">
+            <div>
+                <p class="section-small">Limited-time</p>
+                <h2>Hot Offers for Kids</h2>
+                <p class="section-sub">Save on outfits, toys, and bundles picked for busy parents.</p>
+            </div>
+<!--             <a class="section-btn" href="shop-offers.php">Shop Offers</a>
+ -->        </div>
+
+        <div class="offers-list">
+
+
+            {%for offers in kids_offers%}
+            <article class="offer-card">
+                <span class="offer-badge">{{offers.offers_badge}}</span>
+                <div class="offer-img-wrap">
+                    <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}" loading="lazy">
+                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span><i class="bi bi-eye"></i> Quick View</span></a>
+                </div>
+                <h3><a href="{% url 'product_detail' 'offer' offers.id %}" style="color:inherit;text-decoration:none">{{offers.title}}</a></h3>
+                <p>{{offers.description}}</p>
+                {% with item_rating=offers.avg_rating item_review_count=offers.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                <div class="offer-meta">
+                    {% if offers.price1 %}
+                    <span class="price">{{offers.price1}}</span>
+                    {% endif %}
+                    {% if offers.price2 %}
+                    <span class="price-old">{{offers.price2}}</span>
+                    {% endif %}
+                    {% if offers.stock_text %}
+                    <span class="stock">{{offers.stock_text}}</span>
+                    {% endif %} 
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 8px;">
+                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #6366f1, #ec4899); color: white;"><i class="bi bi-eye"></i> View</a>
+                    {% include "components/compare-button.html" with item_type="offer" item_id=offers.id %}
+                    <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #6366f1, #ec4899); color: white;" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}"><i class="bi bi-bag-plus"></i></a>
+                </div>
+            </article>
+
+            {% endfor %}
+
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+    <section class="offers" id="mens-section">
+        <div class="section-top">
+            <div>
+                <p class="section-small">Limited-time</p>
+                <h2>Hot Offers for MENS</h2>
+                <p class="section-sub">Save on cloths, and bundles picked for busy Partners.</p>
+            </div>
+       </div>
+
+        <div class="offers-list">
+
+              {%for offers in men_offers%}
+            <article class="offer-card">
+                <span class="offer-badge">{{offers.offers_badge}}</span>
+                <div class="offer-img-wrap">
+                    <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}" loading="lazy">
+                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span>Quick View</span></a>
+                </div>
+                <h3><a href="{% url 'product_detail' 'offer' offers.id %}" style="color:inherit;text-decoration:none">{{offers.title}}</a></h3>
+                <p>{{offers.description}}</p>
+                {% with item_rating=offers.avg_rating item_review_count=offers.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                <div class="offer-meta">
+                    {% if offers.price1 %}
+                    <span class="price">{{offers.price1}}</span>
+                    {% endif %}
+                    {% if offers.price2 %}
+                    <span class="price-old">{{offers.price2}}</span>
+                    {% endif %}
+                    {% if offers.stock_text %}
+                    <span class="stock">{{offers.stock_text}}</span>
+                    {% endif %} 
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 8px;">
+                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #4b5563, #747f8f); color: white;"><i class="bi bi-eye"></i> View</a>
+                    {% include "components/compare-button.html" with item_type="offer" item_id=offers.id %}
+                    <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #4b5563, #747f8f); color: white;" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}"><i class="bi bi-bag-plus"></i></a>
+                </div>
+            </article>
+
+            {% endfor %}
+
+
+
+
+
+
+
+
+            <!-- <article class="offer-card">
+                <span class="offer-badge">- 30%</span>
+                <img src="../../assets/images/protective-clothing.png" alt="Mens wear offer">
+                <h3>Smart Casual Essentials</h3>
+                <p>Upgrade your everyday style with breathable shirts, polos, and chinos made for comfort and confidence.</p>
+                <div class="offer-meta">
+                    <span class="price">Rs. 2,490</span>
+                    <span class="price-old">Rs. 3,550</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=16" class="offer-btn">Grab Deal</a>
+            </article>
+
+
+
+            <article class="offer-card">
+                <span class="offer-badge">Bundle</span>
+                <img src="../../assets/images/shopping-bag.png" alt="Bundle offer">
+                <h3>Office Wear Power Deals</h3>
+                <p>Sharp formal shirts, trousers, and blazers designed for workdays and meetings.</p>
+                <div class="offer-meta">
+                    <span class="price">Save Rs. 800</span>
+                    <span class="stock">Most Purchased This Week</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=17" class="offer-btn">Shop Bundle</a>
+            </article>
+
+
+
+            <article class="offer-card">
+                <span class="offer-badge">Free Shipping</span>
+                <img src="../../assets/images/4.jpeg" alt="Delivery offer">
+                <h3>Weekend Comfort Sale</h3>
+                <p>Relaxed t-shirts, shorts, and joggers perfect for weekends and travel.</p>
+                <div class="offer-meta">
+                    <span class="price">20h only</span>
+                    <span class="stock">Trending Now</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=18" class="offer-btn">Grab Deal</a>
+            </article>
+
+
+
+             <article class="offer-card">
+                <span class="offer-badge">- 35%</span>
+                <img src="../../assets/images/protective-clothing.png" alt="Mens wear offer">
+                <h3>New Men's Arrivals</h3>
+                <p>Fresh fashion drops with modern fits and trending colors.</p>
+                <div class="offer-meta">
+                    <span class="price">Rs. 3,500</span>
+                    <span class="stock">Up to 35% Off</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=19" class="offer-btn">Grab Deal</a>
+            </article>
+
+
+
+            <article class="offer-card">
+                <span class="offer-badge">Bundle</span>
+                <img src="../../assets/images/shopping-bag.png" alt="Bundle offer">
+                <h3>Men's Combo Saver </h3>
+                <p>Buy shirt + pant or t-shirt + jeans combos and save more instantly.</p>
+                <div class="offer-meta">
+                    <span class="price">Rs. 2,750</span>
+                    <span class="stock">Auto Bundle Discount Applied</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=20" class="offer-btn">Shop Bundle</a>
+            </article>
+
+
+
+
+            <article class="offer-card">
+                <span class="offer-badge">Free Shipping</span>
+                <img src="../../assets/images/4.jpeg" alt="Delivery offer">
+                <h3>Seasonal Men's Clearance</h3>
+                <p>Last season favorites at unbeatable prices before they're gone</p>
+                <div class="offer-meta">
+                    <span class="price">15h only</span>
+                    <span class="stock">Stock Running Out</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=21" class="offer-btn">Grab Deal</a>
+            </article>
+
+
+            
+             <article class="offer-card">
+                <span class="offer-badge">-45%</span>
+                <img src="../../assets/images/protective-clothing.png" alt="Men's wear offer">
+                <h3>Men's Premium Picks</h3>
+                <p>High-quality fabrics and premium designs for a refined look.</p>
+                <div class="offer-meta">
+                    <span class="price">Rs. 1800</span>
+                    <span class="price-old">Rs. 2200</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=22" class="offer-btn">Grab Deal</a>
+            </article> -->
+    </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <section class="offers" id="womens-section">
+        <div class="section-top">
+            <div>
+                <p class="section-small">Limited-time</p>
+                <h2>Hot Offers for Women</h2>
+                <p class="section-sub">Save on Cloths, and bundles picked for busy Partners.</p>
+            </div>
+       </div>
+
+
+        <div class="offers-list">
+
+
+
+
+             {%for offers in women_offers%}
+            <article class="offer-card">
+                <span class="offer-badge">{{offers.offers_badge}}</span>
+                <div class="offer-img-wrap">
+                    <img src="{{offers.imageUrl.url}}" alt="{{offers.offers_badge}}" loading="lazy">
+                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-overlay"><span><i class="bi bi-eye"></i> Quick View</span></a>
+                </div>
+                <h3><a href="{% url 'product_detail' 'offer' offers.id %}" style="color:inherit;text-decoration:none">{{offers.title}}</a></h3>
+                <p>{{offers.description}}</p>
+                {% with item_rating=offers.avg_rating item_review_count=offers.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                <div class="offer-meta">
+                    {% if offers.price1 %}
+                    <span class="price">{{offers.price1}}</span>
+                    {% endif %}
+                    {% if offers.price2 %}
+                    <span class="price-old">{{offers.price2}}</span>
+                    {% endif %}
+                    {% if offers.stock_text %}
+                    <span class="stock">{{offers.stock_text}}</span>
+                    {% endif %} 
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 8px;">
+                    <a href="{% url 'product_detail' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #c2185b, #d81b60); color: white;"><i class="bi bi-eye"></i> View</a>
+                    {% include "components/compare-button.html" with item_type="offer" item_id=offers.id %}
+                    <a href="{% url 'add_to_cart' 'offer' offers.id %}" class="offer-btn" style="background: linear-gradient(135deg, #c2185b, #d81b60); color: white;" data-add-to-cart data-item-type="offer" data-item-id="{{ offers.id }}"><i class="bi bi-bag-plus"></i></a>
+                </div>
+            </article>
+
+            {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- <article class="offer-card">
+                <span class="offer-badge">- 30%</span>
+                <img src="../../assets/images/protective-clothing.png" alt="Women wear offer">
+                <h3>Everyday Fashion Deals</h3>
+                <p>Comfortable and stylish tops, dresses, and casual wear for daily use.</p>
+                <div class="offer-meta">
+                    <span class="price">Rs. 2,400</span>
+                    <span class="price-old">Rs. 3,500</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=23" class="offer-btn">Grab Deal</a>
+            </article>
+
+
+
+            <article class="offer-card">
+                <span class="offer-badge">Bundle</span>
+                <img src="../../assets/images/shopping-bag.png" alt="Bundle offer">
+                <h3>Work & Office Wear Sale</h3>
+                <p>Elegant blouses, pants, and formal dresses designed for a confident professional look.</p>
+                <div class="offer-meta">
+                    <span class="price">Save Rs. 1000</span>
+                    <span class="stock">Top Rated Office Styles</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=24" class="offer-btn">Shop Bundle</a>
+            </article>
+
+
+
+            <article class="offer-card">
+                <span class="offer-badge">Free Shipping</span>
+                <img src="../../assets/images/4.jpeg" alt="Delivery offer">
+                <h3>Women's Style Combos</h3>
+                <p>Mix and match outfits with special combo discounts.</p>
+                <div class="offer-meta">
+                    <span class="price">20h only</span>
+                    <span class="stock">Ends Sunday</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=25" class="offer-btn">Grab Deal</a>
+            </article>
+
+
+
+             <article class="offer-card">
+                <span class="offer-badge">- 25%</span>
+                <img src="../../assets/images/protective-clothing.png" alt="Kids wear offer">
+                <h3>Party & Occasion Wear</h3>
+                <p>Stand out with trendy party dresses and festive outfits.</p>
+                <div class="offer-meta">
+                    <span class="price">Rs. 3,100</span>
+                    <span class="stock">Occasion Ready | Limited Stock</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=26" class="offer-btn">Grab Deal</a>
+            </article>
+
+
+
+            <article class="offer-card">
+                <span class="offer-badge">Bundle</span>
+                <img src="../../assets/images/shopping-bag.png" alt="Bundle offer">
+                <h3>New Women's Arrivals </h3>
+                <p>Latest trends inspired by modern fashion and seasonal styles.</p>
+                <div class="offer-meta">
+                    <span class="price">Rs. 2,000</span>
+                    <span class="price-old">Rs. 2,500</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=27" class="offer-btn">Shop Bundle</a>
+            </article>
+
+
+
+
+            <article class="offer-card">
+                <span class="offer-badge">Free Shipping</span>
+                <img src="../../assets/images/4.jpeg" alt="Delivery offer">
+                <h3>Women's Comfort Collection</h3>
+                <p>Soft fabrics, relaxed fits, and breathable designs for all-day comfort.</p>
+                <div class="offer-meta">
+                    <span class="price">40h only</span>
+                    <span class="stock">Ends SUN DAY</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=28" class="offer-btn">Grab Deal</a>
+            </article>
+
+
+            
+             <article class="offer-card">
+                <span class="offer-badge">-60%</span>
+                <img src="../../assets/images/protective-clothing.png" alt="Kids wear offer">
+                <h3>Seasonal Clearance Sale</h3>
+                <p>Popular styles at reduced prices for a limited time only.</p>
+                <div class="offer-meta">
+                    <span class="price">Rs. 999</span>
+                    <span class="price-old">Rs. 1500</span>
+                </div>
+                <a href="/G11/Html/pages/add-to-cart.php?product_id=29" class="offer-btn">Grab Deal</a>
+            </article>
+ -->
+
+
+
+        </div>
+    </section>
+
+    {% with page_obj=all_offers %}
+    {% include 'includes/pagination.html' %}
+    {% endwith %}
+
+{% include 'footer.html'%}
+<script src="{% static 'cart_utils.js' %}" defer></script>
+<script src="{% static 'global.js' %}" defer></script>
+<script src="{% static 'scroll-reveal.js' %}" defer></script>
+<script src="{% static 'quick-view.js' %}" defer></script>
+<script src="{% static 'product-comparison.js' %}" defer></script>
+<script src="{% static 'wishlist-enhanced.js' %}" defer></script>
+<script src="{% static 'pagination-loader.js' %}" defer></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const kids = document.getElementById('kids-section');
+        const mens = document.getElementById('mens-section');
+        const womens = document.getElementById('womens-section');
+
+        if (!kids || !mens || !womens) {
+            console.error('Offer sections not found in DOM');
+            return;
+        }
+
+        function showSection(type) {
+            kids.style.display = type === 'kids' ? 'block' : 'none';
+            mens.style.display = type === 'mens' ? 'block' : 'none';
+            womens.style.display = type === 'womens' ? 'block' : 'none';
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                showSection(btn.dataset.category);
+                window.scrollTo({ top: kids.offsetTop - 120, behavior: 'smooth' });
+            });
+        });
+
+        showSection('kids');
+    });
+</script>
+</body>
+</html>
+

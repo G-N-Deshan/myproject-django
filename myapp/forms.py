@@ -12,8 +12,7 @@ class ReviewForm(forms.ModelForm):
             'comment': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 4, 'placeholder': 'Your review'}),
             'uploadImages': forms.FileInput(attrs={'class': 'form-file'}),
         }
-        
-        
+
 class ContactForm(forms.ModelForm):
     class Meta:
         model = ContactMessage
