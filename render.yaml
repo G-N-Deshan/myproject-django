@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: kidzone
+    runtime: python
+    buildCommand: "./build_files.sh"
+    startCommand: "gunicorn myproject.wsgi:application --workers 2 --timeout 120 --bind 0.0.0.0:$PORT"
+    plan: free
+    envVars:
+      - key: DEBUG
+        value: false
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kidzone-db
+          property: connectionString
+      - key: ALLOWED_HOSTS
+        sync: false   # Set manually in dashboard after deploy
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false   # Set manually in dashboard after deploy
+      - key: CLOUDINARY_URL
+        sync: false   # Set manually in dashboard
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: 587
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+
+databases:
+  - name: kidzone-db
+    databaseName: kidzone
+    user: kidzone
+    plan: free
